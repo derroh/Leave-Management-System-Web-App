@@ -1,0 +1,200 @@
+﻿<ul class="nav nav-list">
+    <li class="">
+        <a href="index.html">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text"> Dashboard </span>
+        </a>
+
+        <b class="arrow"></b>
+    </li>
+    <li class="">
+        <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-list"></i>
+            <span class="menu-text"> Approval entries </span>
+
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+
+        <b class="arrow"></b>
+
+        <ul class="submenu">
+            <li class="">
+                <a href="@Url.Action("Index", "ApprovalEntries", new { status = "pending" })">
+                    <i class="menu-icon fa fa-hourglass orange"></i>
+                    Pending
+                </a>
+
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
+                <a href="@Url.Action("Index", "ApprovalEntries", new { status = "approved" })">
+                    <i class="menu-icon fa fa-check green"></i>
+                    Approved
+                </a>
+
+                <b class="arrow"></b>
+            </li>
+            <li class="">
+                <a href="@Url.Action("Index", "ApprovalEntries", new { status = "rejected" })">
+                    <i class="menu-icon fa fa-times red"></i>
+                    Rejected
+                </a>
+
+                <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+
+    <li class="">
+        <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-desktop"></i>
+            <span class="menu-text">
+                Leaves
+            </span>
+
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+
+        <b class="arrow"></b>
+
+        <ul class="submenu">
+
+            <li class="">
+                <a href="@Url.Action("Create", "Leaves")">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Apply New
+                </a>
+
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-caret-right"></i>
+
+                    My Applications
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+                    <li class="">
+                        <a href="@Url.Action("Index", "Leaves", new { status = "open" })">
+                            <i class="menu-icon fa fa-folder-open grey"></i>
+                            Open
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="@Url.Action("Index", "Leaves", new { status = "pending" })">
+                            <i class="menu-icon fa fa-hourglass orange"></i>
+                            Pending
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="@Url.Action("Index", "Leaves", new { status = "approved" })">
+                            <i class="menu-icon fa fa-check green"></i>
+                            Approved
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="@Url.Action("Index", "Leaves", new { status = "rejected" })">
+                            <i class="menu-icon fa fa-times red"></i>
+                            Rejected
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li class="">
+        <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-desktop"></i>
+            <span class="menu-text">
+                Leave Recalls
+            </span>
+
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+
+        <b class="arrow"></b>
+
+        <ul class="submenu">
+
+            <li class="">
+                <a href="@Url.Action("Create", "LeaveRecalls")">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Apply New
+                </a>
+
+                <b class="arrow"></b>
+            </li>
+
+            <li class="">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-caret-right"></i>
+
+                    Leave Recall Applications
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+                    <li class="">
+                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "open" })">
+                            <i class="menu-icon fa fa-folder-open grey"></i>
+                            Open
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "pending" })">
+                            <i class="menu-icon fa fa-hourglass orange"></i>
+                            Pending
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "approved" })">
+                            <i class="menu-icon fa fa-check green"></i>
+                            Approved
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "rejected" })">
+                            <i class="menu-icon fa fa-times red"></i>
+                            Rejected
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    
+    <li class="active">
+        <a href="@Url.Action("Index", "Profile")">
+            <i class="menu-icon fa fa-user"></i>
+            <span class="menu-text"> Profile </span>
+        </a>
+
+        <b class="arrow"></b>
+    </li>
+    
+
+</ul>

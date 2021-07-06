@@ -1,0 +1,211 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="page-header">
+        <h1>
+            Form Wizard
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                and Validation
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+
+            <div class="widget-box">
+                <div class="widget-header widget-header-blue widget-header-flat">
+                    <h4 class="widget-title lighter">New Item Wizard</h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div id="fuelux-wizard-container">
+                            <div>
+                                <ul class="steps">
+                                    <li data-step="1" class="active">
+                                        <span class="step">1</span>
+                                        <span class="title">Leave Selection</span>
+                                    </li>
+
+                                    <li data-step="2">
+                                        <span class="step">2</span>
+                                        <span class="title">Recall Days Specification</span>
+                                    </li>
+
+                                    <li data-step="3">
+                                        <span class="step">3</span>
+                                        <span class="title">Attachments</span>
+                                    </li>
+
+                                    <li data-step="4">
+                                        <span class="step">4</span>
+                                        <span class="title">Finish</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <hr />
+
+                            <div class="step-content pos-rel">
+                                <div class="step-pane active" data-step="1">
+                                    <h3 class="lighter block green">Enter the following information</h3>
+                                    <form class="form-horizontal" id="validation-form" method="get">
+
+                                        <div class="hr hr-dotted"></div>
+
+                                        <div class="space-2"></div>
+
+                                        <div class="space-2"></div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="state">Leave</label>
+
+                                            <div class="col-xs-12 col-sm-9">
+                                                <select id="state" name="state" class="select2" data-placeholder="Click to Choose...">
+                                                    <option value="">&nbsp;</option>
+                                                    <option value="AL">LEAVE001 - June 2020 - Aug 2020</option>
+                                                    <option value="AK">Alaska</option>
+                                                    <option value="AZ">Arizona</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="space-2"></div>
+
+                                        <div class="hr hr-dotted"></div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="LeaveDaysApplied">Leave Days Applied:</label>
+
+                                            <div class="col-xs-12 col-sm-9">
+                                                <div class="clearfix">
+                                                    <input type="text" name="LeaveDaysApplied" id="LeaveDaysApplied" class="col-xs-12 col-sm-4" value="8" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-2"></div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="LeaveStartDate">Leave Start Date:</label>
+
+                                            <div class="col-xs-12 col-sm-9">
+                                                <div class="clearfix">
+                                                    <input type="text" name="LeaveStartDate" id="LeaveStartDate" class="col-xs-12 col-sm-4" value="4" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="space-2"></div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="LeaveEndDate">Leave End Date:</label>
+
+                                            <div class="col-xs-12 col-sm-9">
+                                                <div class="clearfix">
+                                                    <input type="text" name="LeaveEndDate" id="LeaveEndDate" class="col-xs-12 col-sm-4" value="24" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="ReturnDate">Return Date:</label>
+
+                                            <div class="col-xs-12 col-sm-9">
+                                                <div class="clearfix">
+                                                    <input type="text" name="ReturnDate" id="ReturnDate" class="col-xs-12 col-sm-4" value="24" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="step-pane" data-step="2">
+                                    <h3 class="lighter block green">Specify number of days to recall</h3>
+                                    <form class="form-horizontal" id="validation-form2" method="get">
+
+                                        <div class="hr hr-dotted"></div>
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="DaysRecalled">No of Days:</label>
+
+                                            <div class="col-xs-12 col-sm-9">
+                                                <div class="clearfix">
+                                                    <input type="text" id="DaysRecalled" name="DaysRecalled" class="col-xs-12 col-sm-5" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-2"></div>
+
+                                    </form>
+                                </div>
+
+                                <div class="step-pane" data-step="3">
+                                    <h3 class="lighter block green">Add relevant Attachments For this application</h3>
+                                    <form class="form-horizontal" id="validation-form3" method="get">
+
+                                        <div class="hr hr-dotted"></div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">Attachments:</label>
+
+                                            <div class="col-xs-12 col-sm-9">
+                                                <div class="col-xs-12 col-sm-6">
+
+                                                    <input multiple="" type="file" id="id-input-file-3" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="space-2"></div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="comment">Comment</label>
+
+                                            <div class="col-xs-12 col-sm-9">
+                                                <div class="clearfix">
+                                                    <textarea class="autosize-transition limited form-control" name="comment" id="comment" maxlength="50"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="step-pane" data-step="4">
+                                    <div class="center">
+                                        <h3 class="green">Congrats!</h3>
+                                        Your application is ready to be submitted! Click finish to submit for approval!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+                        <div class="wizard-actions">
+                            <button class="btn btn-prev">
+                                <i class="ace-icon fa fa-arrow-left"></i>
+                                Prev
+                            </button>
+
+                            <button class="btn btn-success btn-next" data-last="Finish">
+                                Next
+                                <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                            </button>
+                        </div>
+                    </div><!-- /.widget-main -->
+                </div><!-- /.widget-body -->
+            </div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div>
+

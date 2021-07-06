@@ -9,10 +9,10 @@ namespace HumanResources.Models
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Please enter email")]
-        [IsValidEmailAddress(ErrorMessage = "Please enter a valid email")]
+        [Required(ErrorMessage = "Please enter username")]
+        //[IsValidEmailAddress(ErrorMessage = "Please enter a valid email")]
         //  [IsEmailAddressAvailable(ErrorMessage = "An account with the email provided already exists")]
-        public string Email { get; set; }
+        public string Username { get; set; }
 
 
         [Required(ErrorMessage = "Please enter a password")]

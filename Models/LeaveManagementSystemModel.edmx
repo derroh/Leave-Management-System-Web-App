@@ -21,8 +21,22 @@
           <Property Name="SMTPPort" Type="int" />
           <Property Name="SMTPHost" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="idUser" />
+          </Key>
+          <Property Name="idUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="StudentId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Role" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
         <EntityContainer Name="LeaveManagementSystemModelStoreContainer">
           <EntitySet Name="Settings" EntityType="Self.Settings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -30,6 +44,7 @@
       <Schema Namespace="LeaveManagementSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="LeaveManagementSystemEntities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="Settings" EntityType="LeaveManagementSystemModel.Setting" />
+          <EntitySet Name="Users" EntityType="LeaveManagementSystemModel.User" />
         </EntityContainer>
         <EntityType Name="Setting">
           <Key>
@@ -46,6 +61,19 @@
           <Property Name="EmailSender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SMTPPort" Type="Int32" />
           <Property Name="SMTPHost" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="idUser" />
+          </Key>
+          <Property Name="idUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StudentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Role" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -67,6 +95,20 @@
                 <ScalarProperty Name="AfricasTalkingApiKey" ColumnName="AfricasTalkingApiKey" />
                 <ScalarProperty Name="AfricasTalkingAppName" ColumnName="AfricasTalkingAppName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="LeaveManagementSystemModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
