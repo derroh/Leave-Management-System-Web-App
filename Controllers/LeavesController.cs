@@ -14,10 +14,12 @@ namespace HumanResources.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult Index(string status)
+        public ActionResult List(string status)
         {
+            string s = Request.QueryString["page"];
             return View();
         }
+
         public ActionResult Create()
         {
             return View();

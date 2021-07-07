@@ -1,5 +1,6 @@
 ﻿jQuery(function ($) {
 
+    console.log(window.location.href);
     $('[data-rel=tooltip]').tooltip();
 
     $('.select2').css('width', '400px').select2({ allowClear: true })
@@ -16,13 +17,13 @@
         })
         .on('actionclicked.fu.wizard', function (e, info) {
             if (info.step == 1 && $validation) {
-                if (!$('#validation-form').valid()) e.preventDefault();
+                if (!$('#leaveselection-form').valid()) e.preventDefault();
             }
             if (info.step == 2 && $validation) {
-                if (!$('#validation-form2').valid()) e.preventDefault();
+                if (!$('#leavedaysselection-form').valid()) e.preventDefault();
             }
             if (info.step == 3 && $validation) {
-                if (!$('#validation-form3').valid()) e.preventDefault();
+                if (!$('#leaveattachments-form').valid()) e.preventDefault();
             }
         })
         //.on('changed.fu.wizard', function() {
@@ -42,80 +43,34 @@
         });
 
 
-
-    //documentation : http://docs.jquery.com/Plugins/Validation/validate
-
-
-    $.mask.definitions['~'] = '[+-]';
-    $('#phone').mask('(999) 999-9999');
-
-    jQuery.validator.addMethod("phone", function (value, element) {
-        return this.optional(element) || /^\(\d{3}\) \d{3}\-\d{4}( x\d{1,6})?$/.test(value);
-    }, "Enter a valid phone number.");
-
     $('#validation-form').validate({
         errorElement: 'div',
         errorClass: 'help-block',
         focusInvalid: false,
         ignore: "",
         rules: {
-            email: {
+            LeaveType: {
                 required: true,
-                email: true
             },
-            password: {
+            LeaveDaysEntitled: {
                 required: true,
-                minlength: 5
             },
-            password2: {
+            LeaveDaysTaken: {
                 required: true,
-                minlength: 5,
-                equalTo: "#password"
             },
-            name: {
+            LeaveBalance: {
                 required: true
             },
-            phone: {
-                required: true,
-                phone: 'required'
-            },
-            url: {
-                required: true,
-                url: true
-            },
-            comment: {
+            LeaveAccruedDays: {
                 required: true
             },
-            state: {
+            LeaveOpeningBalance: {
                 required: true
-            },
-            platform: {
-                required: true
-            },
-            subscription: {
-                required: true
-            },
-            gender: {
-                required: true,
-            },
-            agree: {
-                required: true,
             }
         },
 
-        messages: {
-            email: {
-                required: "Please provide a valid email.",
-                email: "Please provide a valid email."
-            },
-            password: {
-                required: "Please specify a password.",
-                minlength: "Please specify a secure password."
-            },
-            state: "Please choose state",
-            subscription: "Please choose at least one option",
-            gender: "Please choose gender",
-            agree: "Please accept our policy"
+        messages: {            
+            LeaveType: "Please choose leave type"
         },
 
 

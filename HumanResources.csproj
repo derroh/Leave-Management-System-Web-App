@@ -181,6 +181,7 @@
     <Compile Include="Controllers\AdvanceRequestsController.cs" />
     <Compile Include="Controllers\AdvanceSurrendersController.cs" />
     <Compile Include="Controllers\ApprovalEntriesController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeaveRecallsController.cs" />
     <Compile Include="Controllers\LeavesController.cs" />
@@ -421,6 +422,9 @@
     <Content Include="Views\Leaves\Index.cshtml" />
     <Content Include="Views\LeaveRecalls\Index.cshtml" />
     <Content Include="Views\LeaveRecalls\Create.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Leaves\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Account\" />
@@ -428,7 +432,6 @@
     <Folder Include="Views\AdvanceRequests\" />
     <Folder Include="Views\AdvanceSurrenders\" />
     <Folder Include="Views\ApprovalEntries\" />
-    <Folder Include="Views\Profile\" />
     <Folder Include="Views\Reports\" />
     <Folder Include="Views\TransportRequests\" />
   </ItemGroup>

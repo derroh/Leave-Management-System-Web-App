@@ -8,10 +8,10 @@
 
     <div class="page-header">
         <h1>
-            Form Wizard
+            Leaves
             <small>
                 <i class="ace-icon fa fa-angle-double-right"></i>
-                and Validation
+                Application
             </small>
         </h1>
     </div><!-- /.page-header -->
@@ -22,7 +22,7 @@
 
             <div class="widget-box">
                 <div class="widget-header widget-header-blue widget-header-flat">
-                    <h4 class="widget-title lighter">New Item Wizard</h4>
+                    <h4 class="widget-title lighter">New Leave Application Wizard</h4>
                 </div>
 
                 <div class="widget-body">
@@ -57,7 +57,7 @@
                             <div class="step-content pos-rel">
                                 <div class="step-pane active" data-step="1">
                                     <h3 class="lighter block green">Enter the following information</h3>
-                                    <form class="form-horizontal" id="validation-form" method="get">
+                                    <form class="form-horizontal" id="leaveselection-form" method="get">
 
                                         <div class="hr hr-dotted"></div>
 
@@ -66,10 +66,10 @@
                                         <div class="space-2"></div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="state">Leave Type</label>
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="LeaveType">Leave Type</label>
 
                                             <div class="col-xs-12 col-sm-9">
-                                                <select id="state" name="state" class="select2" data-placeholder="Click to Choose...">
+                                                <select id="LeaveType" name="LeaveType" class="select2" data-placeholder="Click to Choose...">
                                                     <option value="">&nbsp;</option>
                                                     <option value="AL">Alabama</option>
                                                     <option value="AK">Alaska</option>
@@ -103,7 +103,7 @@
                                         <div class="space-2"></div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="LeaveDaysTaken">Leave Balance:</label>
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="LeaveBalance">Leave Balance:</label>
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
@@ -140,7 +140,7 @@
 
                                 <div class="step-pane" data-step="2">
                                     <h3 class="lighter block green">Select your leave days</h3>
-                                    <form class="form-horizontal" id="validation-form2" method="get">
+                                    <form class="form-horizontal" id="leavedaysselection-form" method="get">
 
                                         <div class="hr hr-dotted"></div>
                                         <div class="space-2"></div>
@@ -255,7 +255,7 @@
 
                                 <div class="step-pane" data-step="3">
                                     <h3 class="lighter block green">Add relevant Attachments For this application</h3>
-                                    <form class="form-horizontal" id="validation-form3" method="get">
+                                    <form class="form-horizontal" id="leaveattachments-form" method="get">
 
                                         <div class="hr hr-dotted"></div>
 

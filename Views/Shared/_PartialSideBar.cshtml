@@ -1,9 +1,9 @@
 ﻿<ul class="nav nav-list">
-    <li class="">
-        <a href="index.html">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text"> Dashboard </span>
-        </a>
+    <li class="@Html.IsActive("Dashboard", "Index")">
+        <a href=" @Url.Action("Index", "Dashboard")">           
+                <i class="menu-icon fa fa-tachometer"></i>
+                <span class="menu-text"> Dashboard </span>
+            </a>
 
         <b class="arrow"></b>
     </li>
@@ -46,7 +46,7 @@
         </ul>
     </li>
 
-    <li class="">
+    <li class="@Html.IsParentActive("Leaves", "Index")">
         <a href="#" class="dropdown-toggle">
             <i class="menu-icon fa fa-desktop"></i>
             <span class="menu-text">
@@ -60,7 +60,7 @@
 
         <ul class="submenu">
 
-            <li class="">
+            <li class="@Html.IsActive("Leaves", "Create")">
                 <a href="@Url.Action("Create", "Leaves")">
                     <i class="menu-icon fa fa-caret-right"></i>
                     Apply New
@@ -69,7 +69,7 @@
                 <b class="arrow"></b>
             </li>
 
-            <li class="">
+            <li class="@Html.IsParent2Active("Leaves", "List")">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-caret-right"></i>
 
@@ -80,15 +80,15 @@
                 <b class="arrow"></b>
 
                 <ul class="submenu">
-                    <li class="">
-                        <a href="@Url.Action("Index", "Leaves", new { status = "open" })">
+                    <li class="@Html.IsLastChildActive("Leaves", "List", "open")">
+                        <a href="@Url.Action("List", "Leaves", new { status = "open" })">
                             <i class="menu-icon fa fa-folder-open grey"></i>
                             Open
                         </a>
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="">
+                    <li class="@Html.IsLastChildActive("Leaves", "List", "pending")">
                         <a href="@Url.Action("Index", "Leaves", new { status = "pending" })">
                             <i class="menu-icon fa fa-hourglass orange"></i>
                             Pending
@@ -96,7 +96,7 @@
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="">
+                    <li class="@Html.IsLastChildActive("Leaves", "List", "approved")">
                         <a href="@Url.Action("Index", "Leaves", new { status = "approved" })">
                             <i class="menu-icon fa fa-check green"></i>
                             Approved
@@ -104,7 +104,7 @@
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="">
+                    <li class="@Html.IsLastChildActive("Leaves", "List", "rejected")">
                         <a href="@Url.Action("Index", "Leaves", new { status = "rejected" })">
                             <i class="menu-icon fa fa-times red"></i>
                             Rejected
@@ -139,7 +139,7 @@
                 <b class="arrow"></b>
             </li>
 
-            <li class="">
+            <li class="@Html.IsParentActive("LeaveRecalls", "Index")">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-caret-right"></i>
 
@@ -150,7 +150,7 @@
                 <b class="arrow"></b>
 
                 <ul class="submenu">
-                    <li class="">
+                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
                         <a href="@Url.Action("Index", "LeaveRecalls", new { status = "open" })">
                             <i class="menu-icon fa fa-folder-open grey"></i>
                             Open
@@ -158,7 +158,7 @@
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="">
+                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
                         <a href="@Url.Action("Index", "LeaveRecalls", new { status = "pending" })">
                             <i class="menu-icon fa fa-hourglass orange"></i>
                             Pending
@@ -166,7 +166,7 @@
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="">
+                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
                         <a href="@Url.Action("Index", "LeaveRecalls", new { status = "approved" })">
                             <i class="menu-icon fa fa-check green"></i>
                             Approved
@@ -174,7 +174,7 @@
 
                         <b class="arrow"></b>
                     </li>
-                    <li class="">
+                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
                         <a href="@Url.Action("Index", "LeaveRecalls", new { status = "rejected" })">
                             <i class="menu-icon fa fa-times red"></i>
                             Rejected
@@ -187,7 +187,7 @@
         </ul>
     </li>
     
-    <li class="active">
+    <li class="@Html.IsActive("Profile", "Index")">
         <a href="@Url.Action("Index", "Profile")">
             <i class="menu-icon fa fa-user"></i>
             <span class="menu-text"> Profile </span>
