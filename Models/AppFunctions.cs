@@ -265,11 +265,11 @@ namespace HumanResources
 
             var routeAction = (string)routeData.Values["action"];
             var routeControl = (string)routeData.Values["controller"];
-            var routeStatus = Request.QueryString["page"];
+       
 
             // must match both
             var returnActive = control == routeControl &&
-                               action == routeAction && status == routeStatus;
+                               action == routeAction ;
 
             return returnActive ? "active" : "";
         }

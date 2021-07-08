@@ -7,6 +7,7 @@
       <Diagram DiagramId="5d85a3fbfec143aea3016d3e2355ca1b" Name="Diagram1" >
         <EntityTypeShape EntityType="LeaveManagementSystemModel.Setting" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="LeaveManagementSystemModel.User" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="LeaveManagementSystemModel.LeaveType" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

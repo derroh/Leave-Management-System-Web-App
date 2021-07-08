@@ -193,6 +193,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppFunctions.cs" />
+    <Compile Include="Models\LeaveApplicationViewModel.cs" />
     <Compile Include="Models\LeaveManagementSystemModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -208,7 +209,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\LeaveType.cs">
+      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\Requests.cs" />
     <Compile Include="Models\Setting.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
@@ -425,6 +430,9 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Leaves\List.cshtml" />
+    <Content Include="UploadedFiles\htaccess">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Account\" />

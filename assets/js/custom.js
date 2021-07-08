@@ -1,6 +1,94 @@
 ﻿jQuery(function ($) {
 
-    console.log(window.location.href);
+    $('#MultipleSelection').change(function () {
+
+        $('#DateRanges').hide();
+        $('#Multiples').show();
+    });
+    $('#RangeSelection').change(function () {
+
+        $('#Multiples').hide();
+        $('#DateRanges').show();
+
+    });
+
+    $("#StartDate").change(function () {
+        $('#LeaveStartDate').val($('#StartDate').val());
+    });
+
+    $("#EndDate").change(function () {
+        $('#LeaveEndDate').val($('#EndDate').val());
+    });
+
+    if ($("#RangeSelection").is(":checked")) {
+        $("#EndDate").change(function () {
+            //Get Leave Quantity And ReturnDate
+
+        });
+    }
+
+
+
+    //autofill leavetypes on LeaveType
+
+    $.ajax({
+        url: '/Leaves/ListLeaveTypes',
+
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (response) {
+            if (response != null) {
+
+                var data = $.parseJSON(response);
+
+                $.each(data, function (i, item) {
+                    $("#LeaveType").append($('<option></option>').attr("value", item.Code).text(item.Description));
+                });
+
+            }
+        },
+        error: function (e) {
+            console.log(e.responseText);
+        }
+    });
+
+    //get leave selected details
+    $("#LeaveType").change(function () {
+      
+        $('#LeaveDaysEntitled').val('');
+        $('#LeaveDaysTaken').val('');
+        $('#LeaveBalance').val('');
+        $('#LeaveAccruedDays').val('');
+        $('#LeaveOpeningBalance').val('');
+
+        jQuery.ajax({
+            url: '/Leaves/LeaveTypeDetails',
+            type: "POST",
+            data: '{Code:"' + $('#LeaveType').val() + '" }',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+
+                if (response != null ) {
+                    //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                    //we need to parse it to JSON
+                    var data = $.parseJSON(response);
+
+                    //set fields values
+                    $('#LeaveDaysEntitled').val(data.LeaveDaysEntitled);
+                    $('#LeaveDaysTaken').val(data.LeaveDaysTaken);
+                    $('#LeaveBalance').val(data.RemainingDays);
+                    $('#LeaveAccruedDays').val(data.AccruedDays);
+                    $('#LeaveOpeningBalance').val(data.OpeningBalance);
+                }
+            }
+        });
+    });
+
+
+
     $('[data-rel=tooltip]').tooltip();
 
     $('.select2').css('width', '400px').select2({ allowClear: true })
@@ -29,21 +117,109 @@
         //.on('changed.fu.wizard', function() {
         //})
         .on('finished.fu.wizard', function (e) {
-            bootbox.dialog({
-                message: "Thank you! Your information was successfully saved!",
-                buttons: {
-                    "success": {
-                        "label": "OK",
-                        "className": "btn-sm btn-primary"
-                    }
+            //submit forms here
+            //Serialize the form datas.  
+            var valdata = $("#leaveselection-form").serialize();
+
+            jQuery.ajax({
+            url: '/Leaves/SaveSelection',
+            type: "POST",
+            data: valdata,
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (response) {
+                if (response != null) {
+                    //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                    //we need to parse it to JSON
+                    var data = $.parseJSON(response);
+
+                    var valdata2 = $("#leavedaysselection-form").serialize();
+
+
+                    jQuery.ajax({
+                        url: '/Leaves/SaveLeaveSelection',
+                        type: "POST",
+                        data: valdata2,
+                        dataType: "json",
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        success: function (response) {
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                                //we need to parse it to JSON
+                                var data = jQuery.parseJSON(response);
+
+                                //Attachments
+                                var files = jQuery("#LeaveAttachments").get(0).files;
+                                var fileData = new FormData();
+
+                                for (var i = 0; i < files.length; i++) {
+                                    fileData.append("LeaveAttachments", files[i]);
+                                }
+
+                                jQuery.ajax({
+                                    type: "POST",
+                                    url: "/Leaves/UploadFiles",
+                                    dataType: "json",
+                                    contentType: false, // Not to set any content header
+                                    processData: false, // Not to process data
+                                    data: fileData,
+                                    success: function (result, status, xhr) {
+                                        alert(result);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        alert(status);
+                                    }
+                                });
+
+
+
+
+
+                                //console.log(data.Message);
+
+                                //bootbox.dialog({
+                                //    message: data.Message,
+                                //    buttons: {
+                                //        "success": {
+                                //            "label": "OK",
+                                //            "className": "btn-sm btn-primary"
+                                //        }
+                                //    }
+                                //});
+
+
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e.responseText);
+                        }
+                    });
+
+
                 }
-            });
+            },
+            error: function (e) {
+                console.log(e.responseText);
+            }
+        });
+
+            //bootbox.dialog({
+            //    message: "Thank you! Your information was successfully saved!",
+            //    buttons: {
+            //        "success": {
+            //            "label": "OK",
+            //            "className": "btn-sm btn-primary"
+            //        }
+            //    }
+            //});
         }).on('stepclick.fu.wizard', function (e) {
             //e.preventDefault();//this will prevent clicking and selecting steps
         });
 
 
-    $('#validation-form').validate({
+    $('#leaveselection-form').validate({
         errorElement: 'div',
         errorClass: 'help-block',
         focusInvalid: false,
@@ -103,7 +279,122 @@
         invalidHandler: function (form) {
         }
     });
+    $('#leavedaysselection-form').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            SelectionType: {
+                required: true,
+            },
+            StartDate: {
+                required: function (element) {
+                    return $("#RangeSelection").is(":checked");
+                }
+            },
+            LeaveDates: {
+                required: function (element) {
+                    return $("#MultipleSelection").is(":checked");
+                }
+            },
+            LeaveDaysApplied: {
+                required: true
+            },
+            LeaveStartDate: {
+                required: true
+            },
+            LeaveEndDate: {
+                required: true
+            },
+            ReturnDate: {
+                required: true
+            }
+        },
 
+        messages: {
+            SelectionType: "Please choose selection type"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+                var controls = element.closest('div[class*="col-"]');
+                if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
+                else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+            }
+            else if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else if (element.is('.chosen-select')) {
+                error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
+    });
+
+    $('#leaveattachments-form').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            LeaveAttachments: {
+                required: true,
+            },
+            LeaveComment: {
+                required: true,
+            }
+        },
+
+        messages: {
+            LeaveAttachments: "Please choose an attachment"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+                var controls = element.closest('div[class*="col-"]');
+                if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
+                else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+            }
+            else if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else if (element.is('.chosen-select')) {
+                error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
+    });
 
 
 
@@ -193,7 +484,7 @@
     });
 
     //files
-    $('#id-input-file-3').ace_file_input({
+    $('#LeaveAttachments').ace_file_input({
         style: 'well',
         btn_choose: 'Drop files here or click to choose',
         btn_change: null,
@@ -238,7 +529,7 @@
                 bAutoWidth: false,
                 "aoColumns": [
                     { "bSortable": false },
-                    null, null, null, null, null,
+                    null, null, null, null, null, null, null,
                     { "bSortable": false }
                 ],
                 "aaSorting": [],
@@ -265,68 +556,68 @@
                     style: 'multi'
                 }
             });
-            $.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+            ////$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
 
-            new $.fn.dataTable.Buttons(myTable, {
-                buttons: [
-                    {
-                        "extend": "colvis",
-                        "text": "<i class='fa fa-search bigger-110 blue'></i> <span class='hidden'>Show/hide columns</span>",
-                        "className": "btn btn-white btn-primary btn-bold",
-                        columns: ':not(:first):not(:last)'
-                    },
-                    {
-                        "extend": "copy",
-                        "text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copy to clipboard</span>",
-                        "className": "btn btn-white btn-primary btn-bold"
-                    },
-                    {
-                        "extend": "csv",
-                        "text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>Export to CSV</span>",
-                        "className": "btn btn-white btn-primary btn-bold"
-                    },
-                    {
-                        "extend": "excel",
-                        "text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Export to Excel</span>",
-                        "className": "btn btn-white btn-primary btn-bold"
-                    },
-                    {
-                        "extend": "pdf",
-                        "text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>Export to PDF</span>",
-                        "className": "btn btn-white btn-primary btn-bold"
-                    },
-                    {
-                        "extend": "print",
-                        "text": "<i class='fa fa-print bigger-110 grey'></i> <span class='hidden'>Print</span>",
-                        "className": "btn btn-white btn-primary btn-bold",
-                        autoPrint: false,
-                        message: 'This print was produced using the Print button for DataTables'
-                    }
-                ]
-            });
-            myTable.buttons().container().appendTo($('.tableTools-container'));
+            ////new $.fn.dataTable.Buttons(myTable, {
+            ////    buttons: [
+            ////        {
+            ////            "extend": "colvis",
+            ////            "text": "<i class='fa fa-search bigger-110 blue'></i> <span class='hidden'>Show/hide columns</span>",
+            ////            "className": "btn btn-white btn-primary btn-bold",
+            ////            columns: ':not(:first):not(:last)'
+            ////        },
+            ////        {
+            ////            "extend": "copy",
+            ////            "text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copy to clipboard</span>",
+            ////            "className": "btn btn-white btn-primary btn-bold"
+            ////        },
+            ////        {
+            ////            "extend": "csv",
+            ////            "text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>Export to CSV</span>",
+            ////            "className": "btn btn-white btn-primary btn-bold"
+            ////        },
+            ////        {
+            ////            "extend": "excel",
+            ////            "text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Export to Excel</span>",
+            ////            "className": "btn btn-white btn-primary btn-bold"
+            ////        },
+            ////        {
+            ////            "extend": "pdf",
+            ////            "text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>Export to PDF</span>",
+            ////            "className": "btn btn-white btn-primary btn-bold"
+            ////        },
+            ////        {
+            ////            "extend": "print",
+            ////            "text": "<i class='fa fa-print bigger-110 grey'></i> <span class='hidden'>Print</span>",
+            ////            "className": "btn btn-white btn-primary btn-bold",
+            ////            autoPrint: false,
+            ////            message: 'This print was produced using the Print button for DataTables'
+            ////        }
+            ////    ]
+            ////});
+            ////myTable.buttons().container().appendTo($('.tableTools-container'));
 
-            //style the message box
-            var defaultCopyAction = myTable.button(1).action();
-            myTable.button(1).action(function (e, dt, button, config) {
-                defaultCopyAction(e, dt, button, config);
-                $('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
-            });
-
-
-            var defaultColvisAction = myTable.button(0).action();
-            myTable.button(0).action(function (e, dt, button, config) {
-
-                defaultColvisAction(e, dt, button, config);
+            //////style the message box
+            ////var defaultCopyAction = myTable.button(1).action();
+            ////myTable.button(1).action(function (e, dt, button, config) {
+            ////    defaultCopyAction(e, dt, button, config);
+            ////    $('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
+            ////});
 
 
-                if ($('.dt-button-collection > .dropdown-menu').length == 0) {
-                    $('.dt-button-collection')
-                        .wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
-                        .find('a').attr('href', '#').wrap("<li />")
-                }
-                $('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
-            });
+            ////var defaultColvisAction = myTable.button(0).action();
+            ////myTable.button(0).action(function (e, dt, button, config) {
+
+            //    defaultColvisAction(e, dt, button, config);
+
+
+            //    if ($('.dt-button-collection > .dropdown-menu').length == 0) {
+            //        $('.dt-button-collection')
+            //            .wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
+            //            .find('a').attr('href', '#').wrap("<li />")
+            //    }
+            //    $('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
+            //});
 
             ////
 
