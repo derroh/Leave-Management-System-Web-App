@@ -1,0 +1,166 @@
+﻿@model IEnumerable<HumanResources.Models.ApprovalEntriesListViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="page-header">
+        <h1>
+            Approval Entries
+        </h1>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="clearfix">
+                        <div class="pull-right tableTools-container"></div>
+                    </div>
+                    <div class="table-header">
+                        Results for "Approval entries"
+                    </div>
+
+                    <!-- div.table-responsive -->
+                    <!-- div.dataTables_borderWrap -->
+                    <div>
+                        <table id="approvalentries-table" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </th>
+
+                                    <th>
+                                        <i class="ace-icon fa fa-clipboard bigger-110 hidden-480"></i>
+                                        Document Type
+                                    </th>
+                                    <th>
+                                        <i class="ace-icon fa fa-list-ol bigger-110 hidden-480"></i>
+                                        Document No.
+                                    </th> 
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Date Submitted
+                                    </th>
+                                    <th>
+                                        <i class="ace-icon fa fa-user bigger-110 hidden-480"></i>
+                                        Employee Name
+                                    </th>
+                                    <th>
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Start Date
+                                    </th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        End Date
+                                    </th>
+
+                                    <th>
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Leave Days
+                                    </th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-question-circle bigger-110 hidden-480"></i>
+                                        Status
+                                    </th>
+
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var approvalentry in Model)
+                                {
+                                <tr>
+                                    <td class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <a href="#">@approvalentry.DocumentType</a>
+                                    </td>
+                                    <td>@approvalentry.DocumentNo</td>
+                                    <td class="hidden-480">@approvalentry.DateSubmitted</td>
+                                    <td>@approvalentry.EmployeeName</td>
+                                    <td>@approvalentry.StartDate</td>
+                                    <td class="hidden-480">@approvalentry.EndDate</td>
+                                    <td>@approvalentry.LeaveDays</td>
+
+                                    <td class="hidden-480">
+                                        <span class="label label-sm label-warning">@approvalentry.ApprovalStatus</span>
+                                    </td>
+
+                                    <td>
+                                        <div class="hidden-sm hidden-xs action-buttons">
+                                            <a class="blue" href="@Url.Action("View", "ApprovalEntries", new { id = approvalentry.DocumentNo })">
+                                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                            </a>
+
+                                            <a class="green appoveapprovalentry" href="#" data-id="@approvalentry.EntryNo" data-docno ="@approvalentry.DocumentNo">
+                                                <i class="ace-icon fa fa-check bigger-130"></i>
+                                            </a>
+
+                                            <a class="red rejectapprovalentry" href="#" data-id="@approvalentry.EntryNo" data-docno="@approvalentry.DocumentNo">
+                                                <i class="ace-icon fa fa-times bigger-130"></i>
+                                            </a>
+                                        </div>
+
+                                        <div class="hidden-md hidden-lg">
+                                            <div class="inline pos-rel">
+                                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                                </button>
+
+                                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                    <li>
+                                                        <a href="@Url.Action("View", "ApprovalEntries", new { id = approvalentry.DocumentNo  })" class="tooltip-info" data-rel="tooltip" title="View">
+                                                            <span class="blue">
+                                                                <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="#" class="tooltip-success appoveapprovalentry" data-id="@approvalentry.EntryNo" data-docno="@approvalentry.DocumentNo" data-rel="tooltip" title="Approve">
+                                                            <span class="green">
+                                                                <i class="ace-icon fa fa-check-square-o bigger-120"></i>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="#" class="tooltip-error rejectapprovalentry" data-id="@approvalentry.EntryNo" data-docno="@approvalentry.DocumentNo" data-rel="tooltip" title="Reject">
+                                                            <span class="red">
+                                                                <i class="ace-icon fa fa-times-circle-o bigger-120"></i>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div>
+

@@ -218,6 +218,8 @@ namespace HumanResources.Controllers
             {
                 HttpPostedFileBase file = files[i];
                 file.SaveAs(path + file.FileName);
+
+                UploadDocuments(path, file);
             }
             msg = files.Count + " Files Uploaded!";
 
@@ -230,6 +232,36 @@ namespace HumanResources.Controllers
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public FileResult DownloadFile(int? fileId)
+        {
+            LeaveManagementSystemEntities entities = new LeaveManagementSystemEntities();
+            var file = entities.Attachments.ToList().Find(p => p.Id == fileId.Value);
+            return File(file.Data, file.ContentType, file.FileName);
+        }
+
+        private void UploadDocuments(string path, HttpPostedFileBase file)
+        {
+            using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+            {
+                byte[] bytes;
+
+                using (BinaryReader br = new BinaryReader(file.InputStream))
+                {
+                    bytes = br.ReadBytes(file.ContentLength);
+                }
+
+                var Attachment = new Attachment { FileName = Path.GetFileName(file.FileName) ,ContentType = file.ContentType, Data = bytes, DateUploaded = DateTime.Now, DocumentNo ="DOC1"  };
+
+                dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                dbEntities.Attachments.Add(Attachment);
+                dbEntities.SaveChanges();
+
+            }
+        }
         // Leave Entry Type -> Opening Balance",Accrue,Deduct,Use,Closing,Recall
+
+
     }
 }

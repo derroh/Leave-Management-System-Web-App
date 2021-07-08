@@ -28,5 +28,8 @@ namespace HumanResources.Models
         public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<LeaveType> LeaveTypes { get; set; }
+        public virtual DbSet<ApprovalEntry> ApprovalEntries { get; set; }
+        public virtual DbSet<Attachment> Attachments { get; set; }
+        public virtual DbSet<EmployeeLedgerEntry> EmployeeLedgerEntries { get; set; }
     }
 }

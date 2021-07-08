@@ -5,6 +5,50 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="LeaveManagementSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ApprovalEntries">
+          <Key>
+            <PropertyRef Name="EntryNumber" />
+          </Key>
+          <Property Name="EntryNumber" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentType" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="SenderId" Type="nvarchar" MaxLength="50" />
+          <Property Name="SequenceNo" Type="int" />
+          <Property Name="ApproverId" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateSent" Type="date" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Attachments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentType" Type="nchar" MaxLength="10" />
+          <Property Name="DocumentNo" Type="nchar" MaxLength="10" />
+          <Property Name="FileName" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="ContentType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Data" Type="varbinary(max)" Nullable="false" />
+          <Property Name="DateUploaded" Type="date" />
+        </EntityType>
+        <EntityType Name="EmployeeLedgerEntries">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PostingDate" Type="date" />
+          <Property Name="DocumentDate" Type="date" />
+          <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ExternalDocumentNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nchar" MaxLength="10" />
+          <Property Name="LeaveType" Type="nvarchar" MaxLength="50" />
+          <Property Name="UnitOfMeasure" Type="nchar" MaxLength="10" />
+          <Property Name="FromDate" Type="date" />
+          <Property Name="ToDate" Type="date" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="EntryType" Type="nchar" MaxLength="10" />
+          <Property Name="Year" Type="nchar" MaxLength="10" />
+        </EntityType>
         <EntityType Name="LeaveTypes">
           <Key>
             <PropertyRef Name="Code" />
@@ -45,6 +89,9 @@
           <Property Name="Role" Type="nchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityContainer Name="LeaveManagementSystemModelStoreContainer">
+          <EntitySet Name="ApprovalEntries" EntityType="Self.ApprovalEntries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Attachments" EntityType="Self.Attachments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeLedgerEntries" EntityType="Self.EmployeeLedgerEntries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LeaveTypes" EntityType="Self.LeaveTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Settings" EntityType="Self.Settings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -57,6 +104,9 @@
           <EntitySet Name="Settings" EntityType="LeaveManagementSystemModel.Setting" />
           <EntitySet Name="Users" EntityType="LeaveManagementSystemModel.User" />
           <EntitySet Name="LeaveTypes" EntityType="LeaveManagementSystemModel.LeaveType" />
+          <EntitySet Name="ApprovalEntries" EntityType="LeaveManagementSystemModel.ApprovalEntry" />
+          <EntitySet Name="Attachments" EntityType="LeaveManagementSystemModel.Attachment" />
+          <EntitySet Name="EmployeeLedgerEntries" EntityType="LeaveManagementSystemModel.EmployeeLedgerEntry" />
         </EntityContainer>
         <EntityType Name="Setting">
           <Key>
@@ -96,6 +146,50 @@
           <Property Name="TotalAbsence" Type="Int32" />
           <Property Name="UnitOfMeasure" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AnnualLeaveDaysType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ApprovalEntry">
+          <Key>
+            <PropertyRef Name="EntryNumber" />
+          </Key>
+          <Property Name="EntryNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SenderId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SequenceNo" Type="Int32" />
+          <Property Name="ApproverId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateSent" Type="DateTime" Precision="0" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Attachment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="DocumentNo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Data" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="DateUploaded" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="EmployeeLedgerEntry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PostingDate" Type="DateTime" Precision="0" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
+          <Property Name="DocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ExternalDocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="LeaveType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UnitOfMeasure" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="FromDate" Type="DateTime" Precision="0" />
+          <Property Name="ToDate" Type="DateTime" Precision="0" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="EntryType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Year" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -142,6 +236,53 @@
                 <ScalarProperty Name="TotalAbsence" ColumnName="TotalAbsence" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApprovalEntries">
+            <EntityTypeMapping TypeName="LeaveManagementSystemModel.ApprovalEntry">
+              <MappingFragment StoreEntitySet="ApprovalEntries">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateSent" ColumnName="DateSent" />
+                <ScalarProperty Name="ApproverId" ColumnName="ApproverId" />
+                <ScalarProperty Name="SequenceNo" ColumnName="SequenceNo" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+                <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+                <ScalarProperty Name="EntryNumber" ColumnName="EntryNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Attachments">
+            <EntityTypeMapping TypeName="LeaveManagementSystemModel.Attachment">
+              <MappingFragment StoreEntitySet="Attachments">
+                <ScalarProperty Name="DateUploaded" ColumnName="DateUploaded" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+                <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeLedgerEntries">
+            <EntityTypeMapping TypeName="LeaveManagementSystemModel.EmployeeLedgerEntry">
+              <MappingFragment StoreEntitySet="EmployeeLedgerEntries">
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="EntryType" ColumnName="EntryType" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="UnitOfMeasure" ColumnName="UnitOfMeasure" />
+                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ExternalDocumentNo" ColumnName="ExternalDocumentNo" />
+                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="PostingDate" ColumnName="PostingDate" />
+                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

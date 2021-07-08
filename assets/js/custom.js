@@ -577,10 +577,11 @@
         remText: '%n character%s remaining...',
         limitText: 'max allowed : %n.'
     });
-    //Leaves datatables isht
 
-    var myTable =
-        $('#dynamic-table')
+
+    //Leaves datatables isht
+    var leavestable =
+        $('#leaves-table')
             //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
             .DataTable({
                 bAutoWidth: false,
@@ -590,148 +591,257 @@
                     { "bSortable": false }
                 ],
                 "aaSorting": [],
-
-
-                //"bProcessing": true,
-                //"bServerSide": true,
-                //"sAjaxSource": "http://127.0.0.1/table.php"	,
-
-                //,
-                //"sScrollY": "200px",
-                //"bPaginate": false,
-
-                //"sScrollX": "100%",
-                //"sScrollXInner": "120%",
-                //"bScrollCollapse": true,
-                //Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
-                //you may want to wrap the table inside a "div.dataTables_borderWrap" element
-
-                //"iDisplayLength": 50
-
-
                 select: {
                     style: 'multi'
                 }
             });
-            ////$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
-
-            ////new $.fn.dataTable.Buttons(myTable, {
-            ////    buttons: [
-            ////        {
-            ////            "extend": "colvis",
-            ////            "text": "<i class='fa fa-search bigger-110 blue'></i> <span class='hidden'>Show/hide columns</span>",
-            ////            "className": "btn btn-white btn-primary btn-bold",
-            ////            columns: ':not(:first):not(:last)'
-            ////        },
-            ////        {
-            ////            "extend": "copy",
-            ////            "text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copy to clipboard</span>",
-            ////            "className": "btn btn-white btn-primary btn-bold"
-            ////        },
-            ////        {
-            ////            "extend": "csv",
-            ////            "text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>Export to CSV</span>",
-            ////            "className": "btn btn-white btn-primary btn-bold"
-            ////        },
-            ////        {
-            ////            "extend": "excel",
-            ////            "text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Export to Excel</span>",
-            ////            "className": "btn btn-white btn-primary btn-bold"
-            ////        },
-            ////        {
-            ////            "extend": "pdf",
-            ////            "text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>Export to PDF</span>",
-            ////            "className": "btn btn-white btn-primary btn-bold"
-            ////        },
-            ////        {
-            ////            "extend": "print",
-            ////            "text": "<i class='fa fa-print bigger-110 grey'></i> <span class='hidden'>Print</span>",
-            ////            "className": "btn btn-white btn-primary btn-bold",
-            ////            autoPrint: false,
-            ////            message: 'This print was produced using the Print button for DataTables'
-            ////        }
-            ////    ]
-            ////});
-            ////myTable.buttons().container().appendTo($('.tableTools-container'));
-
-            //////style the message box
-            ////var defaultCopyAction = myTable.button(1).action();
-            ////myTable.button(1).action(function (e, dt, button, config) {
-            ////    defaultCopyAction(e, dt, button, config);
-            ////    $('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
-            ////});
 
 
-            ////var defaultColvisAction = myTable.button(0).action();
-            ////myTable.button(0).action(function (e, dt, button, config) {
+    setTimeout(function () {
+        $($('.tableTools-container')).find('a.dt-button').each(function () {
+            var div = $(this).find(' > div').first();
+            if (div.length == 1) div.tooltip({ container: 'body', title: div.parent().text() });
+            else $(this).tooltip({ container: 'body', title: $(this).text() });
+        });
+    }, 500);
 
-            //    defaultColvisAction(e, dt, button, config);
 
+    leavestable.on('select', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(leavestable.row(index).node()).find('input:checkbox').prop('checked', true);
+        }
+    });
+    leavestable.on('deselect', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(leavestable.row(index).node()).find('input:checkbox').prop('checked', false);
+        }
+    });
 
-            //    if ($('.dt-button-collection > .dropdown-menu').length == 0) {
-            //        $('.dt-button-collection')
-            //            .wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
-            //            .find('a').attr('href', '#').wrap("<li />")
-            //    }
-            //    $('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
-            //});
+    /////////////////////////////////
+    //table checkboxes
+    $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
 
-            ////
+    //select/deselect all rows according to table header checkbox
+    $('#leaves-table > thead > tr > th input[type=checkbox], #leaves-table_wrapper input[type=checkbox]').eq(0).on('click', function () {
+        var th_checked = this.checked;//checkbox inside "TH" table header
 
-            setTimeout(function () {
-                $($('.tableTools-container')).find('a.dt-button').each(function () {
-                    var div = $(this).find(' > div').first();
-                    if (div.length == 1) div.tooltip({ container: 'body', title: div.parent().text() });
-                    else $(this).tooltip({ container: 'body', title: $(this).text() });
-                });
-            }, 500);
+        $('#leaves-table').find('tbody > tr').each(function () {
+            var row = this;
+            if (th_checked) leavestable.row(row).select();
+            else leavestable.row(row).deselect();
+        });
+    });
+
+    //select/deselect a row when the checkbox is checked/unchecked
+    $('#leaves-table').on('click', 'td input[type=checkbox]', function () {
+        var row = $(this).closest('tr').get(0);
+        if (this.checked) leavestable.row(row).deselect();
+        else leavestable.row(row).select();
+    });
 
 
 
+    $(document).on('click', '#leaves-table .dropdown-toggle', function (e) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        e.preventDefault();
+    });
+    
+
+    //Approval Entries
 
 
-            myTable.on('select', function (e, dt, type, index) {
-                if (type === 'row') {
-                    $(myTable.row(index).node()).find('input:checkbox').prop('checked', true);
-                }
-            });
-            myTable.on('deselect', function (e, dt, type, index) {
-                if (type === 'row') {
-                    $(myTable.row(index).node()).find('input:checkbox').prop('checked', false);
+    var approvalentriestable =
+        $('#approvalentries-table')
+            //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+            .DataTable({
+                bAutoWidth: false,
+                "aoColumns": [
+                    { "bSortable": false },
+                    null, null, null, null, null, null, null, null,
+                    { "bSortable": false }
+                ],
+                "aaSorting": [],
+                select: {
+                    style: 'multi'
                 }
             });
 
 
+    setTimeout(function () {
+        $($('.tableTools-container')).find('a.dt-button').each(function () {
+            var div = $(this).find(' > div').first();
+            if (div.length == 1) div.tooltip({ container: 'body', title: div.parent().text() });
+            else $(this).tooltip({ container: 'body', title: $(this).text() });
+        });
+    }, 500);
 
 
-            /////////////////////////////////
-            //table checkboxes
-            $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+    approvalentriestable.on('select', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(approvalentriestable.row(index).node()).find('input:checkbox').prop('checked', true);
+        }
+    });
+    approvalentriestable.on('deselect', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(approvalentriestable.row(index).node()).find('input:checkbox').prop('checked', false);
+        }
+    });
 
-            //select/deselect all rows according to table header checkbox
-            $('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function () {
-                var th_checked = this.checked;//checkbox inside "TH" table header
+    /////////////////////////////////
+    //table checkboxes
+    $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
 
-                $('#dynamic-table').find('tbody > tr').each(function () {
-                    var row = this;
-                    if (th_checked) myTable.row(row).select();
-                    else myTable.row(row).deselect();
-                });
-            });
+    //select/deselect all rows according to table header checkbox
+    $('#approvalentries-table > thead > tr > th input[type=checkbox], #approvalentries-table_wrapper input[type=checkbox]').eq(0).on('click', function () {
+        var th_checked = this.checked;//checkbox inside "TH" table header
 
-            //select/deselect a row when the checkbox is checked/unchecked
-            $('#dynamic-table').on('click', 'td input[type=checkbox]', function () {
-                var row = $(this).closest('tr').get(0);
-                if (this.checked) myTable.row(row).deselect();
-                else myTable.row(row).select();
-            });
+        $('#approvalentries-table').find('tbody > tr').each(function () {
+            var row = this;
+            if (th_checked) approvalentriestable.row(row).select();
+            else approvalentriestable.row(row).deselect();
+        });
+    });
+
+    //select/deselect a row when the checkbox is checked/unchecked
+    $('#approvalentries-table').on('click', 'td input[type=checkbox]', function () {
+        var row = $(this).closest('tr').get(0);
+        if (this.checked) approvalentriestable.row(row).deselect();
+        else approvalentriestable.row(row).select();
+    });
 
 
 
-            $(document).on('click', '#dynamic-table .dropdown-toggle', function (e) {
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                e.preventDefault();
-            });
+    $(document).on('click', '#approvalentries-table .dropdown-toggle', function (e) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        e.preventDefault();
+    });
+    $("#approvalentries-table").on("click", ".appoveapprovalentry", function (e) {
+        e.preventDefault();
 
+        var pid = $(this).attr('data-id');
+        var docno = $(this).attr('data-docno');
+
+        bootbox.confirm({
+            title: "<i class='fa fa-check'></i> Approve record?",
+            message: "Do you wish to approve this approval entry for document number " + docno + "?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true) {
+
+                    $.gritter.add({
+                        title: 'This is a centered notification',
+                        text: 'Just add a "gritter-center" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
+                        class_name: 'gritter-info gritter-center'
+                    });
+
+                    jQuery.ajax({
+                        url: 'AdvanceRequests.aspx/DeleteRecord',
+                        type: "POST",
+                        data: '{param1:"' + pid + '"}',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+
+                            if (response != null && response.d != null) {
+                                var data = response.d;
+                                // alert(typeof (data)); //it comes out to be string 
+                                //we need to parse it to JSON 
+                                data = $.parseJSON(data);
+
+                                hideLoading();
+
+                                bootbox.alert({
+                                    message: data.Message,
+                                    callback: function () {
+                                        window.setTimeout(function () {
+                                            location.reload()
+                                        }, 1000);
+                                    }
+                                })
+                            }
+                        },
+                        error: function () {
+                            bootbox.error({ title: "System error", message: "An error occured." });
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    $("#approvalentries-table").on("click", ".rejectapprovalentry", function (e) {
+        e.preventDefault();
+
+        var pid = $(this).attr('data-id');
+        var docno = $(this).attr('data-docno');
+
+        bootbox.confirm({
+            title: "<i class='fa fa-times'></i> Reject record?",
+            message: "Do you wish to reject this approval entry for document number " + docno +"?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true) {
+
+                    $.gritter.add({
+                        title: 'This is a centered notification',
+                        text: 'Just add a "gritter-center" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
+                        class_name: 'gritter-info gritter-center'
+                    });
+
+                    jQuery.ajax({
+                        url: 'AdvanceRequests.aspx/DeleteRecord',
+                        type: "POST",
+                        data: '{param1:"' + pid + '"}',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+
+                            if (response != null && response.d != null) {
+                                var data = response.d;
+                                // alert(typeof (data)); //it comes out to be string 
+                                //we need to parse it to JSON 
+                                data = $.parseJSON(data);
+
+                                hideLoading();
+
+                                bootbox.alert({
+                                    message: data.Message,
+                                    callback: function () {
+                                        window.setTimeout(function () {
+                                            location.reload()
+                                        }, 1000);
+                                    }
+                                })
+                            }
+                        },
+                        error: function () {
+                            bootbox.error({ title: "System error", message: "An error occured." });
+                        }
+                    });
+                }
+            }
+        });
+    });
 })

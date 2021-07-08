@@ -21,6 +21,13 @@ namespace HumanResources
             int description;
             return InternetGetConnectedState(out description, 0);
         }
+        public static string GetReadableDate(string Date)
+        {
+           DateTime DateToConvert = Convert.ToDateTime(Date);
+
+            return DateToConvert.ToString("d MMMM yyyy",
+                     System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+        }
         public static bool SendTextMessage(string recipts, string message)
         {
             bool _status = false;

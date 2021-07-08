@@ -193,6 +193,16 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppFunctions.cs" />
+    <Compile Include="Models\ApprovalEntriesListViewModel.cs" />
+    <Compile Include="Models\ApprovalEntry.cs">
+      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Attachment.cs">
+      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EmployeeLedgerEntry.cs">
+      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LeaveApplicationViewModel.cs" />
     <Compile Include="Models\LeaveManagementSystemModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -433,13 +443,13 @@
     <Content Include="UploadedFiles\htaccess">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\ApprovalEntries\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Account\" />
     <Folder Include="Views\AdvanceClaims\" />
     <Folder Include="Views\AdvanceRequests\" />
     <Folder Include="Views\AdvanceSurrenders\" />
-    <Folder Include="Views\ApprovalEntries\" />
     <Folder Include="Views\Reports\" />
     <Folder Include="Views\TransportRequests\" />
   </ItemGroup>
