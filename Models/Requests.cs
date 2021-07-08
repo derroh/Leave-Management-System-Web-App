@@ -24,4 +24,13 @@ namespace HumanResources.Models
         public bool IsAttachmentMandatory { get; set; }
     }
 
+    public class ResponseLeaveQuantityAndReturnDate
+    {
+        public string Code { get; set; }
+        public int LeaveDaysApplied { get; set; }
+        public string ReturnDate { get; set; }
+        public string LeaveEndDate { get; set; }
+    }
+
+
 }

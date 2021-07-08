@@ -23,10 +23,67 @@
     if ($("#RangeSelection").is(":checked")) {
         $("#EndDate").change(function () {
             //Get Leave Quantity And ReturnDate
+            jQuery.ajax({
+                url: '/Leaves/LeaveQuantityAndReturnDate',
+                type: "POST",
+                data: '{Code:"' + $('#LeaveType').val() + '",StartDate:"' + $('#StartDate').val() + '", EndDate:"' + $('#EndDate').val() + '"}',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
 
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+                        //set fields values
+                        $('#LeaveDaysApplied').val(data.LeaveDaysApplied);
+                        $('#ReturnDate').val(data.ReturnDate);
+                    }
+                }
+            });
         });
-    }
+    }  
 
+    $("#LeaveDaysApplied").keyup(function () {
+        //Get Leave Quantity And ReturnDate
+        if ($("#DateSpecification").is(":checked")) {
+
+            if ($("#SpecifiedLeaveStartDate").val() == '') {
+                bootbox.dialog({
+                message: "You must specify your leave start day!",
+                buttons: {
+                    "success": {
+                        "label": "OK",
+                        "className": "btn-sm btn-primary"
+                    }
+                }
+            });
+            } else {
+                jQuery.ajax({
+                    url: '/Leaves/LeaveEndDateAndReturnDate',
+                    type: "POST",
+                    data: '{Code:"' + $('#LeaveType').val() + '",StartDate:"' + $('#SpecifiedLeaveStartDate').val() + '", LeaveDaysApplied:"' + $('#LeaveDaysApplied').val() + '"}',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+
+                        if (response != null) {
+                            //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                            //we need to parse it to JSON
+                            var data = $.parseJSON(response);
+
+                            //set fields values
+                            $('#LeaveEndDate').val(data.LeaveEndDate);
+                            $('#ReturnDate').val(data.ReturnDate);
+                        }
+                    }
+                });
+            }            
+        }
+    });
 
 
     //autofill leavetypes on LeaveType

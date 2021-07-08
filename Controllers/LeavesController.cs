@@ -37,6 +37,8 @@ namespace HumanResources.Controllers
             {
                 var leavetypes = dbEntities.LeaveTypes.ToList();
 
+                //if Male add Paternity. If female add maternity
+
                 foreach (var leavetype in leavetypes)
                 {
                     leavetypelist.Add(new LeaveType
@@ -79,6 +81,65 @@ namespace HumanResources.Controllers
                 RequiresAttachments = false
             };
             return Json(JsonConvert.SerializeObject(_RequestLeaveTypeDetailsResponse), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult LeaveQuantityAndReturnDate(string Code, string StartDate, string EndDate)
+        {
+            using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+            {              
+                var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
+
+                string AnnualLeaveDaysType = leaveType.AnnualLeaveDaysType;
+
+                if(AnnualLeaveDaysType .Trim() == "Consecutive Days")
+                {
+
+                }
+                else if (AnnualLeaveDaysType.Trim() == "Working Days")
+                {
+                    var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), 10);
+                }
+
+            }
+
+            var _ResponseLeaveQuantityAndReturnDate = new ResponseLeaveQuantityAndReturnDate
+            {
+                Code = Code,
+                LeaveDaysApplied = 1,
+                ReturnDate = "2020/01/01"
+            };
+            return Json(JsonConvert.SerializeObject(_ResponseLeaveQuantityAndReturnDate), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult LeaveEndDateAndReturnDate(string Code, string StartDate, string LeaveDaysApplied)
+        {
+            string EndDate = null;
+
+            using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+            {
+                var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
+
+                string AnnualLeaveDaysType = leaveType.AnnualLeaveDaysType;
+
+                if (AnnualLeaveDaysType.Trim() == "Consecutive Days")
+                {
+                    var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), Convert.ToInt32(LeaveDaysApplied));
+                    EndDate = dtResult.ToString("MM/dd/yyyy");
+                }
+                else if (AnnualLeaveDaysType.Trim() == "Working Days")
+                {
+                    var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), Convert.ToInt32(LeaveDaysApplied));
+                    EndDate = dtResult.ToString("MM/dd/yyyy");
+                }
+
+            }
+
+            var _ResponseLeaveQuantityAndReturnDate = new ResponseLeaveQuantityAndReturnDate
+            {
+                Code = Code,
+                LeaveDaysApplied = 1,
+                LeaveEndDate = EndDate,
+                ReturnDate = EndDate
+            };
+            return Json(JsonConvert.SerializeObject(_ResponseLeaveQuantityAndReturnDate), JsonRequestBehavior.AllowGet);
         }
         public ActionResult SaveSelection(LeaveApplicationViewModel ep)
         {
