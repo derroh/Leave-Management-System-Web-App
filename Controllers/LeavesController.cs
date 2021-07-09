@@ -11,11 +11,16 @@ namespace HumanResources.Controllers
     using System.IO;
 
     public class LeavesController : Controller
-    {
-        [HttpPost]
+    {       
         public ActionResult Index()
         {
-            return View();
+            List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
+
+            for(int i=1; i <=10; i++)
+            {
+                _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo ="LEAVE00"+1, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = "open", DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()) , EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()) , StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()) ,LeaveDays = i.ToString(),DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = i*10 });
+            }
+            return View(_LeavesListViewModel);
         }
         [HttpGet]
         public ActionResult List(string status)

@@ -31,5 +31,6 @@ namespace HumanResources.Models
         public virtual DbSet<ApprovalEntry> ApprovalEntries { get; set; }
         public virtual DbSet<Attachment> Attachments { get; set; }
         public virtual DbSet<EmployeeLedgerEntry> EmployeeLedgerEntries { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
     }
 }

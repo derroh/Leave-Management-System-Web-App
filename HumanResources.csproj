@@ -200,9 +200,13 @@
     <Compile Include="Models\Attachment.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Employee.cs">
+      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\EmployeeLedgerEntry.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EmployeeProfileViewModel.cs" />
     <Compile Include="Models\LeaveApplicationViewModel.cs" />
     <Compile Include="Models\LeaveManagementSystemModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -219,6 +223,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\LeavesListViewModel.cs" />
     <Compile Include="Models\LeaveType.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
@@ -446,6 +451,7 @@
     <Content Include="Views\ApprovalEntries\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CustomFunctions\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\AdvanceClaims\" />
     <Folder Include="Views\AdvanceRequests\" />

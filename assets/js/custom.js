@@ -587,7 +587,7 @@
                 bAutoWidth: false,
                 "aoColumns": [
                     { "bSortable": false },
-                    null, null, null, null, null, null, null,
+                    null, null, null, null, null, null, null, null,
                     { "bSortable": false }
                 ],
                 "aaSorting": [],
@@ -738,42 +738,36 @@
             },
             callback: function (result) {
 
-                if (result == true) {
-
-                    $.gritter.add({
-                        title: 'This is a centered notification',
-                        text: 'Just add a "gritter-center" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
-                        class_name: 'gritter-info gritter-center'
-                    });
+                if (result == true) {                    
 
                     jQuery.ajax({
-                        url: 'AdvanceRequests.aspx/DeleteRecord',
+                        url: '/ApprovalEntries/Approve',
                         type: "POST",
-                        data: '{param1:"' + pid + '"}',
+                        data: '{EntryNo:"' + pid + '" }',
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (response) {
 
-                            if (response != null && response.d != null) {
-                                var data = response.d;
-                                // alert(typeof (data)); //it comes out to be string 
-                                //we need to parse it to JSON 
-                                data = $.parseJSON(data);
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
 
-                                hideLoading();
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
 
-                                bootbox.alert({
-                                    message: data.Message,
-                                    callback: function () {
-                                        window.setTimeout(function () {
-                                            location.reload()
-                                        }, 1000);
-                                    }
-                                })
+                                if (data.Status =="000") {
+                                    $.gritter.add({
+                                        title: 'Approval Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Approval Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
                             }
-                        },
-                        error: function () {
-                            bootbox.error({ title: "System error", message: "An error occured." });
                         }
                     });
                 }
@@ -804,44 +798,42 @@
 
                 if (result == true) {
 
-                    $.gritter.add({
-                        title: 'This is a centered notification',
-                        text: 'Just add a "gritter-center" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
-                        class_name: 'gritter-info gritter-center'
-                    });
-
                     jQuery.ajax({
-                        url: 'AdvanceRequests.aspx/DeleteRecord',
+                        url: '/ApprovalEntries/Approve',
                         type: "POST",
-                        data: '{param1:"' + pid + '"}',
+                        data: '{EntryNo:"' + pid + '" }',
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (response) {
 
-                            if (response != null && response.d != null) {
-                                var data = response.d;
-                                // alert(typeof (data)); //it comes out to be string 
-                                //we need to parse it to JSON 
-                                data = $.parseJSON(data);
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
 
-                                hideLoading();
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
 
-                                bootbox.alert({
-                                    message: data.Message,
-                                    callback: function () {
-                                        window.setTimeout(function () {
-                                            location.reload()
-                                        }, 1000);
-                                    }
-                                })
+
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Approval Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Approval Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
                             }
-                        },
-                        error: function () {
-                            bootbox.error({ title: "System error", message: "An error occured." });
                         }
                     });
                 }
             }
         });
     });
+
+    //Profile
+
 })
