@@ -223,7 +223,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\LeavesListViewModel.cs" />
+    <Compile Include="Models\ListViewModels.cs" />
     <Compile Include="Models\LeaveType.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>

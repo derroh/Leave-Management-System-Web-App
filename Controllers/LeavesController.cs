@@ -267,6 +267,26 @@ namespace HumanResources.Controllers
         }
         // Leave Entry Type -> Opening Balance",Accrue,Deduct,Use,Closing,Recall
 
+        //Approal stuff
+        public ActionResult Submit(string DocumentNo)
+        {
+            var _RequestResponse = new RequestResponse
+            {
+                Status = "900",
+                Message = "Submit Success! for leave " + DocumentNo
+            };
 
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Cancel(string DocumentNo)
+        {
+            var _RequestResponse = new RequestResponse
+            {
+                Status = "900",
+                Message = "Cancel Success! for leave " + DocumentNo
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
     }
 }

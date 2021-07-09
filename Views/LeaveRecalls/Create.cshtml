@@ -27,7 +27,7 @@
 
                 <div class="widget-body">
                     <div class="widget-main">
-                        <div id="fuelux-wizard-container">
+                        <div id="leaverecall-wizard">
                             <div>
                                 <ul class="steps">
                                     <li data-step="1" class="active">
@@ -57,7 +57,7 @@
                             <div class="step-content pos-rel">
                                 <div class="step-pane active" data-step="1">
                                     <h3 class="lighter block green">Enter the following information</h3>
-                                    <form class="form-horizontal" id="validation-form" method="get">
+                                    <form class="form-horizontal" id="leaverecallleaveselection-form" method="get">
 
                                         <div class="hr hr-dotted"></div>
 
@@ -69,7 +69,7 @@
                                             <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="state">Leave</label>
 
                                             <div class="col-xs-12 col-sm-9">
-                                                <select id="state" name="state" class="select2" data-placeholder="Click to Choose...">
+                                                <select id="state" name="ApprovedLeave" class="select2" data-placeholder="Click to Choose...">
                                                     <option value="">&nbsp;</option>
                                                     <option value="AL">LEAVE001 - June 2020 - Aug 2020</option>
                                                     <option value="AK">Alaska</option>
@@ -128,7 +128,7 @@
 
                                 <div class="step-pane" data-step="2">
                                     <h3 class="lighter block green">Specify number of days to recall</h3>
-                                    <form class="form-horizontal" id="validation-form2" method="get">
+                                    <form class="form-horizontal" id="leaverecalldayselection-form" method="get">
 
                                         <div class="hr hr-dotted"></div>
 
@@ -150,7 +150,7 @@
 
                                 <div class="step-pane" data-step="3">
                                     <h3 class="lighter block green">Add relevant Attachments For this application</h3>
-                                    <form class="form-horizontal" id="validation-form3" method="get">
+                                    <form class="form-horizontal" id="leaverecallattachments-form" method="get">
 
                                         <div class="hr hr-dotted"></div>
 
@@ -160,7 +160,7 @@
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="col-xs-12 col-sm-6">
 
-                                                    <input multiple="" type="file" id="id-input-file-3" />
+                                                    <input multiple="" type="file" id="LeaveRecallAttachments" />
                                                 </div>
                                             </div>
                                         </div>
@@ -169,11 +169,11 @@
                                         <div class="space-2"></div>
 
                                         <div class="form-group">
-                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="comment">Comment</label>
+                                            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Comment">Comment</label>
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <textarea class="autosize-transition limited form-control" name="comment" id="comment" maxlength="50"></textarea>
+                                                    <textarea class="autosize-transition limited form-control" name="Comment" id="Comment" maxlength="50"></textarea>
                                                 </div>
                                             </div>
                                         </div>

@@ -1,6 +1,6 @@
-﻿
+﻿@model IEnumerable<HumanResources.Models.LeaveRecallsListViewModel>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "List";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
@@ -8,11 +8,7 @@
 
     <div class="page-header">
         <h1>
-            Tables
-            <small>
-                <i class="ace-icon fa fa-angle-double-right"></i>
-                Static &amp; Dynamic Tables
-            </small>
+           Leave Recalls
         </h1>
     </div><!-- /.page-header -->
 
@@ -25,13 +21,13 @@
                         <div class="pull-right tableTools-container"></div>
                     </div>
                     <div class="table-header">
-                        Results for "Latest Registered Domains"
+                        Results for "Open Leave applications"
                     </div>
 
                     <!-- div.table-responsive -->
                     <!-- div.dataTables_borderWrap -->
                     <div>
-                        <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                        <table id="leaverecalls-table" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th class="center">
@@ -40,160 +36,140 @@
                                             <span class="lbl"></span>
                                         </label>
                                     </th>
-                                    <th>Domain</th>
-                                    <th>Price</th>
-                                    <th class="hidden-480">Clicks</th>
+                                    <th>
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Date Submitted
+                                    </th>
+                                    <th>
+                                        <i class="ace-icon fa fa-clipboard bigger-110 hidden-480"></i>
+                                        Leave Type Recalled
+                                    </th>
+                                    <th>
+                                        <i class="ace-icon fa fa-list-ol bigger-110 hidden-480"></i>
+                                        Leave No
+                                    </th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Start Date
+                                    </th>
 
                                     <th>
-                                        <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
-                                        Update
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        End Date
                                     </th>
-                                    <th class="hidden-480">Status</th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Days Recalled
+                                    </th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-question-circle bigger-110 hidden-480"></i>
+                                        Status
+                                    </th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-question-circle bigger-110 hidden-480"></i>
+                                        Progress
+                                    </th>
 
                                     <th></th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <td class="center">
-                                        <label class="pos-rel">
-                                            <input type="checkbox" class="ace" />
-                                            <span class="lbl"></span>
-                                        </label>
-                                    </td>
+                                @foreach (var leaverecall in Model)
+                                {
+                                    <tr>
+                                        <td class="center">
+                                            <label class="pos-rel">
+                                                <input type="checkbox" class="ace" />
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </td>
 
-                                    <td>
-                                        <a href="#">app.com</a>
-                                    </td>
-                                    <td>$45</td>
-                                    <td class="hidden-480">3,330</td>
-                                    <td>Feb 12</td>
-
-                                    <td class="hidden-480">
-                                        <span class="label label-sm label-warning">Expiring</span>
-                                    </td>
-
-                                    <td>
-                                        <div class="hidden-sm hidden-xs action-buttons">
-                                            <a class="blue" href="#">
-                                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                            </a>
-
-                                            <a class="green" href="#">
-                                                <i class="ace-icon fa fa-pencil bigger-130"></i>
-                                            </a>
-
-                                            <a class="red" href="#">
-                                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                            </a>
-                                        </div>
-
-                                        <div class="hidden-md hidden-lg">
-                                            <div class="inline pos-rel">
-                                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                                </button>
-
-                                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                                    <li>
-                                                        <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                                            <span class="blue">
-                                                                <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                                            <span class="green">
-                                                                <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                                            <span class="red">
-                                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                        <td>
+                                            @leaverecall.DateSubmitted
+                                        </td>
+                                        <td>@leaverecall.LeaveTypeRecalled</td>
+                                        <td>@leaverecall.DocumentNo</td>
+                                        <td class="hidden-480">@leaverecall.StartDate</td>
+                                        <td>@leaverecall.EndDate</td>
+                                        <td> @leaverecall.LeaveDaysRecalled day(s)</td>
+                                        <td class="hidden-480">
+                                            <span class="label label-sm label-warning">@leaverecall.ApprovalStatus</span>
+                                        </td>
+                                        <td class="hidden-480">
+                                            <div class="progress pos-rel" data-percent="@leaverecall.ApprovalProgress%">
+                                                <div class="progress-bar" style="width:@leaverecall.ApprovalProgress%;"></div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
 
-                                <tr>
-                                    <td class="center">
-                                        <label class="pos-rel">
-                                            <input type="checkbox" class="ace" />
-                                            <span class="lbl"></span>
-                                        </label>
-                                    </td>
+                                        <td>
+                                            <div class="hidden-sm hidden-xs action-buttons">
+                                                <a class="blue" href="#">
+                                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                </a>
 
-                                    <td>
-                                        <a href="#">base.com</a>
-                                    </td>
-                                    <td>$35</td>
-                                    <td class="hidden-480">2,595</td>
-                                    <td>Feb 18</td>
+                                                @if (leaverecall.ApprovalStatus == "open")
+                                                {
+                                                    <a class="green" href="#">
+                                                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                    </a>
+                                                }
+                                                <a class="green submitleaverecall" href="#" data-docno="@leaverecall.DocumentNo">
+                                                    <i class="ace-icon fa fa-paper-plane-o bigger-130"></i>
+                                                </a>
 
-                                    <td class="hidden-480">
-                                        <span class="label label-sm label-success">Registered</span>
-                                    </td>
-
-                                    <td>
-                                        <div class="hidden-sm hidden-xs action-buttons">
-                                            <a class="blue" href="#">
-                                                <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                            </a>
-
-                                            <a class="green" href="#">
-                                                <i class="ace-icon fa fa-pencil bigger-130"></i>
-                                            </a>
-
-                                            <a class="red" href="#">
-                                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                            </a>
-                                        </div>
-
-                                        <div class="hidden-md hidden-lg">
-                                            <div class="inline pos-rel">
-                                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                                </button>
-
-                                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                                    <li>
-                                                        <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                                            <span class="blue">
-                                                                <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-                                                            <span class="green">
-                                                                <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                                            <span class="red">
-                                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                                <a class="red" href="#">
+                                                    <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                </a>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+
+                                            <div class="hidden-md hidden-lg">
+                                                <div class="inline pos-rel">
+                                                    <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                        <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                                    </button>
+
+                                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                        <li>
+                                                            <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                <span class="blue">
+                                                                    <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+
+                                                        @if (leaverecall.ApprovalStatus == "open")
+                                                        {
+                                                            <li>
+                                                                <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                                    <span class="green">
+                                                                        <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        }
+
+                                                        <li>
+                                                            <a href="#" class="tooltip-error submitleaverecall" data-docno="@leaverecall.DocumentNo" data-rel="tooltip" title="Submit">
+                                                                <span class="green">
+                                                                    <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                                <span class="red">
+                                                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -203,4 +179,3 @@
         </div><!-- /.col -->
     </div><!-- /.row -->
 </div>
-
