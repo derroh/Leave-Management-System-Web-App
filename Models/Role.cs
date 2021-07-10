@@ -12,14 +12,9 @@ namespace HumanResources.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class LeaveRecall
+    public partial class Role
     {
-        public string DocumentNo { get; set; }
-        public string LeaveDocumentNo { get; set; }
-        public int LeaveDaysRecalled { get; set; }
-        public string EmployeeNo { get; set; }
-        public string ApprovalStatus { get; set; }
-    
-        public virtual Leaf Leaf { get; set; }
+        public int Roled { get; set; }
+        public string Description { get; set; }
     }
 }

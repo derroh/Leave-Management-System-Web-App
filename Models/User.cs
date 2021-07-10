@@ -20,10 +20,9 @@ namespace HumanResources.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public string Phone { get; set; }
-        public string StudentId { get; set; }
-        public string Role { get; set; }
         public string EmployeeNo { get; set; }
+        public string Role { get; set; }
     
-        public virtual Employee1 Employee { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

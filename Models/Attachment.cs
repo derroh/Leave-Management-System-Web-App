@@ -22,7 +22,6 @@ namespace HumanResources.Models
         public byte[] Data { get; set; }
         public Nullable<System.DateTime> DateUploaded { get; set; }
     
-        public virtual LeaveRecall LeaveRecall { get; set; }
         public virtual Leaf Leaf { get; set; }
     }
 }

@@ -14,6 +14,14 @@ namespace HumanResources.Models
     
     public partial class Employee
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Employee()
+        {
+            this.EmployeeLedgerEntries = new HashSet<EmployeeLedgerEntry>();
+            this.Leaves = new HashSet<Leaf>();
+            this.Users = new HashSet<User>();
+        }
+    
         public string EmployeeNo { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -63,5 +71,12 @@ namespace HumanResources.Models
         public string HRPosition { get; set; }
         public int CurrentYear { get; set; }
         public int Status { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmployeeLedgerEntry> EmployeeLedgerEntries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Leaf> Leaves { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<User> Users { get; set; }
     }
 }

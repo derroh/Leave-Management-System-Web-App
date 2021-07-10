@@ -28,5 +28,7 @@ namespace HumanResources.Models
         public Nullable<int> Quantity { get; set; }
         public string EntryType { get; set; }
         public string Year { get; set; }
+    
+        public virtual Employee Employee { get; set; }
     }
 }
