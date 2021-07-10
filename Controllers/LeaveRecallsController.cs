@@ -29,7 +29,7 @@ namespace HumanResources.Controllers
 
             for (int i = 1; i <= 10; i++)
             {
-                _LeaveRecallsListViewModel.Add(new LeaveRecallsListViewModel { DocumentNo = "LEAVE00" + 1, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = "open", DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDaysRecalled = i.ToString(), DocumentType = "Leave", LeaveTypeRecalled = "Annual Leave", ApprovalProgress = i * 10 });
+                _LeaveRecallsListViewModel.Add(new LeaveRecallsListViewModel { DocumentNo = "LEAVE00" + i, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = "open", DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDaysRecalled = i.ToString(), DocumentType = "Leave", LeaveTypeRecalled = "Annual Leave", ApprovalProgress = i * 10 });
             }
             return View(_LeaveRecallsListViewModel);
         }
@@ -54,6 +54,16 @@ namespace HumanResources.Controllers
             {
                 Status = "900",
                 Message = "Cancel Success! for leave recall " + DocumentNo
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Delete(string DocumentNo)
+        {
+            var _RequestResponse = new RequestResponse
+            {
+                Status = "900",
+                Message = "Delete Success! for leave recall " + DocumentNo
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);

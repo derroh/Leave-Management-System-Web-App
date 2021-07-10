@@ -114,10 +114,18 @@
                                                         <i class="ace-icon fa fa-pencil bigger-130"></i>
                                                     </a>
                                                 }
+                                                <a class="green submitleave" href="#" data-docno="@leave.DocumentNo">
+                                                    <i class="ace-icon fa fa-paper-plane-o bigger-130"></i>
+                                                </a>
 
-                                                <a class="red" href="#">
+                                                <a class="red cancelleave" href="#" data-docno="@leave.DocumentNo">
+                                                    <i class="ace-icon fa fa-times bigger-130"></i>
+                                                </a>
+
+                                                <a class="red deleteleaves" data-docno="@leave.DocumentNo" href="#">
                                                     <i class="ace-icon fa fa-trash-o bigger-130"></i>
                                                 </a>
+
                                             </div>
 
                                             <div class="hidden-md hidden-lg">
@@ -147,7 +155,23 @@
                                                         }
 
                                                         <li>
-                                                            <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                            <a href="#" class="tooltip-success submitleave" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Submit">
+                                                                <span class="green">
+                                                                    <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="#" class="tooltip-error cancelleave" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Cancel">
+                                                                <span class="red">
+                                                                    <i class="ace-icon fa fa-times bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="#" class="tooltip-error deleteleaves"  data-docno="@leave.DocumentNo" data-rel="tooltip" title="Delete">
                                                                 <span class="red">
                                                                     <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                                                 </span>
@@ -168,3 +192,4 @@
         </div><!-- /.col -->
     </div><!-- /.row -->
 </div>
+

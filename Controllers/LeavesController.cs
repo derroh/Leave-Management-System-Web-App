@@ -18,7 +18,7 @@ namespace HumanResources.Controllers
 
             for(int i=1; i <=10; i++)
             {
-                _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo ="LEAVE00"+1, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = "open", DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()) , EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()) , StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()) ,LeaveDays = i.ToString(),DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = i*10 });
+                _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo ="LEAVE00"+i, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = "open", DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()) , EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()) , StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()) ,LeaveDays = i.ToString(),DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = i*10 });
             }
             return View(_LeavesListViewModel);
         }
@@ -26,7 +26,14 @@ namespace HumanResources.Controllers
         public ActionResult List(string status)
         {
             string s = Request.QueryString["page"];
-            return View();
+
+            List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
+
+            for (int i = 1; i <= 10; i++)
+            {
+                _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = "LEAVE00" + 1, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = "open", DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = i.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = i * 10 });
+            }
+            return View(_LeavesListViewModel);
         }
 
         public ActionResult Create()
@@ -284,6 +291,16 @@ namespace HumanResources.Controllers
             {
                 Status = "900",
                 Message = "Cancel Success! for leave " + DocumentNo
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Delete(string DocumentNo)
+        {
+            var _RequestResponse = new RequestResponse
+            {
+                Status = "900",
+                Message = "Delete Success! for leave " + DocumentNo
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);

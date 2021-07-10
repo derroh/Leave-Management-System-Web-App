@@ -653,7 +653,7 @@
         var docno = $(this).attr('data-docno');
 
         bootbox.confirm({
-            title: "<i class='fa fa-paper-plane'></i> Submit record?",
+            title: "<i class='fa fa-paper-plane'></i> Submit record for approval?",
             message: "Do you wish to submit this leave number " + docno + " for approval?",
             buttons: {
                 confirm: {
@@ -710,7 +710,7 @@
         var docno = $(this).attr('data-docno');
 
         bootbox.confirm({
-            title: "<i class='fa fa-times'></i> Reject record?",
+            title: "<i class='fa fa-times'></i>  Cancel approval request?",
             message: "Do you wish to cancel this leave number " + docno + " for approval?",
             buttons: {
                 confirm: {
@@ -761,7 +761,65 @@
             }
         });
     });
-    
+
+
+    $("#leaves-table").on("click", ".deleteleaves", function (e) {
+        e.preventDefault();
+
+        var docno = $(this).attr('data-docno');
+
+        bootbox.confirm({
+            title: "<i class='fa fa-trash'></i> Delete?",
+            message: "Do you wish to delete this leave number " + docno + "?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true) {
+
+                    jQuery.ajax({
+                        url: '/Leaves/Delete',
+                        type: "POST",
+                        data: '{DocumentNo:"' + docno + '" }',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
+
+
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
 
     //Approval Entries
 
@@ -949,7 +1007,8 @@
         });
     });
 
-    //Leave Recall
+    //Leave Recalls scripts
+
     $leaverecallvalidation = true;
 
     $('#leaverecall-wizard').ace_wizard().on('actionclicked.fu.wizard', function (e, info) {
@@ -1233,7 +1292,7 @@
         var docno = $(this).attr('data-docno');
 
         bootbox.confirm({
-            title: "<i class='fa fa-paper-plane'></i> Submit record?",
+            title: "<i class='fa fa-paper-plane'></i> Submit record for approval?",
             message: "Do you wish to submit this leave recall number " + docno + " for approval?",
             buttons: {
                 confirm: {
@@ -1250,7 +1309,7 @@
                 if (result == true) {
 
                     jQuery.ajax({
-                        url: '/LeaveRecall/Submit',
+                        url: '/LeaveRecalls/Submit',
                         type: "POST",
                         data: '{DocumentNo:"' + docno + '" }',
                         dataType: "json",
@@ -1284,13 +1343,13 @@
         });
     });
 
-    $("#leaverecalls-table").on("click", ".cancelleave", function (e) {
+    $("#leaverecalls-table").on("click", ".cancelleaverecall", function (e) {
         e.preventDefault();
 
         var docno = $(this).attr('data-docno');
 
         bootbox.confirm({
-            title: "<i class='fa fa-times'></i> Cancel approval?",
+            title: "<i class='fa fa-times'></i> Cancel approval request?",
             message: "Do you wish to cancel this leave recall number " + docno + " for approval?",
             buttons: {
                 confirm: {
@@ -1307,7 +1366,7 @@
                 if (result == true) {
 
                     jQuery.ajax({
-                        url: '/LeaveRecall/Cancel',
+                        url: '/LeaveRecalls/Cancel',
                         type: "POST",
                         data: '{DocumentNo:"' + docno + '" }',
                         dataType: "json",
@@ -1342,5 +1401,61 @@
         });
     });
 
-    
+    $("#leaverecalls-table").on("click", ".deleteleaverecall", function (e) {
+        e.preventDefault();
+
+        var docno = $(this).attr('data-docno');
+
+        bootbox.confirm({
+            title: "<i class='fa fa-trash'></i> Delete?",
+            message: "Do you wish to delete this leave recall number " + docno + "?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true) {
+
+                    jQuery.ajax({
+                        url: '/LeaveRecalls/Delete',
+                        type: "POST",
+                        data: '{DocumentNo:"' + docno + '" }',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
+
+
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
 })
