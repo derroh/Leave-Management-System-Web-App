@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5d85a3fbfec143aea3016d3e2355ca1b" Name="Diagram1" >
+      <Diagram DiagramId="5d85a3fbfec143aea3016d3e2355ca1b" Name="Diagram1" ZoomLevel="30" >
         <EntityTypeShape EntityType="LeaveManagementSystemModel.Setting" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="LeaveManagementSystemModel.User" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="LeaveManagementSystemModel.LeaveType" Width="1.5" PointX="0.75" PointY="4.75" />
@@ -12,6 +12,13 @@
         <EntityTypeShape EntityType="LeaveManagementSystemModel.Attachment" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="LeaveManagementSystemModel.EmployeeLedgerEntry" Width="1.5" PointX="5.375" PointY="4.75" />
         <EntityTypeShape EntityType="LeaveManagementSystemModel.Employee" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="LeaveManagementSystemModel.Employee1" Width="1.5" PointX="4" PointY="13.625" />
+        <EntityTypeShape EntityType="LeaveManagementSystemModel.LeaveRecall" Width="1.5" PointX="6" PointY="9" />
+        <EntityTypeShape EntityType="LeaveManagementSystemModel.Leaf" Width="1.5" PointX="0.75" PointY="4.375" />
+        <AssociationConnector Association="LeaveManagementSystemModel.FK_Attachments_ToLeaveRecalls" />
+        <AssociationConnector Association="LeaveManagementSystemModel.FK_Attachments_ToLeaves" />
+        <AssociationConnector Association="LeaveManagementSystemModel.FK_Users_ToEmployees" />
+        <AssociationConnector Association="LeaveManagementSystemModel.FK_LeaveRecalls_ToLeaves" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

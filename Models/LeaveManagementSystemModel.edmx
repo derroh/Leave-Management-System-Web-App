@@ -24,13 +24,32 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="DocumentType" Type="nchar" MaxLength="10" />
-          <Property Name="DocumentNo" Type="nchar" MaxLength="10" />
+          <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
           <Property Name="FileName" Type="nchar" MaxLength="10" Nullable="false" />
           <Property Name="ContentType" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Data" Type="varbinary(max)" Nullable="false" />
           <Property Name="DateUploaded" Type="date" />
         </EntityType>
-        <EntityType Name="Employee">
+        <EntityType Name="EmployeeLedgerEntries">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PostingDate" Type="date" />
+          <Property Name="DocumentDate" Type="date" />
+          <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ExternalDocumentNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nchar" MaxLength="10" />
+          <Property Name="LeaveType" Type="nvarchar" MaxLength="50" />
+          <Property Name="UnitOfMeasure" Type="nchar" MaxLength="10" />
+          <Property Name="FromDate" Type="date" />
+          <Property Name="ToDate" Type="date" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="EntryType" Type="nchar" MaxLength="10" />
+          <Property Name="Year" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Employees">
           <Key>
             <PropertyRef Name="EmployeeNo" />
           </Key>
@@ -84,24 +103,30 @@
           <Property Name="CurrentYear" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="EmployeeLedgerEntries">
+        <EntityType Name="LeaveRecalls">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="DocumentNo" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LeaveDocumentNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LeaveDaysRecalled" Type="int" Nullable="false" />
           <Property Name="EmployeeNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="PostingDate" Type="date" />
-          <Property Name="DocumentDate" Type="date" />
-          <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="ExternalDocumentNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="Description" Type="nchar" MaxLength="10" />
-          <Property Name="LeaveType" Type="nvarchar" MaxLength="50" />
-          <Property Name="UnitOfMeasure" Type="nchar" MaxLength="10" />
-          <Property Name="FromDate" Type="date" />
-          <Property Name="ToDate" Type="date" />
-          <Property Name="Quantity" Type="int" />
-          <Property Name="EntryType" Type="nchar" MaxLength="10" />
-          <Property Name="Year" Type="nchar" MaxLength="10" />
+          <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Leaves">
+          <Key>
+            <PropertyRef Name="DocumentNo" />
+          </Key>
+          <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LeaveType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SelectionType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StartDate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="LeaveDates" Type="text" />
+          <Property Name="LeaveDaysApplied" Type="int" Nullable="false" />
+          <Property Name="ReturnDate" Type="date" Nullable="false" />
+          <Property Name="EmployeeNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="LeaveTypes">
           <Key>
@@ -139,17 +164,83 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" />
           <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-          <Property Name="StudentId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeNo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Role" Type="nchar" MaxLength="10" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Attachments_ToLeaveRecalls">
+          <End Role="LeaveRecalls" Type="Self.LeaveRecalls" Multiplicity="0..1" />
+          <End Role="Attachments" Type="Self.Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LeaveRecalls">
+              <PropertyRef Name="DocumentNo" />
+            </Principal>
+            <Dependent Role="Attachments">
+              <PropertyRef Name="DocumentNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attachments_ToLeaves">
+          <End Role="Leaves" Type="Self.Leaves" Multiplicity="0..1" />
+          <End Role="Attachments" Type="Self.Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leaves">
+              <PropertyRef Name="DocumentNo" />
+            </Principal>
+            <Dependent Role="Attachments">
+              <PropertyRef Name="DocumentNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LeaveRecalls_ToLeaves">
+          <End Role="Leaves" Type="Self.Leaves" Multiplicity="1" />
+          <End Role="LeaveRecalls" Type="Self.LeaveRecalls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leaves">
+              <PropertyRef Name="DocumentNo" />
+            </Principal>
+            <Dependent Role="LeaveRecalls">
+              <PropertyRef Name="LeaveDocumentNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_ToEmployees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeNo" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="EmployeeNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="LeaveManagementSystemModelStoreContainer">
           <EntitySet Name="ApprovalEntries" EntityType="Self.ApprovalEntries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Attachments" EntityType="Self.Attachments" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeLedgerEntries" EntityType="Self.EmployeeLedgerEntries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LeaveRecalls" EntityType="Self.LeaveRecalls" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Leaves" EntityType="Self.Leaves" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LeaveTypes" EntityType="Self.LeaveTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Settings" EntityType="Self.Settings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Attachments_ToLeaveRecalls" Association="Self.FK_Attachments_ToLeaveRecalls">
+            <End Role="LeaveRecalls" EntitySet="LeaveRecalls" />
+            <End Role="Attachments" EntitySet="Attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attachments_ToLeaves" Association="Self.FK_Attachments_ToLeaves">
+            <End Role="Leaves" EntitySet="Leaves" />
+            <End Role="Attachments" EntitySet="Attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LeaveRecalls_ToLeaves" Association="Self.FK_LeaveRecalls_ToLeaves">
+            <End Role="Leaves" EntitySet="Leaves" />
+            <End Role="LeaveRecalls" EntitySet="LeaveRecalls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_ToEmployees" Association="Self.FK_Users_ToEmployees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -163,6 +254,25 @@
           <EntitySet Name="Attachments" EntityType="LeaveManagementSystemModel.Attachment" />
           <EntitySet Name="EmployeeLedgerEntries" EntityType="LeaveManagementSystemModel.EmployeeLedgerEntry" />
           <EntitySet Name="Employees" EntityType="LeaveManagementSystemModel.Employee" />
+          <EntitySet Name="Employee1" EntityType="LeaveManagementSystemModel.Employee1" />
+          <EntitySet Name="LeaveRecalls" EntityType="LeaveManagementSystemModel.LeaveRecall" />
+          <EntitySet Name="Leaves" EntityType="LeaveManagementSystemModel.Leaf" />
+          <AssociationSet Name="FK_Attachments_ToLeaveRecalls" Association="LeaveManagementSystemModel.FK_Attachments_ToLeaveRecalls">
+            <End Role="LeaveRecall" EntitySet="LeaveRecalls" />
+            <End Role="Attachment" EntitySet="Attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attachments_ToLeaves" Association="LeaveManagementSystemModel.FK_Attachments_ToLeaves">
+            <End Role="Leaf" EntitySet="Leaves" />
+            <End Role="Attachment" EntitySet="Attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_ToEmployees" Association="LeaveManagementSystemModel.FK_Users_ToEmployees">
+            <End Role="Employee1" EntitySet="Employee1" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LeaveRecalls_ToLeaves" Association="LeaveManagementSystemModel.FK_LeaveRecalls_ToLeaves">
+            <End Role="Leaf" EntitySet="Leaves" />
+            <End Role="LeaveRecall" EntitySet="LeaveRecalls" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Setting">
           <Key>
@@ -192,6 +302,8 @@
           <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StudentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Role" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="EmployeeNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="LeaveManagementSystemModel.FK_Users_ToEmployees" FromRole="User" ToRole="Employee1" />
         </EntityType>
         <EntityType Name="LeaveType">
           <Key>
@@ -222,11 +334,13 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DocumentType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="DocumentNo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="DocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FileName" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="ContentType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Data" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
           <Property Name="DateUploaded" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="LeaveRecall" Relationship="LeaveManagementSystemModel.FK_Attachments_ToLeaveRecalls" FromRole="Attachment" ToRole="LeaveRecall" />
+          <NavigationProperty Name="Leaf" Relationship="LeaveManagementSystemModel.FK_Attachments_ToLeaves" FromRole="Attachment" ToRole="Leaf" />
         </EntityType>
         <EntityType Name="EmployeeLedgerEntry">
           <Key>
@@ -301,6 +415,138 @@
           <Property Name="CurrentYear" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="Employee1">
+          <Key>
+            <PropertyRef Name="EmployeeNo" />
+          </Key>
+          <Property Name="EmployeeNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Initials" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IDNumber" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="PassportNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="Int32" Nullable="false" />
+          <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PINNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NSSFNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NHIFNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HELBNo" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Religion" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Citizenship" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Picture" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="PostalAddress" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ResidentialAddress" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="PostCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="HomePhoneNumber" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CellularPhoneNumber" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="WorkPhoneNumber" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyEMail" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="JobTitle" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaritalStatus" Type="Int32" Nullable="false" />
+          <Property Name="Disabled" Type="Int32" Nullable="false" />
+          <Property Name="ResignationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SuspensionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DemisedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Retirementdate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RetrenchmentDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateOfLeaving" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndOfContractDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Date_Of_Joining_the_Company" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Date_Of_Leaving_the_Company" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Termination_Grounds" Type="Int32" Nullable="false" />
+          <Property Name="Bank" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BankBranch" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Department_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AnnualLeaveDaysEntitled" Type="Decimal" Nullable="false" Precision="38" Scale="20" />
+          <Property Name="HROrgUnit" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HRPosition" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CurrentYear" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="LeaveManagementSystemModel.FK_Users_ToEmployees" FromRole="Employee1" ToRole="User" />
+        </EntityType>
+        <EntityType Name="LeaveRecall">
+          <Key>
+            <PropertyRef Name="DocumentNo" />
+          </Key>
+          <Property Name="DocumentNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LeaveDocumentNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LeaveDaysRecalled" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Attachments" Relationship="LeaveManagementSystemModel.FK_Attachments_ToLeaveRecalls" FromRole="LeaveRecall" ToRole="Attachment" />
+          <NavigationProperty Name="Leaf" Relationship="LeaveManagementSystemModel.FK_LeaveRecalls_ToLeaves" FromRole="LeaveRecall" ToRole="Leaf" />
+        </EntityType>
+        <EntityType Name="Leaf">
+          <Key>
+            <PropertyRef Name="DocumentNo" />
+          </Key>
+          <Property Name="DocumentNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LeaveType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SelectionType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="LeaveDates" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LeaveDaysApplied" Type="Int32" Nullable="false" />
+          <Property Name="ReturnDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovalStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Attachments" Relationship="LeaveManagementSystemModel.FK_Attachments_ToLeaves" FromRole="Leaf" ToRole="Attachment" />
+          <NavigationProperty Name="LeaveRecalls" Relationship="LeaveManagementSystemModel.FK_LeaveRecalls_ToLeaves" FromRole="Leaf" ToRole="LeaveRecall" />
+        </EntityType>
+        <Association Name="FK_Attachments_ToLeaveRecalls">
+          <End Type="LeaveManagementSystemModel.LeaveRecall" Role="LeaveRecall" Multiplicity="0..1" />
+          <End Type="LeaveManagementSystemModel.Attachment" Role="Attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LeaveRecall">
+              <PropertyRef Name="DocumentNo" />
+            </Principal>
+            <Dependent Role="Attachment">
+              <PropertyRef Name="DocumentNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attachments_ToLeaves">
+          <End Type="LeaveManagementSystemModel.Leaf" Role="Leaf" Multiplicity="0..1" />
+          <End Type="LeaveManagementSystemModel.Attachment" Role="Attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leaf">
+              <PropertyRef Name="DocumentNo" />
+            </Principal>
+            <Dependent Role="Attachment">
+              <PropertyRef Name="DocumentNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_ToEmployees">
+          <End Type="LeaveManagementSystemModel.Employee1" Role="Employee1" Multiplicity="1" />
+          <End Type="LeaveManagementSystemModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee1">
+              <PropertyRef Name="EmployeeNo" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="EmployeeNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LeaveRecalls_ToLeaves">
+          <End Type="LeaveManagementSystemModel.Leaf" Role="Leaf" Multiplicity="1" />
+          <End Type="LeaveManagementSystemModel.LeaveRecall" Role="LeaveRecall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leaf">
+              <PropertyRef Name="DocumentNo" />
+            </Principal>
+            <Dependent Role="LeaveRecall">
+              <PropertyRef Name="LeaveDocumentNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -327,8 +573,8 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="LeaveManagementSystemModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
-                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -396,9 +642,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Employees">
-            <EntityTypeMapping TypeName="LeaveManagementSystemModel.Employee">
-              <MappingFragment StoreEntitySet="Employee">
+          <EntitySetMapping Name="Employee1">
+            <EntityTypeMapping TypeName="LeaveManagementSystemModel.Employee1">
+              <MappingFragment StoreEntitySet="Employees">
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CurrentYear" ColumnName="CurrentYear" />
                 <ScalarProperty Name="HRPosition" ColumnName="HRPosition" />
@@ -448,6 +694,33 @@
                 <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LeaveRecalls">
+            <EntityTypeMapping TypeName="LeaveManagementSystemModel.LeaveRecall">
+              <MappingFragment StoreEntitySet="LeaveRecalls">
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
+                <ScalarProperty Name="LeaveDaysRecalled" ColumnName="LeaveDaysRecalled" />
+                <ScalarProperty Name="LeaveDocumentNo" ColumnName="LeaveDocumentNo" />
+                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Leaves">
+            <EntityTypeMapping TypeName="LeaveManagementSystemModel.Leaf">
+              <MappingFragment StoreEntitySet="Leaves">
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
+                <ScalarProperty Name="ReturnDate" ColumnName="ReturnDate" />
+                <ScalarProperty Name="LeaveDaysApplied" ColumnName="LeaveDaysApplied" />
+                <ScalarProperty Name="LeaveDates" ColumnName="LeaveDates" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="SelectionType" ColumnName="SelectionType" />
+                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+                <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
