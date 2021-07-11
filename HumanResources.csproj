@@ -193,7 +193,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppFunctions.cs" />
-    <Compile Include="Models\ApprovalEntriesListViewModel.cs" />
+    <Compile Include="ViewModels\ApprovalEntriesListViewModel.cs" />
     <Compile Include="Models\ApprovalEntry.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
@@ -206,11 +206,11 @@
     <Compile Include="Models\EmployeeLedgerEntry.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\EmployeeProfileViewModel.cs" />
+    <Compile Include="ViewModels\EmployeeProfileViewModel.cs" />
     <Compile Include="Models\Leaf.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\LeaveApplicationViewModel.cs" />
+    <Compile Include="ViewModels\LeaveApplicationViewModel.cs" />
     <Compile Include="Models\LeaveManagementSystemModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -232,8 +232,9 @@
     <Compile Include="Models\LeaveType.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ListViewModels.cs" />
-    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="ViewModels\LeaveRecallsListViewModel.cs" />
+    <Compile Include="ViewModels\LeavesListViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\Requests.cs" />
     <Compile Include="Models\Role.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>

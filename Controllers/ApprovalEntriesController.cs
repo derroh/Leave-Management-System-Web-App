@@ -8,6 +8,7 @@ namespace HumanResources.Controllers
 {
     using Models;
     using Newtonsoft.Json;
+    using HumanResources.ViewModels;
 
     public class ApprovalEntriesController : Controller
     {

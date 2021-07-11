@@ -7,6 +7,7 @@ using System.Web.Mvc;
 namespace HumanResources.Controllers
 {
     using HumanResources.Models;
+    using HumanResources.ViewModels;
     using Newtonsoft.Json;
 
     public class LeaveRecallsController : Controller

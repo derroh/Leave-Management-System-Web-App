@@ -8,6 +8,7 @@ using System.Web.Mvc;
 namespace HumanResources.Controllers
 {
     using HumanResources.Models;
+    using HumanResources.ViewModels;
     public class ProfileController : Controller
     {
         // GET: Profile

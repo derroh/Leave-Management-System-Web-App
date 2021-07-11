@@ -15,6 +15,7 @@ namespace HumanResources.Controllers
     using Microsoft.AspNet.Identity;
     using Microsoft.Owin.Security;
     using HumanResources.Models;
+    using HumanResources.ViewModels;
     public class AccountController : Controller
     {
         #region Private Properties

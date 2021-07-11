@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace HumanResources.Models
+namespace HumanResources.ViewModels
 {
     public class LeaveApplicationViewModel
     {
