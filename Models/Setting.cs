@@ -25,5 +25,7 @@ namespace HumanResources.Models
         public string EmailSender { get; set; }
         public Nullable<int> SMTPPort { get; set; }
         public string SMTPHost { get; set; }
+        public string LeaveNumbers { get; set; }
+        public string LeaveRecallNumbers { get; set; }
     }
 }

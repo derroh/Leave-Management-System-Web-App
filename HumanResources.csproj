@@ -193,6 +193,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppFunctions.cs" />
+    <Compile Include="Models\NumberSery.cs">
+      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\ApprovalEntriesListViewModel.cs" />
     <Compile Include="Models\ApprovalEntry.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
@@ -451,14 +454,12 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Leaves\List.cshtml" />
-    <Content Include="UploadedFiles\htaccess">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Views\ApprovalEntries\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="CustomFunctions\" />
+    <Folder Include="UploadedFiles\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\AdvanceClaims\" />
     <Folder Include="Views\AdvanceRequests\" />

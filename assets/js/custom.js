@@ -205,6 +205,9 @@
                                 //console.log(JSON.stringify(response)); //it comes out to be string 
 
                                 //we need to parse it to JSON
+
+
+
                                 var data = jQuery.parseJSON(response);
 
                                 //Attachments
@@ -217,7 +220,7 @@
 
                                 jQuery.ajax({
                                     type: "POST",
-                                    url: "/Leaves/UploadFiles",
+                                    url: "/Leaves/SaveLeaveAttachments",
                                     dataType: "json",
                                     contentType: false, // Not to set any content header
                                     processData: false, // Not to process data

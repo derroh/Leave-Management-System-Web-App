@@ -12,7 +12,8 @@ namespace HumanResources.Controllers
     using System.IO;
 
     public class LeavesController : Controller
-    {       
+    {
+        static string LeaveDocumentNo = null;
         public ActionResult Index()
         {
             List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
@@ -42,6 +43,7 @@ namespace HumanResources.Controllers
 
         public ActionResult Create()
         {
+
             return View();
         }
         //Get LeaveTypes
@@ -159,72 +161,109 @@ namespace HumanResources.Controllers
         }
         public ActionResult SaveSelection(LeaveApplicationViewModel ep)
         {
-            string msg = "";;
+            string message = "", DocumentNo = "", status = "";
+
+            //create Leave Header here
+            LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
 
             try
             {
-                msg = ep.LeaveType;
+                var settings = _db.Settings.Where(s => s.Id == 1).SingleOrDefault();
+
+                if(settings != null)
+                {
+                    string LeaveCode = settings.LeaveNumbers;
+
+                    var NumberSeriesData = _db.NumberSeries.Where(s => s.Code == LeaveCode).SingleOrDefault();
+
+                    string LastUsedNumber = NumberSeriesData.LastUsedNumber;
+
+                    if (LastUsedNumber != "")
+                    {
+                        DocumentNo = AppFunctions.GetNewDocumentNumber(LeaveCode.Trim(), LastUsedNumber.Trim());
+
+                        LeaveDocumentNo = DocumentNo;
+                    }
+
+                    var leave = new Leaf
+                    {
+                        DocumentNo = DocumentNo,
+                        LeaveType = ep.LeaveType,
+                        ApprovalStatus = "Open"
+                    };
+
+                    using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+                    {
+                        dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                        dbEntities.Leaves.Add(leave);
+                        dbEntities.SaveChanges();
+
+                        message = "Position Created successfully";
+                    }
+
+                    //update last used number
+                    AppFunctions.UpdateNumberSeries(LeaveCode, DocumentNo);
+                }
+                else
+                {
+                    message = "Looks like leave numbers have not been set up";
+                    status = "900";
+                }               
             }
             catch (Exception es)
             {
-                msg = es.Message;
+                message = es.Message;
+                status = "000";
             }
 
             var _RequestResponse = new RequestResponse
             {
-                Message = msg,
+                Message = message,
 
-                Status = "000"
+                Status = status
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
         public ActionResult SaveLeaveSelection(LeaveApplicationViewModel ep)
         {
-            string msg = ""; ;
+            string message = "", status = "";
 
             try
-            {
-                msg = ep.SelectionType;
+            {             
+                using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+                {
+                    var leave = dbEntities.Leaves.Where(s => s.DocumentNo == LeaveDocumentNo).SingleOrDefault();
+
+                    if (leave != null)
+                    {
+                        leave.SelectionType = ep.SelectionType;
+                        leave.StartDate = ep.StartDate;
+                        leave.EndDate =Convert.ToDateTime(ep.EndDate);
+                        leave.LeaveDaysApplied =Convert.ToInt32(ep.LeaveDaysApplied);
+                        dbEntities.SaveChanges();
+                        message = "Position Created successfully";
+                        status = "000";
+                    }                   
+                }
             }
             catch (Exception es)
             {
-                msg = es.Message;
+                message = es.Message;
+                status = "900";
             }
 
             var _RequestResponse = new RequestResponse
             {
-                Message = msg,
+                Message = message,
 
-                Status = "000"
-            };
-
-            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult SaveLeaveAttachment(LeaveApplicationViewModel ep)
-        {
-            string msg = ""; ;
-
-            try
-            {
-                msg = ep.SelectionType;
-            }
-            catch (Exception es)
-            {
-                msg = es.Message;
-            }
-
-            var _RequestResponse = new RequestResponse
-            {
-                Message = msg,
-
-                Status = "000"
+                Status = status
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult UploadFiles()
+        public ActionResult SaveLeaveAttachments()
         {
             string msg = null;
 
@@ -247,7 +286,7 @@ namespace HumanResources.Controllers
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
-        }
+        }       
 
         [HttpPost]
         public FileResult DownloadFile(int? fileId)
@@ -259,21 +298,29 @@ namespace HumanResources.Controllers
 
         private void UploadDocuments(string path, HttpPostedFileBase file)
         {
-            using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+            try
             {
-                byte[] bytes;
-
-                using (BinaryReader br = new BinaryReader(file.InputStream))
+                using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
                 {
-                    bytes = br.ReadBytes(file.ContentLength);
+                    byte[] bytes;
+
+                    using (BinaryReader br = new BinaryReader(file.InputStream))
+                    {
+                        bytes = br.ReadBytes(file.ContentLength);
+                    }
+
+                    var Attachment = new Attachment { FileName = Path.GetFileName(file.FileName), ContentType = file.ContentType, Data = bytes, DateUploaded = DateTime.Now, DocumentNo = LeaveDocumentNo };
+
+                    dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                    dbEntities.Attachments.Add(Attachment);
+                    dbEntities.SaveChanges();
+
                 }
-
-                var Attachment = new Attachment { FileName = Path.GetFileName(file.FileName) ,ContentType = file.ContentType, Data = bytes, DateUploaded = DateTime.Now, DocumentNo ="DOC1"  };
-
-                dbEntities.Configuration.ValidateOnSaveEnabled = false;
-                dbEntities.Attachments.Add(Attachment);
-                dbEntities.SaveChanges();
-
+            } 
+            catch (Exception es)
+            {
+              string  message = es.Message;
+              string status = "900";
             }
         }
         // Leave Entry Type -> Opening Balance",Accrue,Deduct,Use,Closing,Recall

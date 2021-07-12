@@ -161,13 +161,13 @@ namespace HumanResources
         {
             bool status = false;
 
-            //var check = _db.NumberSeries.FirstOrDefault(s => s.Code == NumberSeriesCode);
-            //if (check != null)
-            //{
-            //    check.LastUsedNumber = LastUsedNumber;
-            //    _db.SaveChanges();
-            //    status = true;
-            //}
+            var check = _db.NumberSeries.FirstOrDefault(s => s.Code == NumberSeriesCode.Trim());
+            if (check != null)
+            {
+                check.LastUsedNumber = LastUsedNumber;
+                _db.SaveChanges();
+                status = true;
+            }
             return status;
         }
     }
