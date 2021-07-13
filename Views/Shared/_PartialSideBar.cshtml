@@ -1,9 +1,9 @@
 ﻿<ul class="nav nav-list">
     <li class="@Html.IsActive("Dashboard", "Index")">
-        <a href=" @Url.Action("Index", "Dashboard")">           
-                <i class="menu-icon fa fa-tachometer"></i>
-                <span class="menu-text"> Dashboard </span>
-            </a>
+        <a href=" @Url.Action("Index", "Dashboard")">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text"> Dashboard </span>
+        </a>
 
         <b class="arrow"></b>
     </li>
@@ -186,7 +186,7 @@
             </li>
         </ul>
     </li>
-    
+
     <li class="@Html.IsActive("Profile", "Index")">
         <a href="@Url.Action("Index", "Profile")">
             <i class="menu-icon fa fa-user"></i>
@@ -195,6 +195,15 @@
 
         <b class="arrow"></b>
     </li>
-    
+
+    <li class="@Html.IsActive("Reports", "Index")">
+        <a href="@Url.Action("Index", "Reports")">
+            <i class="menu-icon fa fa-file-pdf-o"></i>
+            <span class="menu-text"> Reports </span>
+        </a>
+
+        <b class="arrow"></b>
+    </li>
+
 
 </ul>

@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="page-header">
+        <h1>
+            Human Resource Reports
+        </h1>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+
+            <div class="widget-box">
+                <div class="widget-header widget-header-blue widget-header-flat">
+                    <h4 class="widget-title lighter">Report Wizard</h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div id="fuelux-wizard-container">
+
+                            <div class="step-content pos-rel">
+                                <h3 class="lighter block green">Enter the following information</h3>
+
+                                <form class="form-horizontal" id="reports-form" method="get">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right">Report</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div>
+                                                <label class="line-height-1 blue">
+                                                    <input name="Report" value="Payslip" type="radio" id="Payslip" class="ace" />
+                                                    <span class="lbl"> Payslip</span>
+                                                </label>
+                                            </div>
+
+                                            <div>
+                                                <label class="line-height-1 blue">
+                                                    <input name="Report" value="P9" type="radio" class="ace" />
+                                                    <span class="lbl"> P9</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr-dotted"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="state">Month</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <select id="Month" name="Month" class="select2" data-placeholder="Click to Choose...">
+                                                <option value="">&nbsp;</option>
+                                                <option value="AL">Jan</option>
+                                                <option value="AK">Feb</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="state">Year</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <select id="Year" name="Year" class="select2" data-placeholder="Click to Choose...">
+                                                <option value="">&nbsp;</option>
+                                                <option value="2020">2020</option>
+                                                <option value="2021">2021</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <hr />
+                        <div class="wizard-actions center">
+                            <button class="btn btn-success btn-next" id="Print">
+                                Print
+                                <i class="ace-icon fa fa-print  icon-on-right"></i>
+                            </button>
+                        </div>
+                    </div><!-- /.widget-main -->
+                </div><!-- /.widget-body -->
+            </div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.page-content -->
