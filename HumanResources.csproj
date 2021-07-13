@@ -189,6 +189,7 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\TransportRequestsController.cs" />
     <Compile Include="CustomValidation\EmailValidation.cs" />
+    <Compile Include="Enums\enums.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
