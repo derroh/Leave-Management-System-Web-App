@@ -188,6 +188,7 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\TransportRequestsController.cs" />
+    <Compile Include="CustomFunctions\MakerChecker.cs" />
     <Compile Include="CustomValidation\EmailValidation.cs" />
     <Compile Include="Enums\enums.cs" />
     <Compile Include="Global.asax.cs">
@@ -197,7 +198,6 @@
     <Compile Include="Models\ApprovalUser.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MakerChecker.cs" />
     <Compile Include="Models\NumberSery.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
@@ -465,7 +465,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="CustomFunctions\" />
     <Folder Include="UploadedFiles\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\AdvanceClaims\" />

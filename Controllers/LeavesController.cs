@@ -10,17 +10,27 @@ namespace HumanResources.Controllers
     using HumanResources.ViewModels;
     using Newtonsoft.Json;
     using System.IO;
+    using HumanResources.CustomFunctions;
 
     public class LeavesController : Controller
     {
+        private static LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
         static string LeaveDocumentNo = null;
         public ActionResult Index()
         {
+            string status = Request.QueryString["status"];
+
             List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
 
-            for(int i=1; i <=10; i++)
+            if (!string.IsNullOrEmpty(status))
             {
-                _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo ="LEAVE00"+i, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = "open", DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()) , EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()) , StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()) ,LeaveDays = i.ToString(),DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = i*10 });
+                if (status == "pending") status = "Pending Approval";
+                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == status).ToList();
+
+                foreach (var leave in leaves)
+                {
+                    _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = leave.DocumentNo, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = status, DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = leave.LeaveDaysApplied.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = GetApprovalProgress(leave.DocumentNo) });
+                }
             }
             return View(_LeavesListViewModel);
         }
@@ -29,12 +39,16 @@ namespace HumanResources.Controllers
         {
             //  string s = Request.QueryString["status"];
             List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
+           
 
             if (!string.IsNullOrEmpty(status))
             {
-                for (int i = 1; i <= 10; i++)
+                if (status == "pending") status = "Pending Approval";
+                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == status).ToList();
+
+                foreach (var leave in leaves)
                 {
-                    _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = "LEAVE00" + 1, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = status, DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = i.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = i * 10 });
+                    _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = leave.DocumentNo, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = status, DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = leave.LeaveDaysApplied.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = GetApprovalProgress(leave.DocumentNo) });
                 }
             }    
             
@@ -328,10 +342,25 @@ namespace HumanResources.Controllers
         //Approal stuff
         public ActionResult Submit(string DocumentNo)
         {
+            string status = "", message = "";
+            //submit for approval
+
+            if (MakerChecker.SendApprovalRequest(DocumentNo))
+            {
+                status = "000";
+                message = "Submit Success! for leave " + DocumentNo;
+            }
+            else
+            {
+                status = "999";
+                message = "Submit Failed for leave " + DocumentNo;
+            }               
+
+
             var _RequestResponse = new RequestResponse
             {
-                Status = "900",
-                Message = "Submit Success! for leave " + DocumentNo
+                Status = status,
+                Message = message
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
@@ -355,6 +384,28 @@ namespace HumanResources.Controllers
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
+        //get approve
+
+        private static int GetApprovalProgress( string DocumentNumber)
+        {
+            int progress = 0;
+
+            try
+            {
+                using (var db = new LeaveManagementSystemEntities())
+                {
+                    var NoOfApprovals = db.ApprovalEntries.Where(x =>  x.DocumentNo == DocumentNumber).ToList();
+                    var NoOfApproved = db.ApprovalEntries.Where(x => x.DocumentNo == DocumentNumber && x.Status =="Approved").ToList();
+
+                    progress = (Convert.ToInt32(NoOfApproved) / Convert.ToInt32(NoOfApprovals)) * 100;
+                }
+            }
+            catch (Exception ex)
+            {
+                progress = 0;
+            }
+            return progress;
         }
     }
 }

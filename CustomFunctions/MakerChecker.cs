@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using HumanResources.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace HumanResources.Models
+namespace HumanResources.CustomFunctions
 {
     class MakerChecker
     {
@@ -18,7 +16,7 @@ namespace HumanResources.Models
 
         * @return bool | return true if approval entry is created / return false if not created
         */
-        public static bool SendApprovalRequest( string _DocumentNumber)
+        public static bool SendApprovalRequest(string _DocumentNumber)
         {
             string ApprovalStatus = null; //Created,Open,Canceled,Rejected,Approved
             string ApproverEmail = null;
@@ -28,10 +26,10 @@ namespace HumanResources.Models
 
             var approvers = _db.ApprovalUsers.Where(a => a.DocumentType == "Leave").ToList();
 
-            if(approvers != null)
+            if (approvers != null)
             {
                 //Get List of approval users then create Approval Entries (Make Reusable)
-               
+
                 //create approval entries for each of the Approvers, for first approver in the sequence, set to 'Open', the remaining, set to 'Created'
 
                 //loop through approval users json array
@@ -55,7 +53,7 @@ namespace HumanResources.Models
                     }
                     //create Approval Entry
 
-                    ApprovalEntryCreated = CreateApprovalEntry( _DocumentNumber, ApprovalSequence, Approver, ApprovalStatus, ApprovalUser.Approver, "SessionID", DateTime.Now);
+                    ApprovalEntryCreated = CreateApprovalEntry(_DocumentNumber, ApprovalSequence, Approver, ApprovalStatus, ApprovalUser.Approver, "Derrick", DateTime.Now);
                 }
                 //Update Parent Table
 
@@ -78,16 +76,16 @@ namespace HumanResources.Models
             bool status = false;
             try
             {
-               
 
                 using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
                 {
-                    var leaves = _db.Leaves.Where(a => a.DocumentNo == documentNumber).FirstOrDefault();
+                    var leaves = dbEntities.Leaves.Where(a => a.DocumentNo == documentNumber).FirstOrDefault();
 
                     if (leaves != null)
                     {
                         leaves.ApprovalStatus = ApprovalStatus;
-                        _db.SaveChanges();
+                        dbEntities.SaveChanges();
+                        status = true;
                     }
                 }
             }
@@ -103,7 +101,7 @@ namespace HumanResources.Models
             bool status = false;
             try
             {
-                var approvalEntry = new ApprovalEntry { DocumentNo = documentNumber, SequenceNo = approvalSequence, Status = approvalStatus, ApproverId = ApproverId, DocumentType = "Leave", SenderId  = SenderId, DateSent = DateSent };
+                var approvalEntry = new ApprovalEntry { DocumentNo = documentNumber, SequenceNo = approvalSequence, Status = approvalStatus, ApproverId = ApproverId, DocumentType = "Leave", SenderId = SenderId, DateSent = DateSent };
 
                 using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
                 {
@@ -113,7 +111,7 @@ namespace HumanResources.Models
                     status = true;
                 }
             }
-            catch(Exception es)
+            catch (Exception es)
             {
                 status = false;
             }
@@ -131,17 +129,17 @@ namespace HumanResources.Models
 
         * @return bool | return true if approval entry is created / return false if not created
         */
-        public static bool ApproveAppovalRequest(int EntryNumber, int SequenceNumber, string _DocumentType, string _DocumentNumber, string Table)
-        { 
+        public static bool ApproveAppovalRequest(int EntryNumber, int SequenceNumber, string _DocumentType, string _DocumentNumber)
+        {
             bool ApprovalEntryCreated = false;
 
             // Update status to 'Approved' for specified DocumentNumber and Document Type where Approver is loggedIn user
-            bool IsRecordApproved = UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, "Approved", "SessionId");
+            bool IsRecordApproved = UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, "Approved", "Derrick");
 
             if (IsRecordApproved)
             {
                 //check if there are approvers in sequence
-                var PendingApprovals = _db.ApprovalEntries.Where(a => a.DocumentType == "Leave" && a.DocumentNo == _DocumentNumber && a.Status == "Created").ToList().Count();
+                var PendingApprovals = _db.ApprovalEntries.Where(a => a.DocumentType == "Leave" && a.DocumentNo == _DocumentNumber && (a.Status == "Created" || a.Status == "Open")).ToList().Count();
 
                 if (PendingApprovals > 0)
                 {
@@ -159,12 +157,14 @@ namespace HumanResources.Models
 
                     ApprovalEntryCreated = true;
 
-                    UpdateParentTableStatus( _DocumentNumber, "Approved");
+                    UpdateParentTableStatus(_DocumentNumber, "Approved");
+
+                    UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, "Approved", "Derrick");
                 }
             }
             return ApprovalEntryCreated;
         }
-        public static bool UpdateApprovalEntrySequence(int SequenceNumber, string DocumentType, string DocumentNumber, string Status)
+        private static bool UpdateApprovalEntrySequence(int SequenceNumber, string DocumentType, string DocumentNumber, string Status)
         {
             bool status = false;
 
@@ -176,10 +176,10 @@ namespace HumanResources.Models
 
                     if (approvalentry != null)
                     {
-                        approvalentry.Status = Status;                        
+                        approvalentry.Status = Status;
                         db.SaveChanges();
                         status = true;
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
@@ -189,7 +189,7 @@ namespace HumanResources.Models
             return status;
         }
 
-        public static bool UpdateApprovalEntry(int EntryNumber, string DocumentType, string DocumentNumber, string Status, string ApproverId)
+        private static bool UpdateApprovalEntry(int EntryNumber, string DocumentType, string DocumentNumber, string Status, string ApproverId)
         {
             bool status = false;
 
@@ -251,7 +251,7 @@ namespace HumanResources.Models
 
             return IsRecordDelegated;
         }
-        public static bool UpdateApprovalEntryApproverId(int entryNumber, string approverId)
+        private static bool UpdateApprovalEntryApproverId(int entryNumber, string approverId)
         {
             bool status = false;
 
