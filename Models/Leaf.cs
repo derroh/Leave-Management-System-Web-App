@@ -27,8 +27,8 @@ namespace HumanResources.Models
         public string StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public string LeaveDates { get; set; }
-        public int LeaveDaysApplied { get; set; }
-        public System.DateTime ReturnDate { get; set; }
+        public Nullable<int> LeaveDaysApplied { get; set; }
+        public Nullable<System.DateTime> ReturnDate { get; set; }
         public string EmployeeNo { get; set; }
         public string ApprovalStatus { get; set; }
     

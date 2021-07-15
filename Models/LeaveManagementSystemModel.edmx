@@ -18,14 +18,26 @@
           <Property Name="DateSent" Type="date" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="ApprovalUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentType" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Approver" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ApprovalSequence" Type="int" Nullable="false" />
+          <Property Name="ApproverEmail" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="SubstituteApprover" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SubstituteApproverEmail" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
         <EntityType Name="Attachments">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DocumentType" Type="nchar" MaxLength="10" />
           <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="FileName" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="FileName" Type="varchar(max)" Nullable="false" />
           <Property Name="ContentType" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Data" Type="varbinary(max)" Nullable="false" />
           <Property Name="DateUploaded" Type="date" />
@@ -119,12 +131,12 @@
           </Key>
           <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="LeaveType" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="SelectionType" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="StartDate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SelectionType" Type="nvarchar" MaxLength="50" />
+          <Property Name="StartDate" Type="nvarchar" MaxLength="50" />
           <Property Name="EndDate" Type="date" />
           <Property Name="LeaveDates" Type="text" />
-          <Property Name="LeaveDaysApplied" Type="int" Nullable="false" />
-          <Property Name="ReturnDate" Type="date" Nullable="false" />
+          <Property Name="LeaveDaysApplied" Type="int" />
+          <Property Name="ReturnDate" Type="date" />
           <Property Name="EmployeeNo" Type="nvarchar" MaxLength="50" />
           <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
@@ -256,6 +268,7 @@
         </Association>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="ApprovalEntries" EntityType="Self.ApprovalEntries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApprovalUsers" EntityType="Self.ApprovalUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Attachments" EntityType="Self.Attachments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeLedgerEntries" EntityType="Self.EmployeeLedgerEntries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
@@ -311,7 +324,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DocumentType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="DocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FileName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ContentType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Data" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <Property Name="DateUploaded" Type="DateTime" Precision="0" />
@@ -411,12 +424,12 @@
           </Key>
           <Property Name="DocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LeaveType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SelectionType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="StartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SelectionType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EndDate" Type="DateTime" Precision="0" />
           <Property Name="LeaveDates" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="LeaveDaysApplied" Type="Int32" Nullable="false" />
-          <Property Name="ReturnDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LeaveDaysApplied" Type="Int32" />
+          <Property Name="ReturnDate" Type="DateTime" Precision="0" />
           <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Attachments" Relationship="Self.FK_Attachments_Leaves" FromRole="Leaves" ToRole="Attachments" />
@@ -572,6 +585,7 @@
             <End Role="LeaveRecalls" EntitySet="LeaveRecalls" />
           </AssociationSet>
           <EntitySet Name="NumberSeries" EntityType="Model.NumberSery" />
+          <EntitySet Name="ApprovalUsers" EntityType="Model.ApprovalUser" />
         </EntityContainer>
         <EntityType Name="NumberSery">
           <Key>
@@ -582,6 +596,18 @@
           <Property Name="StartingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EndingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastUsedNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ApprovalUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Approver" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalSequence" Type="Int32" Nullable="false" />
+          <Property Name="ApproverEmail" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="SubstituteApprover" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SubstituteApproverEmail" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -778,6 +804,19 @@
                 <ScalarProperty Name="StartingNumber" ColumnName="StartingNumber" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApprovalUsers">
+            <EntityTypeMapping TypeName="Model.ApprovalUser">
+              <MappingFragment StoreEntitySet="ApprovalUsers">
+                <ScalarProperty Name="SubstituteApproverEmail" ColumnName="SubstituteApproverEmail" />
+                <ScalarProperty Name="SubstituteApprover" ColumnName="SubstituteApprover" />
+                <ScalarProperty Name="ApproverEmail" ColumnName="ApproverEmail" />
+                <ScalarProperty Name="ApprovalSequence" ColumnName="ApprovalSequence" />
+                <ScalarProperty Name="Approver" ColumnName="Approver" />
+                <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

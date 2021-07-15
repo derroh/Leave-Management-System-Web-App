@@ -16,6 +16,7 @@ namespace HumanResources.Controllers
         public ActionResult Index()
         {
             List<ApprovalEntriesListViewModel> _ApprovalEntriesListViewModel = new List<ApprovalEntriesListViewModel>();
+
             for(int i =1; i <= 17; i++)
             {
                 _ApprovalEntriesListViewModel.Add(new ApprovalEntriesListViewModel { EntryNo = i, DocumentType = "Leave", DocumentNo = "DOC000"+i, DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EmployeeName = "Derrick Witness Abucheri", EndDate = "July 6 2021", LeaveDays = "1", StartDate = "July 6 2021", ApprovedLeaveType = "Annual Leave", ApprovalStatus = "Open" });

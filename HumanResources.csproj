@@ -194,6 +194,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppFunctions.cs" />
+    <Compile Include="Models\ApprovalUser.cs">
+      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MakerChecker.cs" />
     <Compile Include="Models\NumberSery.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
