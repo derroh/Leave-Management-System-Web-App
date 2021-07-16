@@ -19,18 +19,12 @@ namespace HumanResources.Controllers
 
             return View();
         }
-
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Your application description page.";
 
             return View();
         }
-        public ActionResult Login()
-        {
-            ViewBag.Message = "Your login page.";
 
-            return View();
-        }
     }
 }
