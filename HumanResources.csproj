@@ -82,6 +82,9 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=106.12.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>packages\RestSharp.106.12.0\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -188,6 +191,7 @@
     <Compile Include="Controllers\LeavesController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TransportRequestsController.cs" />
     <Compile Include="CustomFunctions\MakerChecker.cs" />
     <Compile Include="CustomValidation\EmailValidation.cs" />
@@ -214,6 +218,7 @@
     <Compile Include="Models\EmployeeLedgerEntry.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GoogleCalendarAPI.cs" />
     <Compile Include="Models\Leaf.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
@@ -479,6 +484,7 @@
     <Folder Include="Views\AdvanceClaims\" />
     <Folder Include="Views\AdvanceRequests\" />
     <Folder Include="Views\AdvanceSurrenders\" />
+    <Folder Include="Views\Settings\" />
     <Folder Include="Views\TransportRequests\" />
   </ItemGroup>
   <ItemGroup>
