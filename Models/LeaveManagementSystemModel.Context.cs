@@ -26,16 +26,17 @@ namespace HumanResources.Models
         }
     
         public virtual DbSet<ApprovalEntry> ApprovalEntries { get; set; }
+        public virtual DbSet<ApprovalUser> ApprovalUsers { get; set; }
         public virtual DbSet<Attachment> Attachments { get; set; }
+        public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<EmployeeLedgerEntry> EmployeeLedgerEntries { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<LeaveRecall> LeaveRecalls { get; set; }
         public virtual DbSet<Leaf> Leaves { get; set; }
         public virtual DbSet<LeaveType> LeaveTypes { get; set; }
+        public virtual DbSet<NumberSery> NumberSeries { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<NumberSery> NumberSeries { get; set; }
-        public virtual DbSet<ApprovalUser> ApprovalUsers { get; set; }
     }
 }

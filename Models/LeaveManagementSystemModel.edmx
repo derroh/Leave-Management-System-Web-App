@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ApprovalEntries">
           <Key>
             <PropertyRef Name="EntryNumber" />
@@ -41,6 +41,13 @@
           <Property Name="ContentType" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Data" Type="varbinary(max)" Nullable="false" />
           <Property Name="DateUploaded" Type="date" />
+        </EntityType>
+        <EntityType Name="Departments">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="EmployeeLedgerEntries">
           <Key>
@@ -184,6 +191,7 @@
           <Property Name="SMTPHost" Type="nvarchar" MaxLength="50" />
           <Property Name="LeaveNumbers" Type="nvarchar" MaxLength="50" />
           <Property Name="LeaveRecallNumbers" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepartmentNumbers" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -270,6 +278,7 @@
           <EntitySet Name="ApprovalEntries" EntityType="Self.ApprovalEntries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApprovalUsers" EntityType="Self.ApprovalUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Attachments" EntityType="Self.Attachments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeLedgerEntries" EntityType="Self.EmployeeLedgerEntries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LeaveRecalls" EntityType="Self.LeaveRecalls" Schema="dbo" store:Type="Tables" />
@@ -300,7 +309,8 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -317,6 +327,18 @@
           <Property Name="DateSent" Type="DateTime" Precision="0" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="ApprovalUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Approver" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ApprovalSequence" Type="Int32" Nullable="false" />
+          <Property Name="ApproverEmail" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SubstituteApprover" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SubstituteApproverEmail" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
         <EntityType Name="Attachment">
           <Key>
             <PropertyRef Name="Id" />
@@ -329,6 +351,13 @@
           <Property Name="Data" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <Property Name="DateUploaded" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Leaf" Relationship="Self.FK_Attachments_Leaves" FromRole="Attachments" ToRole="Leaves" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="EmployeeLedgerEntry">
           <Key>
@@ -446,6 +475,16 @@
           <Property Name="UnitOfMeasure" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AnnualLeaveDaysType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="NumberSery">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StartingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EndingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastUsedNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Roled" />
@@ -470,6 +509,7 @@
           <Property Name="SMTPHost" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LeaveNumbers" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LeaveRecallNumbers" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentNumbers" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -555,12 +595,15 @@
         </Association>
         <EntityContainer Name="LeaveManagementSystemEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ApprovalEntries" EntityType="Self.ApprovalEntry" />
+          <EntitySet Name="ApprovalUsers" EntityType="Self.ApprovalUser" />
           <EntitySet Name="Attachments" EntityType="Self.Attachment" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
           <EntitySet Name="EmployeeLedgerEntries" EntityType="Self.EmployeeLedgerEntry" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
           <EntitySet Name="LeaveRecalls" EntityType="Self.LeaveRecall" />
           <EntitySet Name="Leaves" EntityType="Self.Leaf" />
           <EntitySet Name="LeaveTypes" EntityType="Self.LeaveType" />
+          <EntitySet Name="NumberSeries" EntityType="Self.NumberSery" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="Settings" EntityType="Self.Setting" />
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -584,31 +627,7 @@
             <End Role="Leaves" EntitySet="Leaves" />
             <End Role="LeaveRecalls" EntitySet="LeaveRecalls" />
           </AssociationSet>
-          <EntitySet Name="NumberSeries" EntityType="Model.NumberSery" />
-          <EntitySet Name="ApprovalUsers" EntityType="Model.ApprovalUser" />
         </EntityContainer>
-        <EntityType Name="NumberSery">
-          <Key>
-            <PropertyRef Name="Code" />
-          </Key>
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="StartingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EndingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastUsedNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="ApprovalUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DocumentType" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Approver" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="ApprovalSequence" Type="Int32" Nullable="false" />
-          <Property Name="ApproverEmail" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="SubstituteApprover" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="SubstituteApproverEmail" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -629,6 +648,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ApprovalUsers">
+            <EntityTypeMapping TypeName="Model.ApprovalUser">
+              <MappingFragment StoreEntitySet="ApprovalUsers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
+                <ScalarProperty Name="Approver" ColumnName="Approver" />
+                <ScalarProperty Name="ApprovalSequence" ColumnName="ApprovalSequence" />
+                <ScalarProperty Name="ApproverEmail" ColumnName="ApproverEmail" />
+                <ScalarProperty Name="SubstituteApprover" ColumnName="SubstituteApprover" />
+                <ScalarProperty Name="SubstituteApproverEmail" ColumnName="SubstituteApproverEmail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Attachments">
             <EntityTypeMapping TypeName="Model.Attachment">
               <MappingFragment StoreEntitySet="Attachments">
@@ -639,6 +671,14 @@
                 <ScalarProperty Name="ContentType" ColumnName="ContentType" />
                 <ScalarProperty Name="Data" ColumnName="Data" />
                 <ScalarProperty Name="DateUploaded" ColumnName="DateUploaded" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="Model.Department">
+              <MappingFragment StoreEntitySet="Departments">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -755,6 +795,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="NumberSeries">
+            <EntityTypeMapping TypeName="Model.NumberSery">
+              <MappingFragment StoreEntitySet="NumberSeries">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StartingNumber" ColumnName="StartingNumber" />
+                <ScalarProperty Name="EndingNumber" ColumnName="EndingNumber" />
+                <ScalarProperty Name="LastUsedNumber" ColumnName="LastUsedNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="Model.Role">
               <MappingFragment StoreEntitySet="Roles">
@@ -766,8 +817,6 @@
           <EntitySetMapping Name="Settings">
             <EntityTypeMapping TypeName="Model.Setting">
               <MappingFragment StoreEntitySet="Settings">
-                <ScalarProperty Name="LeaveRecallNumbers" ColumnName="LeaveRecallNumbers" />
-                <ScalarProperty Name="LeaveNumbers" ColumnName="LeaveNumbers" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AfricasTalkingAppName" ColumnName="AfricasTalkingAppName" />
                 <ScalarProperty Name="AfricasTalkingApiKey" ColumnName="AfricasTalkingApiKey" />
@@ -779,6 +828,9 @@
                 <ScalarProperty Name="EmailSender" ColumnName="EmailSender" />
                 <ScalarProperty Name="SMTPPort" ColumnName="SMTPPort" />
                 <ScalarProperty Name="SMTPHost" ColumnName="SMTPHost" />
+                <ScalarProperty Name="LeaveNumbers" ColumnName="LeaveNumbers" />
+                <ScalarProperty Name="LeaveRecallNumbers" ColumnName="LeaveRecallNumbers" />
+                <ScalarProperty Name="DepartmentNumbers" ColumnName="DepartmentNumbers" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -793,30 +845,6 @@
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NumberSeries">
-            <EntityTypeMapping TypeName="Model.NumberSery">
-              <MappingFragment StoreEntitySet="NumberSeries">
-                <ScalarProperty Name="LastUsedNumber" ColumnName="LastUsedNumber" />
-                <ScalarProperty Name="EndingNumber" ColumnName="EndingNumber" />
-                <ScalarProperty Name="StartingNumber" ColumnName="StartingNumber" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ApprovalUsers">
-            <EntityTypeMapping TypeName="Model.ApprovalUser">
-              <MappingFragment StoreEntitySet="ApprovalUsers">
-                <ScalarProperty Name="SubstituteApproverEmail" ColumnName="SubstituteApproverEmail" />
-                <ScalarProperty Name="SubstituteApprover" ColumnName="SubstituteApprover" />
-                <ScalarProperty Name="ApproverEmail" ColumnName="ApproverEmail" />
-                <ScalarProperty Name="ApprovalSequence" ColumnName="ApprovalSequence" />
-                <ScalarProperty Name="Approver" ColumnName="Approver" />
-                <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

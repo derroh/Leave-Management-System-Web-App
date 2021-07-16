@@ -27,5 +27,6 @@ namespace HumanResources.Models
         public string SMTPHost { get; set; }
         public string LeaveNumbers { get; set; }
         public string LeaveRecallNumbers { get; set; }
+        public string DepartmentNumbers { get; set; }
     }
 }

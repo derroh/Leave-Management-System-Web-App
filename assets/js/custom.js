@@ -1541,4 +1541,281 @@
 
         event.preventDefault();
     });
+
+    //deparments
+
+    var departmentstable =
+        $('#departments-table')
+            //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+            .DataTable({
+                bAutoWidth: false,
+                "aoColumns": [
+                    { "bSortable": false },
+                    null, null,
+                    { "bSortable": false }
+                ],
+                "aaSorting": [],
+                select: {
+                    style: 'multi'
+                }
+            });
+
+
+    setTimeout(function () {
+        $($('.tableTools-container')).find('a.dt-button').each(function () {
+            var div = $(this).find(' > div').first();
+            if (div.length == 1) div.tooltip({ container: 'body', title: div.parent().text() });
+            else $(this).tooltip({ container: 'body', title: $(this).text() });
+        });
+    }, 500);
+
+
+    departmentstable.on('select', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(departmentstable.row(index).node()).find('input:checkbox').prop('checked', true);
+        }
+    });
+    departmentstable.on('deselect', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(departmentstable.row(index).node()).find('input:checkbox').prop('checked', false);
+        }
+    });
+
+    /////////////////////////////////
+    //table checkboxes
+    $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+
+    //select/deselect all rows according to table header checkbox
+    $('#departments-table > thead > tr > th input[type=checkbox], #departments-table_wrapper input[type=checkbox]').eq(0).on('click', function () {
+        var th_checked = this.checked;//checkbox inside "TH" table header
+
+        $('#departments-table').find('tbody > tr').each(function () {
+            var row = this;
+            if (th_checked) departmentstable.row(row).select();
+            else departmentstable.row(row).deselect();
+        });
+    });
+
+    //select/deselect a row when the checkbox is checked/unchecked
+    $('#departments-table').on('click', 'td input[type=checkbox]', function () {
+        var row = $(this).closest('tr').get(0);
+        if (this.checked) departmentstable.row(row).deselect();
+        else departmentstable.row(row).select();
+    });
+
+
+
+    $(document).on('click', '#departments-table .dropdown-toggle', function (e) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        e.preventDefault();
+    });
+    $("#departments-table").on("click", ".deletedepartment", function (e) {
+        e.preventDefault();
+
+        var pid = $(this).attr('data-id');
+        var docno = $(this).attr('data-docno');
+
+        bootbox.confirm({
+            title: "<i class='fa fa-trash'></i> Delete Department?",
+            message: "Do you wish to delete this department " + docno + "?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true) {
+
+                    jQuery.ajax({
+                        url: '/Departments/Delete',
+                        type: "POST",
+                        data: '{EntryNo:"' + pid + '" }',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
+
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Action Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Action Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    //create department
+   
+
+    $('#departmentsform').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            Name: {
+                required: true,
+            }
+        },
+
+        messages: {
+            Name: "Please give a department name"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+                var controls = element.closest('div[class*="col-"]');
+                if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
+                else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+            }
+            else if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else if (element.is('.chosen-select')) {
+                error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
+    });
+
+    $("#SaveDepartment").click(function (event) {
+
+        //var formAction = $("#electralpositionform").attr('action');
+
+        //console.log(formAction);
+
+
+        if ($('#departmentsform').valid()) {
+            //Serialize the form datas.  
+            var valdata = $("#departmentsform").serialize();
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/Departments/CreateDepartment',
+                type: "POST",
+                data: valdata,
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+
+                        if (data.Status == "000") {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-info gritter-center'
+                            });
+                        } else {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-error gritter-center'
+                            });
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
+    });
+    $("#UpdateDepartment").click(function (event) {
+
+        //var formAction = $("#electralpositionform").attr('action');
+
+        //console.log(formAction);
+
+
+        if ($('#departmentsform').valid()) {
+            //Serialize the form datas.  
+            var valdata = $("#departmentsform").serialize();
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/Departments/UpdateDepartment',
+                type: "POST",
+                data: valdata,
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+
+                        if (data.Status == "000") {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-info gritter-center'
+                            });
+                        } else {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-error gritter-center'
+                            });
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
+    });
+
+
+
 })

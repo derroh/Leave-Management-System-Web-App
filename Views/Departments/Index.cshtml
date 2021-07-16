@@ -1,0 +1,132 @@
+﻿@model IEnumerable<HumanResources.ViewModels.DepartmentsViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="page-header">
+        <h1>
+            Departments
+        </h1>
+    </div>
+    <!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="clearfix">
+                        <div class="pull-right tableTools-container"></div>
+                    </div>
+                    <div class="table-header">
+                        Results for "Departments"
+                    </div>
+
+                    <!-- div.table-responsive -->
+                    <!-- div.dataTables_borderWrap -->
+                    <div>
+                        <table id="departments-table" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </th>
+                                    
+                                    <th>
+                                        <i class="ace-icon fa fa-list-ol bigger-110 hidden-480"></i>
+                                        Code
+                                    </th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                       Name
+                                    </th>
+                                    
+
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var department in Model)
+                                {
+                                    <tr>
+                                        <td class="center">
+                                            <label class="pos-rel">
+                                                <input type="checkbox" class="ace" />
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </td>
+
+                                       
+                                        <td>@department.Code</td>
+                                        <td class="hidden-480">@department.Name</td>
+
+                                        <td>
+                                            <div class="hidden-sm hidden-xs action-buttons">
+                                                <a class="blue" href="@Url.Action("ViewDepartment", "Departments", new { id = department.Code })">
+                                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                </a>
+                                                <a class="green" href="@Url.Action("Edit", "Departments", new { id = department.Code })">
+                                                    <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                </a>
+
+                                                <a class="red deletedepartment" href="#" data-id="@department.Code" data-docno="@department.Code">
+                                                    <i class="ace-icon fa fa-trash bigger-130"></i>
+                                                </a>
+                                            </div>
+
+                                            <div class="hidden-md hidden-lg">
+                                                <div class="inline pos-rel">
+                                                    <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                        <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                                    </button>
+
+                                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                        <li>
+                                                            <a href="@Url.Action("ViewDepartment", "Departments", new { id = department.Code  })" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                <span class="blue">
+                                                                    <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="@Url.Action("Edit", "Departments", new { id = department.Code  })" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                <span class="green">
+                                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="#" class="tooltip-error deletedepartment" data-id="@department.Code" data-docno="@department.Code" data-rel="tooltip" title="Delete">
+                                                                <span class="red">
+                                                                    <i class="ace-icon fa fa-trash bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div>
+

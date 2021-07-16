@@ -1,0 +1,70 @@
+﻿
+@model HumanResources.ViewModels.DepartmentsViewModel
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="page-header">
+        <h1>
+            View Department
+        </h1>
+    </div>
+    <!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+
+            <div class="widget-box">
+                <div class="widget-header widget-header-blue widget-header-flat">
+                    <h4 class="widget-title lighter">View Department Wizard</h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div id="fuelux-wizard-container">
+
+                            <div class="step-content pos-rel">
+                                <h3 class="lighter block green">Enter the following information</h3>
+                                @using (Html.BeginForm("CreateDepartment", "Departments", FormMethod.Post, new { @id = "departmentsform", @class = "form-horizontal", @value = Model.Name, @disabled = "disabled" }))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">Department Name:</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.Name, new { @class = "col-xs-12 col-sm-5", @disabled = "disabled" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                }
+                            </div>
+                        </div>
+
+                        <hr />
+                        <div class="wizard-actions center">
+                            @*<button class="btn btn-success btn-next" id="SaveDepartment">
+                                    Save
+                                    <i class="ace-icon fa fa-floppy-o  icon-on-right"></i>
+                                </button>*@
+                        </div>
+                    </div><!-- /.widget-main -->
+                </div><!-- /.widget-body -->
+            </div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+
+
+</div>
