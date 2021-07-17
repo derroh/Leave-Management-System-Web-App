@@ -34,52 +34,55 @@
 
     $("#LeaveDaysApplied").keyup(function () {
         //Get Leave Quantity And ReturnDate
-        jQuery.ajax({
-            url: '/Leaves/LeaveEndDateAndReturnDate',
-            type: "POST",
-            data: '{Code:"' + $('#LeaveType').val() + '",StartDate:"' + $('#SpecifiedLeaveStartDate').val() + '", LeaveDaysApplied:"' + $('#LeaveDaysApplied').val() + '"}',
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (response) {
+        if ($('#LeaveStartDate').val() !== null && $('#LeaveStartDate').val() !== '') {
+            jQuery.ajax({
+                url: '/Leaves/LeaveEndDateAndReturnDate',
+                type: "POST",
+                data: '{Code:"' + $('#LeaveType').val() + '",StartDate:"' + $('#LeaveStartDate').val() + '", LeaveDaysApplied:"' + $('#LeaveDaysApplied').val() + '"}',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
 
-                if (response != null) {
-                    //console.log(JSON.stringify(response)); //it comes out to be string 
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
 
-                    //we need to parse it to JSON
-                    var data = $.parseJSON(response);
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
 
-                    //set fields values
-                    $('#LeaveEndDate').val(data.LeaveEndDate);
-                    $('#ReturnDate').val(data.ReturnDate);
+                        //set fields values
+                        $('#EndDate').val(data.LeaveEndDate);
+                        $('#LeaveEndDate').val(data.LeaveEndDate);
+                        $('#ReturnDate').val(data.ReturnDate);
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 
 
     //autofill leavetypes on LeaveType
 
-    $.ajax({
-        url: '/Leaves/ListLeaveTypes',
+    //$.ajax({
+    //    url: '/Leaves/ListLeaveTypes',
 
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (response) {
-            if (response != null) {
+    //    type: "POST",
+    //    dataType: "json",
+    //    contentType: "application/json; charset=utf-8",
+    //    success: function (response) {
+    //        if (response != null) {
 
-                var data = $.parseJSON(response);
+    //            var data = $.parseJSON(response);
 
-                $.each(data, function (i, item) {
-                    $("#LeaveType").append($('<option></option>').attr("value", item.Code).text(item.Description));
-                });
+    //            $.each(data, function (i, item) {
+    //                $("#LeaveType").append($('<option></option>').attr("value", item.Code).text(item.Description));
+    //            });
 
-            }
-        },
-        error: function (e) {
-            console.log(e.responseText);
-        }
-    });
+    //        }
+    //    },
+    //    error: function (e) {
+    //        console.log(e.responseText);
+    //    }
+    //});
 
     //get leave selected details
     $("#LeaveType").change(function () {
@@ -134,117 +137,154 @@
         .on('actionclicked.fu.wizard', function (e, info) {
             if (info.step == 1 && $validation) {
                 if (!$('#leaveselection-form').valid()) e.preventDefault();
+                //save step 1
+                var valdata = $("#leaveselection-form").serialize();
+
+                jQuery.ajax({
+                    url: '/Leaves/SaveSelection',
+                    type: "POST",
+                    data: valdata,
+                    dataType: "json",
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    success: function (response) {
+                        if (response != null) {
+                            console.log(JSON.stringify(response)); //it comes out to be string 
+
+                            //we need to parse it to JSON
+                            var data = $.parseJSON(response);
+
+                            if (data.Status == "000") {
+                                $.gritter.add({
+                                    title: 'Leave Notification',
+                                    text: data.Message,
+                                    class_name: 'gritter-info'
+                                });
+                            } else {
+                                $.gritter.add({
+                                    title: 'Leave Notification',
+                                    text: data.Message,
+                                    class_name: 'gritter-error'
+                                });
+                            }
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e.responseText);
+                    }
+                });
             }
             if (info.step == 2 && $validation) {
                 if (!$('#leavedaysselection-form').valid()) e.preventDefault();
+
+                //save step 2
+                var valdata2 = $("#leavedaysselection-form").serialize();
+
+                jQuery.ajax({
+                    url: '/Leaves/SaveLeaveSelection',
+                    type: "POST",
+                    data: valdata2,
+                    dataType: "json",
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    success: function (response) {
+                        if (response != null) {
+                            //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                            //we need to parse it to JSON
+
+                            var data = jQuery.parseJSON(response);                          
+
+                            if (data.Status == "000") {
+                                $.gritter.add({
+                                    title: 'Leave Notification',
+                                    text: data.Message,
+                                    class_name: 'gritter-info'
+                                });
+                            } else {
+                                $.gritter.add({
+                                    title: 'Leave Notification',
+                                    text: data.Message,
+                                    class_name: 'gritter-error'
+                                });
+                            }
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e.responseText);
+                    }
+                });
             }
             if (info.step == 3 && $validation) {
                 if (!$('#leaveattachments-form').valid()) e.preventDefault();
+
+                //Attachments
+                var files = jQuery("#LeaveAttachments").get(0).files;
+                var fileData = new FormData();
+
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append("LeaveAttachments", files[i]);
+                }
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/Leaves/SaveLeaveAttachments",
+                    dataType: "json",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result, status, xhr) {
+                        //  alert(result);
+
+                        $.gritter.add({
+                            title: 'Action Notification',
+                            text: result,
+                            class_name: 'gritter-info'
+                        });
+                       
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(status);
+                    }
+                });
             }
         })
         //.on('changed.fu.wizard', function() {
         //})
         .on('finished.fu.wizard', function (e) {
-            //submit forms here
-            //Serialize the form datas.  
-            var valdata = $("#leaveselection-form").serialize();
-
+            //send application for approval here
             jQuery.ajax({
-            url: '/Leaves/SaveSelection',
-            type: "POST",
-            data: valdata,
-            dataType: "json",
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            success: function (response) {
-                if (response != null) {
-                    //console.log(JSON.stringify(response)); //it comes out to be string 
+                url: '/Leaves/SubmitForApproval',
+                type: "POST",
+                  data: '{DocumentNo:"Leave001" }',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
 
-                    //we need to parse it to JSON
-                    var data = $.parseJSON(response);
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
 
-                    var valdata2 = $("#leavedaysselection-form").serialize();
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
 
+                        if (data.Status == "000") {
+                            $.gritter.add({
+                                title: 'Approval Notification',
+                                text: data.Message,
+                                class_name: 'gritter-success gritter-center'
+                            });
+                            var delay = 5000;
+                            var url = '/Leaves/Index'
+                            setTimeout(function () { window.location = url; }, delay);
 
-                    jQuery.ajax({
-                        url: '/Leaves/SaveLeaveSelection',
-                        type: "POST",
-                        data: valdata2,
-                        dataType: "json",
-                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                        success: function (response) {
-                            if (response != null) {
-                                //console.log(JSON.stringify(response)); //it comes out to be string 
-
-                                //we need to parse it to JSON
-
-
-
-                                var data = jQuery.parseJSON(response);
-
-                                //Attachments
-                                var files = jQuery("#LeaveAttachments").get(0).files;
-                                var fileData = new FormData();
-
-                                for (var i = 0; i < files.length; i++) {
-                                    fileData.append("LeaveAttachments", files[i]);
-                                }
-
-                                jQuery.ajax({
-                                    type: "POST",
-                                    url: "/Leaves/SaveLeaveAttachments",
-                                    dataType: "json",
-                                    contentType: false, // Not to set any content header
-                                    processData: false, // Not to process data
-                                    data: fileData,
-                                    success: function (result, status, xhr) {
-                                        alert(result);
-                                    },
-                                    error: function (xhr, status, error) {
-                                        alert(status);
-                                    }
-                                });
-
-
-
-
-
-                                //console.log(data.Message);
-
-                                //bootbox.dialog({
-                                //    message: data.Message,
-                                //    buttons: {
-                                //        "success": {
-                                //            "label": "OK",
-                                //            "className": "btn-sm btn-primary"
-                                //        }
-                                //    }
-                                //});
-
-
-                            }
-                        },
-                        error: function (e) {
-                            console.log(e.responseText);
+                        } else {
+                            $.gritter.add({
+                                title: 'Approval Notification',
+                                text: data.Message,
+                                class_name: 'gritter-error gritter-center'
+                            });
                         }
-                    });
-
-
+                    }
                 }
-            },
-            error: function (e) {
-                console.log(e.responseText);
-            }
-        });
-
-            //bootbox.dialog({
-            //    message: "Thank you! Your information was successfully saved!",
-            //    buttons: {
-            //        "success": {
-            //            "label": "OK",
-            //            "className": "btn-sm btn-primary"
-            //        }
-            //    }
-            //});
+            });
         }).on('stepclick.fu.wizard', function (e) {
             //e.preventDefault();//this will prevent clicking and selecting steps
         });
@@ -378,7 +418,7 @@
         ignore: "",
         rules: {
             LeaveAttachments: {
-                required: true,
+                required: false,
             },
             LeaveComment: {
                 required: true,

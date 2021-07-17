@@ -1,4 +1,5 @@
-﻿
+﻿@model HumanResources.ViewModels.LeaveApplicationViewModel
+
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
@@ -53,7 +54,12 @@
                             <div class="step-content pos-rel">
                                 <div class="step-pane active" data-step="1">
                                     <h3 class="lighter block green">Enter the following information</h3>
-                                    <form class="form-horizontal" id="leaveselection-form" method="get">
+
+                                    @using (Html.BeginForm("SaveSelection", "Leaves", FormMethod.Post, new { @id = "leaveselection-form", @class = "form-horizontal" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
 
                                         <div class="hr hr-dotted"></div>
 
@@ -64,10 +70,16 @@
                                         <div class="form-group">
                                             <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="LeaveType">Leave Type</label>
 
-                                            <div class="col-xs-12 col-sm-9">
-                                                <select id="LeaveType" name="LeaveType" class="select2" data-placeholder="Click to Choose...">
-                                                    <option value="">&nbsp;</option>
-                                                </select>
+                                            <div class="col-xs-12 col-sm-9">                                               
+
+                                                <div class="clearfix">
+
+                                                    @Html.DropDownListFor(m => m.LeaveType,
+                                                                        new SelectList(ViewBag.LeaveTypes, "Code", "Description", ""),
+                                                                        "Select Leave Type",
+                                                                        new { @class = "select2", @data_placeholder = "Click to Choose..." })
+                                                </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveType, "", new { @class = "text-danger  " })
                                             </div>
                                         </div>
                                         <div class="space-2"></div>
@@ -77,8 +89,9 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <input type="text" name="LeaveDaysEntitled" id="LeaveDaysEntitled" class="col-xs-12 col-sm-4" />
+                                                    @Html.TextBoxFor(m => m.LeaveDaysEntitled, new { @class = "col-xs-12 col-sm-4" })
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveDaysEntitled, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
 
@@ -89,8 +102,9 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <input type="text" name="LeaveDaysTaken" id="LeaveDaysTaken" class="col-xs-12 col-sm-4"  />
+                                                    @Html.TextBoxFor(m => m.LeaveDaysTaken, new { @class = "col-xs-12 col-sm-4" })
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveDaysTaken, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
                                         <div class="space-2"></div>
@@ -100,8 +114,9 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <input type="text" name="LeaveBalance" id="LeaveBalance" class="col-xs-12 col-sm-4"  />
+                                                    @Html.TextBoxFor(m => m.LeaveBalance, new { @class = "col-xs-12 col-sm-5" })
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveBalance, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
 
@@ -112,8 +127,9 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <input type="text" id="LeaveAccruedDays" name="LeaveAccruedDays" class="col-xs-12 col-sm-5" />
+                                                    @Html.TextBoxFor(m => m.LeaveAccruedDays, new { @class = "col-xs-12 col-sm-5" })
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveAccruedDays, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
 
@@ -124,32 +140,40 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <input type="text" id="LeaveOpeningBalance" name="LeaveOpeningBalance" class="col-xs-12 col-sm-5" />
+                                                    @Html.TextBoxFor(m => m.LeaveOpeningBalance, new { @class = "col-xs-12 col-sm-5" })
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveOpeningBalance, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
-                                    </form>
+                                    }
                                 </div>
 
                                 <div class="step-pane" data-step="2">
                                     <h3 class="lighter block green">Select your leave days</h3>
-                                    <form class="form-horizontal" id="leavedaysselection-form" method="get">
+
+                                    @using (Html.BeginForm("SaveLeaveSelection", "Leaves", FormMethod.Post, new { @id = "leavedaysselection-form", @class = "form-horizontal" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
 
                                         <div class="hr hr-dotted"></div>
                                         <div class="space-2"></div>
 
-                                        <div class="form-group" >
+                                        <div class="form-group">
                                             <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">Date Ranges:</label>
 
                                             <div class="col-xs-12 col-sm-6">
                                                 <div class="col-xs-12 col-sm-6 input-daterange input-group">
-                                                    <input type="text" class="input-sm form-control" name="StartDate" id="StartDate" />
+                                                    @Html.TextBoxFor(m => m.StartDate, new { @class = "input-sm form-control" })
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-exchange"></i>
                                                     </span>
 
-                                                    <input type="text" class="input-sm form-control" name="EndDate" id="EndDate" />
+                                                    @Html.TextBoxFor(m => m.EndDate, new { @class = "input-sm form-control" })
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
+                                                @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
 
@@ -163,8 +187,9 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <input type="text" name="LeaveDaysApplied" id="LeaveDaysApplied" class="col-xs-12 col-sm-4" />
+                                                    @Html.TextBoxFor(m => m.LeaveDaysApplied, new { @class = "col-xs-12 col-sm-4" })
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveDaysApplied, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
 
@@ -175,8 +200,9 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <input type="text" name="LeaveStartDate" id="LeaveStartDate" class="col-xs-12 col-sm-4" disabled />
+                                                    @Html.TextBoxFor(m => m.LeaveStartDate, new { @class = "col-xs-12 col-sm-4", @disabled = "disabled" })                                                   
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveStartDate, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
                                         <div class="space-2"></div>
@@ -186,8 +212,9 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <input type="text" name="LeaveEndDate" id="LeaveEndDate" class="col-xs-12 col-sm-4" disabled />
+                                                    @Html.TextBoxFor(m => m.LeaveEndDate, new { @class = "col-xs-12 col-sm-4", @disabled = "disabled" })
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveEndDate, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
 
@@ -196,16 +223,16 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <input type="text" name="ReturnDate" id="ReturnDate" class="col-xs-12 col-sm-4" disabled />
+                                                    @Html.TextBoxFor(m => m.ReturnDate, new { @class = "col-xs-12 col-sm-4", @disabled = "disabled" })
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.ReturnDate, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
 
 
 
                                         <div class="hr hr-dotted"></div>
-
-                                    </form>
+                                    }
                                 </div>
 
                                 <div class="step-pane" data-step="3">
@@ -220,7 +247,7 @@
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="col-xs-12 col-sm-6">
 
-                                                    <input multiple="" type="file" id="LeaveAttachments" />
+                                                    <input multiple="" type="file" id="LeaveAttachments" name="LeaveAttachments" />
                                                 </div>
                                             </div>
                                         </div>

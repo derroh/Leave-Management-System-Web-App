@@ -29,11 +29,11 @@ namespace HumanResources.Controllers
 
                 string jsonGoogleCal = response.Content;
 
-                GoogleCalendarAPI jsonGetMemberInfo = JsonConvert.DeserializeObject<GoogleCalendarAPI>(jsonGoogleCal);
+                GoogleCalendarAPI googlecalendar = JsonConvert.DeserializeObject<GoogleCalendarAPI>(jsonGoogleCal);
 
                 List<PublicHolidays> _PublicHolidays = new List<PublicHolidays>();
 
-                foreach (var holiday in jsonGetMemberInfo.items)
+                foreach (var holiday in googlecalendar.items)
                 {
                     _PublicHolidays.Add(new PublicHolidays { HolidayDate = Convert.ToDateTime(holiday.start.date), Id = holiday.id, Name = holiday.summary });
                     //Console.WriteLine(holiday.id + " - " + holiday.summary +" - "+ holiday.start.date);

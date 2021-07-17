@@ -57,6 +57,8 @@ namespace HumanResources.Controllers
 
         public ActionResult Create()
         {
+            var leavetypes = _db.LeaveTypes.ToList();
+            ViewBag.LeaveTypes = leavetypes;
 
             return View();
         }
@@ -143,6 +145,11 @@ namespace HumanResources.Controllers
             return Json(JsonConvert.SerializeObject(_ResponseLeaveQuantityAndReturnDate), JsonRequestBehavior.AllowGet);
         }
         public JsonResult LeaveEndDateAndReturnDate(string Code, string StartDate, string LeaveDaysApplied)
+        {           
+            return Json(GetLeaveEndDateAndReturnDate(Code, StartDate, LeaveDaysApplied), JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetLeaveEndDateAndReturnDate(string Code, string StartDate, string LeaveDaysApplied)
         {
             string EndDate = null;
 
@@ -172,8 +179,10 @@ namespace HumanResources.Controllers
                 LeaveEndDate = EndDate,
                 ReturnDate = EndDate
             };
-            return Json(JsonConvert.SerializeObject(_ResponseLeaveQuantityAndReturnDate), JsonRequestBehavior.AllowGet);
+
+            return JsonConvert.SerializeObject(_ResponseLeaveQuantityAndReturnDate);
         }
+
         public ActionResult SaveSelection(LeaveApplicationViewModel ep)
         {
             string message = "", DocumentNo = "", status = "";
@@ -204,6 +213,7 @@ namespace HumanResources.Controllers
                     {
                         DocumentNo = DocumentNo,
                         LeaveType = ep.LeaveType,
+                      //  EmployeeNo = "Derrick",
                         ApprovalStatus = "Open"
                     };
 
@@ -212,8 +222,8 @@ namespace HumanResources.Controllers
                         dbEntities.Configuration.ValidateOnSaveEnabled = false;
                         dbEntities.Leaves.Add(leave);
                         dbEntities.SaveChanges();
-
-                        message = "Position Created successfully";
+                        status = "000";
+                        message = "Leave type saved successfully";
                     }
 
                     //update last used number
@@ -228,7 +238,7 @@ namespace HumanResources.Controllers
             catch (Exception es)
             {
                 message = es.Message;
-                status = "000";
+                status = "900";
             }
 
             var _RequestResponse = new RequestResponse
@@ -252,12 +262,19 @@ namespace HumanResources.Controllers
 
                     if (leave != null)
                     {
-                        leave.SelectionType = ep.SelectionType;
+                        string response = GetLeaveEndDateAndReturnDate(leave.LeaveType, ep.StartDate, ep.LeaveDaysApplied);
+
+                        ResponseLeaveQuantityAndReturnDate leavedates = JsonConvert.DeserializeObject<ResponseLeaveQuantityAndReturnDate>(response);
+
+                        leave.SelectionType = "RangeSelection";
                         leave.StartDate = ep.StartDate;
-                        leave.EndDate =Convert.ToDateTime(ep.EndDate);
-                        leave.LeaveDaysApplied =Convert.ToInt32(ep.LeaveDaysApplied);
+                        leave.ReturnDate = Convert.ToDateTime(leavedates.ReturnDate);
+                        leave.EndDate =Convert.ToDateTime(leavedates.LeaveEndDate);
+                        leave.LeaveDaysApplied = Convert.ToInt32(ep.LeaveDaysApplied);
+                       // leave.LeaveDates = GetListOfDates(Convert.ToDateTime(ep.StartDate), Convert.ToDateTime(ep.EndDate));
                         dbEntities.SaveChanges();
-                        message = "Position Created successfully";
+
+                        message = "Leave Created successfully";
                         status = "000";
                     }                   
                 }
@@ -282,16 +299,27 @@ namespace HumanResources.Controllers
         {
             string msg = null;
 
-            string path = Server.MapPath("~/UploadedFiles/");
-            HttpFileCollectionBase files = Request.Files;
-            for (int i = 0; i < files.Count; i++)
+            try
             {
-                HttpPostedFileBase file = files[i];
-                file.SaveAs(path + file.FileName);
+                string path = Server.MapPath("~/UploadedFiles/");
 
-                UploadDocuments(path, file);
+                HttpFileCollectionBase files = Request.Files;
+
+                for (int i = 0; i < files.Count; i++)
+                {
+                    HttpPostedFileBase file = files[i];
+                    file.SaveAs(path + file.FileName);
+
+                    UploadDocuments(path, file);
+                }
+                msg = files.Count + " Files Uploaded!";
             }
-            msg = files.Count + " Files Uploaded!";
+            catch(Exception es)
+            {
+                AppFunctions.WriteLog(es.Message);
+
+                msg = es.Message;
+            }
 
             var _RequestResponse = new RequestResponse
             {
@@ -324,7 +352,7 @@ namespace HumanResources.Controllers
                         bytes = br.ReadBytes(file.ContentLength);
                     }
 
-                    var Attachment = new Attachment { FileName = Path.GetFileName(file.FileName), ContentType = file.ContentType, Data = bytes, DateUploaded = DateTime.Now, DocumentNo = LeaveDocumentNo };
+                    var Attachment = new Attachment { FileName = Path.GetFileName(file.FileName), ContentType = file.ContentType, Data = bytes, DateUploaded = DateTime.Now, DocumentNo = LeaveDocumentNo,DocumentType = "Leave" };
 
                     dbEntities.Configuration.ValidateOnSaveEnabled = false;
                     dbEntities.Attachments.Add(Attachment);
@@ -334,13 +362,37 @@ namespace HumanResources.Controllers
             } 
             catch (Exception es)
             {
-              string  message = es.Message;
-              string status = "900";
+                AppFunctions.WriteLog(es.Message);
             }
         }
         // Leave Entry Type -> Opening Balance",Accrue,Deduct,Use,Closing,Recall
 
         //Approal stuff
+        public ActionResult SubmitForApproval()
+        {
+            string status = "", message = "";
+            //submit for approval
+
+            if (MakerChecker.SendApprovalRequest(LeaveDocumentNo))
+            {
+                status = "000";
+                message = "Submit Success! for leave " + LeaveDocumentNo;
+            }
+            else
+            {
+                status = "999";
+                message = "Submit Failed for leave " + LeaveDocumentNo;
+            }
+
+
+            var _RequestResponse = new RequestResponse
+            {
+                Status = status,
+                Message = message
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Submit(string DocumentNo)
         {
             string status = "", message = "";
@@ -387,7 +439,17 @@ namespace HumanResources.Controllers
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
         //get approve
+        public string GetListOfDates(DateTime startdate, DateTime enddate)
+        {
+            var dates = new List<DateTime>();
 
+            for (var dt = startdate; dt <= enddate; dt = dt.AddDays(1))
+            {
+                dates.Add(dt);
+            }
+
+            return dates.ToString();
+        }
         private static int GetApprovalProgress( string DocumentNumber)
         {
             int progress = 0;
