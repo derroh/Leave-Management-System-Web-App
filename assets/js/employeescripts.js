@@ -1,17 +1,5 @@
 ﻿jQuery(function ($) {
 
-    $('#MultipleSelection').change(function () {
-
-        $('#DateRanges').hide();
-        $('#Multiples').show();
-    });
-    $('#RangeSelection').change(function () {
-
-        $('#Multiples').hide();
-        $('#DateRanges').show();
-
-    });
-
     $("#StartDate").change(function () {
         $('#LeaveStartDate').val($('#StartDate').val());
     });
@@ -20,69 +8,52 @@
         $('#LeaveEndDate').val($('#EndDate').val());
     });
 
-    if ($("#RangeSelection").is(":checked")) {
-        $("#EndDate").change(function () {
-            //Get Leave Quantity And ReturnDate
-            jQuery.ajax({
-                url: '/Leaves/LeaveQuantityAndReturnDate',
-                type: "POST",
-                data: '{Code:"' + $('#LeaveType').val() + '",StartDate:"' + $('#StartDate').val() + '", EndDate:"' + $('#EndDate').val() + '"}',
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (response) {
+    //$("#EndDate").change(function () {
+    //    //Get Leave Quantity And ReturnDate
+    //    jQuery.ajax({
+    //        url: '/Leaves/LeaveQuantityAndReturnDate',
+    //        type: "POST",
+    //        data: '{Code:"' + $('#LeaveType').val() + '",StartDate:"' + $('#StartDate').val() + '", EndDate:"' + $('#EndDate').val() + '"}',
+    //        dataType: "json",
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function (response) {
 
-                    if (response != null) {
-                        //console.log(JSON.stringify(response)); //it comes out to be string 
+    //            if (response != null) {
+    //                //console.log(JSON.stringify(response)); //it comes out to be string 
 
-                        //we need to parse it to JSON
-                        var data = $.parseJSON(response);
+    //                //we need to parse it to JSON
+    //                var data = $.parseJSON(response);
 
-                        //set fields values
-                        $('#LeaveDaysApplied').val(data.LeaveDaysApplied);
-                        $('#ReturnDate').val(data.ReturnDate);
-                    }
-                }
-            });
-        });
-    }  
+    //                //set fields values
+    //                $('#LeaveDaysApplied').val(data.LeaveDaysApplied);
+    //                $('#ReturnDate').val(data.ReturnDate);
+    //            }
+    //        }
+    //    });
+    //});
 
     $("#LeaveDaysApplied").keyup(function () {
         //Get Leave Quantity And ReturnDate
-        if ($("#DateSpecification").is(":checked")) {
+        jQuery.ajax({
+            url: '/Leaves/LeaveEndDateAndReturnDate',
+            type: "POST",
+            data: '{Code:"' + $('#LeaveType').val() + '",StartDate:"' + $('#SpecifiedLeaveStartDate').val() + '", LeaveDaysApplied:"' + $('#LeaveDaysApplied').val() + '"}',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
 
-            if ($("#SpecifiedLeaveStartDate").val() == '') {
-                bootbox.dialog({
-                message: "You must specify your leave start day!",
-                buttons: {
-                    "success": {
-                        "label": "OK",
-                        "className": "btn-sm btn-primary"
-                    }
+                if (response != null) {
+                    //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                    //we need to parse it to JSON
+                    var data = $.parseJSON(response);
+
+                    //set fields values
+                    $('#LeaveEndDate').val(data.LeaveEndDate);
+                    $('#ReturnDate').val(data.ReturnDate);
                 }
-            });
-            } else {
-                jQuery.ajax({
-                    url: '/Leaves/LeaveEndDateAndReturnDate',
-                    type: "POST",
-                    data: '{Code:"' + $('#LeaveType').val() + '",StartDate:"' + $('#SpecifiedLeaveStartDate').val() + '", LeaveDaysApplied:"' + $('#LeaveDaysApplied').val() + '"}',
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (response) {
-
-                        if (response != null) {
-                            //console.log(JSON.stringify(response)); //it comes out to be string 
-
-                            //we need to parse it to JSON
-                            var data = $.parseJSON(response);
-
-                            //set fields values
-                            $('#LeaveEndDate').val(data.LeaveEndDate);
-                            $('#ReturnDate').val(data.ReturnDate);
-                        }
-                    }
-                });
-            }            
-        }
+            }
+        });
     });
 
 
@@ -345,18 +316,11 @@
         focusInvalid: false,
         ignore: "",
         rules: {
-            SelectionType: {
-                required: true,
-            },
             StartDate: {
-                required: function (element) {
-                    return $("#RangeSelection").is(":checked");
-                }
+                required: true
             },
             LeaveDates: {
-                required: function (element) {
-                    return $("#MultipleSelection").is(":checked");
-                }
+                required: true
             },
             LeaveDaysApplied: {
                 required: true
@@ -1816,6 +1780,74 @@
         event.preventDefault();
     });
 
+    //holidays
+
+    var holidaystable =
+        $('#holidays-table')
+            //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+            .DataTable({
+                bAutoWidth: false,
+                "aoColumns": [
+                    { "bSortable": false },
+                    null, null,
+                    { "bSortable": false }
+                ],
+                "aaSorting": [],
+                select: {
+                    style: 'multi'
+                }
+            });
+
+
+    setTimeout(function () {
+        $($('.tableTools-container')).find('a.dt-button').each(function () {
+            var div = $(this).find(' > div').first();
+            if (div.length == 1) div.tooltip({ container: 'body', title: div.parent().text() });
+            else $(this).tooltip({ container: 'body', title: $(this).text() });
+        });
+    }, 500);
+
+
+    holidaystable.on('select', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(holidaystable.row(index).node()).find('input:checkbox').prop('checked', true);
+        }
+    });
+    holidaystable.on('deselect', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(holidaystable.row(index).node()).find('input:checkbox').prop('checked', false);
+        }
+    });
+
+    /////////////////////////////////
+    //table checkboxes
+    $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+
+    //select/deselect all rows according to table header checkbox
+    $('#holidays-table > thead > tr > th input[type=checkbox], #holidays-table_wrapper input[type=checkbox]').eq(0).on('click', function () {
+        var th_checked = this.checked;//checkbox inside "TH" table header
+
+        $('#holidays-table').find('tbody > tr').each(function () {
+            var row = this;
+            if (th_checked) holidaystable.row(row).select();
+            else holidaystable.row(row).deselect();
+        });
+    });
+
+    //select/deselect a row when the checkbox is checked/unchecked
+    $('#holidays-table').on('click', 'td input[type=checkbox]', function () {
+        var row = $(this).closest('tr').get(0);
+        if (this.checked) holidaystable.row(row).deselect();
+        else holidaystable.row(row).select();
+    });
+
+
+
+    $(document).on('click', '#holidays-table .dropdown-toggle', function (e) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        e.preventDefault();
+    });
 
 
 })

@@ -75,76 +75,7 @@
             </li>
         </ul>
     </li>
-    <li class="">
-        <a href="#" class="dropdown-toggle">
-            <i class="menu-icon fa fa-desktop"></i>
-            <span class="menu-text">
-                Leave Recalls
-            </span>
 
-            <b class="arrow fa fa-angle-down"></b>
-        </a>
-
-        <b class="arrow"></b>
-
-        <ul class="submenu">
-
-            <li class="">
-                <a href="@Url.Action("Create", "LeaveRecalls")">
-                    <i class="menu-icon fa fa-caret-right"></i>
-                    Apply New
-                </a>
-
-                <b class="arrow"></b>
-            </li>
-
-            <li class="@Html.IsParentActive("LeaveRecalls", "Index")">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-caret-right"></i>
-
-                    Leave Recall Applications
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
-
-                <b class="arrow"></b>
-
-                <ul class="submenu">
-                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
-                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "open" })">
-                            <i class="menu-icon fa fa-folder-open grey"></i>
-                            Open
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
-                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "pending" })">
-                            <i class="menu-icon fa fa-hourglass orange"></i>
-                            Pending
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
-                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "approved" })">
-                            <i class="menu-icon fa fa-check green"></i>
-                            Approved
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
-                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "rejected" })">
-                            <i class="menu-icon fa fa-times red"></i>
-                            Rejected
-                        </a>
-
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </li>
 
     <li class="@Html.IsParentActive("Leaves", "Index")">
         <a href="#" class="dropdown-toggle">
@@ -216,76 +147,76 @@
             </li>
         </ul>
     </li>
-    <li class="">
-        <a href="#" class="dropdown-toggle">
-            <i class="menu-icon fa fa-desktop"></i>
-            <span class="menu-text">
-                Leave Recalls
-            </span>
+    @*<li class="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-desktop"></i>
+                <span class="menu-text">
+                    Leave Recalls
+                </span>
 
-            <b class="arrow fa fa-angle-down"></b>
-        </a>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
 
-        <b class="arrow"></b>
+            <b class="arrow"></b>
 
-        <ul class="submenu">
+            <ul class="submenu">
 
-            <li class="">
-                <a href="@Url.Action("Create", "LeaveRecalls")">
-                    <i class="menu-icon fa fa-caret-right"></i>
-                    Apply New
-                </a>
+                <li class="">
+                    <a href="@Url.Action("Create", "LeaveRecalls")">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Apply New
+                    </a>
 
-                <b class="arrow"></b>
-            </li>
+                    <b class="arrow"></b>
+                </li>
 
-            <li class="@Html.IsParentActive("LeaveRecalls", "Index")">
-                <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-caret-right"></i>
+                <li class="@Html.IsParentActive("LeaveRecalls", "Index")">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-caret-right"></i>
 
-                    Leave Recall Applications
-                    <b class="arrow fa fa-angle-down"></b>
-                </a>
+                        Leave Recall Applications
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
 
-                <b class="arrow"></b>
+                    <b class="arrow"></b>
 
-                <ul class="submenu">
-                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
-                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "open" })">
-                            <i class="menu-icon fa fa-folder-open grey"></i>
-                            Open
-                        </a>
+                    <ul class="submenu">
+                        <li class="@Html.IsActive("LeaveRecalls", "Index")">
+                            <a href="@Url.Action("Index", "LeaveRecalls", new { status = "open" })">
+                                <i class="menu-icon fa fa-folder-open grey"></i>
+                                Open
+                            </a>
 
-                        <b class="arrow"></b>
-                    </li>
-                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
-                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "pending" })">
-                            <i class="menu-icon fa fa-hourglass orange"></i>
-                            Pending
-                        </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="@Html.IsActive("LeaveRecalls", "Index")">
+                            <a href="@Url.Action("Index", "LeaveRecalls", new { status = "pending" })">
+                                <i class="menu-icon fa fa-hourglass orange"></i>
+                                Pending
+                            </a>
 
-                        <b class="arrow"></b>
-                    </li>
-                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
-                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "approved" })">
-                            <i class="menu-icon fa fa-check green"></i>
-                            Approved
-                        </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="@Html.IsActive("LeaveRecalls", "Index")">
+                            <a href="@Url.Action("Index", "LeaveRecalls", new { status = "approved" })">
+                                <i class="menu-icon fa fa-check green"></i>
+                                Approved
+                            </a>
 
-                        <b class="arrow"></b>
-                    </li>
-                    <li class="@Html.IsActive("LeaveRecalls", "Index")">
-                        <a href="@Url.Action("Index", "LeaveRecalls", new { status = "rejected" })">
-                            <i class="menu-icon fa fa-times red"></i>
-                            Rejected
-                        </a>
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="@Html.IsActive("LeaveRecalls", "Index")">
+                            <a href="@Url.Action("Index", "LeaveRecalls", new { status = "rejected" })">
+                                <i class="menu-icon fa fa-times red"></i>
+                                Rejected
+                            </a>
 
-                        <b class="arrow"></b>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </li>
+                            <b class="arrow"></b>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>*@
 
     <li class="@Html.IsActive("Profile", "Index")">
         <a href="@Url.Action("Index", "Profile")">
@@ -303,6 +234,27 @@
         </a>
 
         <b class="arrow"></b>
+    </li>
+    <li class="">
+        <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-cogs"></i>
+            <span class="menu-text"> Settings </span>
+
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+
+        <b class="arrow"></b>
+
+        <ul class="submenu">
+            <li class="">
+                <a href="@Url.Action("Holidays", "Settings")">
+                    <i class="menu-icon fa fa-cog orange"></i>
+                    Holidays
+                </a>
+
+                <b class="arrow"></b>
+            </li>
+        </ul>
     </li>
 
 

@@ -11,37 +11,61 @@ namespace HumanResources.Controllers
 {
     public class SettingsController : Controller
     {
+        LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
         // GET: Settings
         public ActionResult Index()
         {
-            var client = new RestClient("https://www.googleapis.com/calendar/v3/calendars/en.ke%23holiday%40group.v.calendar.google.com/events?key=AIzaSyBQF1TR_4h4mFj9UZMOl07GRJbH_SiRxxY");
-            client.Timeout = -1;
-            var request = new RestRequest(Method.GET);
-            IRestResponse response = client.Execute(request);
-            //Console.WriteLine(response.Content);
-
-            string jsonGoogleCal = response.Content;
-
-            GoogleCalendarAPI jsonGetMemberInfo = JsonConvert.DeserializeObject<GoogleCalendarAPI>(jsonGoogleCal);
-
-            List<PublicHolidays> _PublicHolidays = new List<PublicHolidays>();
-
-            foreach (var holiday in jsonGetMemberInfo.items)
-            {
-                _PublicHolidays.Add(new PublicHolidays { HolidayDate = Convert.ToDateTime(holiday.start.date), Id = holiday.id, Name = holiday.summary });
-                //Console.WriteLine(holiday.id + " - " + holiday.summary +" - "+ holiday.start.date);
-            }
-            // = MembershipNumber;
-
-            List<PublicHolidays> sortedList = _PublicHolidays.Where(f => f.HolidayDate > DateTime.Now).OrderBy(o => o.HolidayDate).ToList();
-            //  Console.WriteLine((int)ElectionStatus.Created);
-
-            foreach (var holday in sortedList)
-            {
-                Console.WriteLine("Holiday Date " + holday.HolidayDate); //insert to Database here
-            }
-
             return View();
+        }
+        public ActionResult Holidays()
+        {
+            try
+            {
+                var client = new RestClient("https://www.googleapis.com/calendar/v3/calendars/en.ke%23holiday%40group.v.calendar.google.com/events?key=AIzaSyBQF1TR_4h4mFj9UZMOl07GRJbH_SiRxxY");
+                client.Timeout = -1;
+                var request = new RestRequest(Method.GET);
+                IRestResponse response = client.Execute(request);
+                //Console.WriteLine(response.Content);
+
+                string jsonGoogleCal = response.Content;
+
+                GoogleCalendarAPI jsonGetMemberInfo = JsonConvert.DeserializeObject<GoogleCalendarAPI>(jsonGoogleCal);
+
+                List<PublicHolidays> _PublicHolidays = new List<PublicHolidays>();
+
+                foreach (var holiday in jsonGetMemberInfo.items)
+                {
+                    _PublicHolidays.Add(new PublicHolidays { HolidayDate = Convert.ToDateTime(holiday.start.date), Id = holiday.id, Name = holiday.summary });
+                    //Console.WriteLine(holiday.id + " - " + holiday.summary +" - "+ holiday.start.date);
+                }
+                // = MembershipNumber;
+
+                List<PublicHolidays> sortedList = _PublicHolidays.Where(f => f.HolidayDate > DateTime.Now).OrderBy(o => o.HolidayDate).ToList();
+                //  Console.WriteLine((int)ElectionStatus.Created);
+
+                using (var db = new LeaveManagementSystemEntities())
+                {
+                    foreach (var holday in sortedList)
+                    {
+                        if (!db.PublicHolidays.Any(o => o.Id == holday.Id))
+                        {
+                            var publicholiday = new PublicHoliday { Id = holday.Id, HolidayDate = holday.HolidayDate, HolidayName = holday.Name, IsObserved = 1 };
+                            db.Configuration.ValidateOnSaveEnabled = false;
+                            db.PublicHolidays.Add(publicholiday);
+                            db.SaveChanges();
+                        }
+                    }
+
+                }
+            }
+            catch(Exception es)
+            {
+                AppFunctions.WriteLog(es.Message);
+            }
+            DateTime SixmonthsFromToday = DateTime.Now.AddMonths(6); 
+
+            return View(from publicholidays in _db.PublicHolidays.Where(h =>h.HolidayDate <= SixmonthsFromToday).OrderBy(h=>h.HolidayDate)
+                        select publicholidays);
         }
     }
 }

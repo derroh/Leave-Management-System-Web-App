@@ -119,6 +119,7 @@ namespace HumanResources.Controllers
             using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
             {              
                 var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
+                //
 
                 string AnnualLeaveDaysType = leaveType.AnnualLeaveDaysType;
 
