@@ -11,6 +11,7 @@ namespace HumanResources.Controllers
     using HumanResources.ViewModels;
     public class ProfileController : Controller
     {
+        LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
         // GET: Profile
         public ActionResult Index()
         {
@@ -42,5 +43,6 @@ namespace HumanResources.Controllers
 
             return View(mymodel);
         }
+        
     }
 }
