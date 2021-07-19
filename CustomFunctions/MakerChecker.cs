@@ -1,8 +1,11 @@
 ﻿using HumanResources.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace HumanResources.CustomFunctions
 {
@@ -16,11 +19,13 @@ namespace HumanResources.CustomFunctions
 
         * @return bool | return true if approval entry is created / return false if not created
         */
-        public static bool SendApprovalRequest(string _DocumentNumber)
+        public static string SendApprovalRequest(string _DocumentNumber)
         {
             string ApprovalStatus = null; //Created,Open,Canceled,Rejected,Approved
             string ApproverEmail = null;
             string ApproverName = null;
+            string OpenApproverEmail = null;
+            string status = null, message = null;
 
             bool ApprovalEntryCreated = false;
 
@@ -45,7 +50,10 @@ namespace HumanResources.CustomFunctions
                     {
                         ApprovalStatus = "Open";
                         ApproverEmail = ApprovalUser.ApproverEmail;
+                        OpenApproverEmail = ApproverEmail;
                         ApproverName = ApprovalUser.Approver;
+
+                       
                     }
                     else
                     {
@@ -53,7 +61,7 @@ namespace HumanResources.CustomFunctions
                     }
                     //create Approval Entry
 
-                    ApprovalEntryCreated = CreateApprovalEntry(_DocumentNumber, ApprovalSequence, Approver, ApprovalStatus, ApprovalUser.Approver, "Derrick", DateTime.Now);
+                    ApprovalEntryCreated = CreateApprovalEntry(_DocumentNumber, ApprovalSequence, Approver, ApprovalStatus, ApprovalUser.Approver, "Derrick", DateTime.Now);                   
                 }
                 //Update Parent Table
 
@@ -62,13 +70,24 @@ namespace HumanResources.CustomFunctions
                 //if sender has an approval entry approve it
 
                 ApprovalEntryCreated = true;
+
+                message = "An approval entry has been successfully created";
+                status = "000";
             }
             else
             {
                 ApprovalEntryCreated = false;
+                status = "900";
             }
 
-            return ApprovalEntryCreated;
+            var _ApprovalRequestResponse = new ApprovalRequestResponse
+            {
+                Status = status,
+                Message = message,
+                ApproverEmail = OpenApproverEmail
+            };
+
+            return JsonConvert.SerializeObject(_ApprovalRequestResponse);
         }
 
         private static bool UpdateParentTableStatus(string documentNumber, string ApprovalStatus)

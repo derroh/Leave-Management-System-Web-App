@@ -372,9 +372,31 @@ namespace HumanResources.Controllers
         {
             string status = "", message = "";
             //submit for approval
+            string approvalrequestresponse = MakerChecker.SendApprovalRequest(LeaveDocumentNo);
 
-            if (MakerChecker.SendApprovalRequest(LeaveDocumentNo))
+            ApprovalRequestResponse googlecalendar = JsonConvert.DeserializeObject<ApprovalRequestResponse>(approvalrequestresponse);
+
+            status = googlecalendar.Status;
+
+            if (status=="000")
             {
+                string body = string.Empty;
+
+                string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                string url = Url.Action("Login", "Account");
+
+                string pathToTemplate = Server.MapPath("~/MailTemplates/ApprovalNotification.html");
+
+                using (StreamReader reader = new StreamReader(pathToTemplate))
+                {
+                    body = reader.ReadToEnd();
+                }
+                body = body.Replace("{Link}", domainName+url);
+                body = body.Replace("{UserName}", googlecalendar.ApproverEmail);
+
+                bool IsSendEmail = EmailFunctions.SendMail(googlecalendar.ApproverEmail, googlecalendar.ApproverEmail, "Approval Notification", body);
+
                 status = "000";
                 message = "Submit Success! for leave " + LeaveDocumentNo;
             }
@@ -398,8 +420,32 @@ namespace HumanResources.Controllers
             string status = "", message = "";
             //submit for approval
 
-            if (MakerChecker.SendApprovalRequest(DocumentNo))
+            string approvalrequestresponse = MakerChecker.SendApprovalRequest(LeaveDocumentNo);
+
+            ApprovalRequestResponse googlecalendar = JsonConvert.DeserializeObject<ApprovalRequestResponse>(approvalrequestresponse);
+
+            status = googlecalendar.Status;
+
+
+            if (status == "000")
             {
+                string body = string.Empty;
+
+                string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                string url = Url.Action("Login", "Account");
+
+                string pathToTemplate = Server.MapPath("~/MailTemplates/ApprovalNotification.html");
+
+                using (StreamReader reader = new StreamReader(pathToTemplate))
+                {
+                    body = reader.ReadToEnd();
+                }
+                body = body.Replace("{Link}", domainName + url);
+                body = body.Replace("{UserName}", googlecalendar.ApproverEmail);
+
+                bool IsSendEmail = EmailFunctions.SendMail(googlecalendar.ApproverEmail, googlecalendar.ApproverEmail, "Approval Notification", body);
+
                 status = "000";
                 message = "Submit Success! for leave " + DocumentNo;
             }

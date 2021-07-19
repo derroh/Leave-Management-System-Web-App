@@ -197,6 +197,7 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TransportRequestsController.cs" />
+    <Compile Include="CustomFunctions\EmailFunctions.cs" />
     <Compile Include="CustomFunctions\MakerChecker.cs" />
     <Compile Include="CustomValidation\EmailValidation.cs" />
     <Compile Include="Enums\enums.cs" />

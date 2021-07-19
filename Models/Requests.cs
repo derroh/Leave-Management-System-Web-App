@@ -32,5 +32,10 @@ namespace HumanResources.Models
         public string LeaveEndDate { get; set; }
     }
 
-
+    public class ApprovalRequestResponse
+    {
+        public string Message { get; set; }
+        public string Status { get; set; }
+        public string ApproverEmail { get; set; }
+    }
 }
