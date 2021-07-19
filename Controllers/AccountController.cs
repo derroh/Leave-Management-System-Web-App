@@ -239,7 +239,7 @@ namespace HumanResources.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RegisterAccount(HumanResources.ViewModels.RegisterViewModel ep)
+        public ActionResult Register(HumanResources.ViewModels.RegisterViewModel ep)
         {
             if (ModelState.IsValid)
             {
@@ -274,7 +274,7 @@ namespace HumanResources.Controllers
                     FirstName = ep.FirstName,
                     LastName = ep.LastName,
                    // Phone = _user.Phone,
-                    Role = "Admin",
+                    Role = "Staff",
                     EmployeeNo = employee.EmployeeNo
 
                 };
@@ -289,9 +289,8 @@ namespace HumanResources.Controllers
 
                 ViewBag.Message = "Account Created successfully";
 
-                return View();
             }
-            return View();
+            return this.View(ep);
         }
         public static string GetMD5(string str)
         {

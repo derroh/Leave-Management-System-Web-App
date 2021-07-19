@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace HumanResources.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class EmployeesController : Controller
     {
         HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();

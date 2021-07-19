@@ -12,7 +12,7 @@ namespace HumanResources.Controllers
     using HumanResources.CustomFunctions;
     using System.IO;
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ApprovalEntriesController : Controller
     {
         private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();

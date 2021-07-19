@@ -55,7 +55,7 @@ namespace HumanResources.Controllers
             
             return View(_LeavesListViewModel);
         }
-
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             var leavetypes = _db.LeaveTypes.ToList();

@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace HumanResources.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class TransportRequestsController : Controller
     {
         // GET: TransportRequests

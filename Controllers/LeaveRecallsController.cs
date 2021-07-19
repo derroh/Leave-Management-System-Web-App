@@ -10,7 +10,7 @@ namespace HumanResources.Controllers
     using HumanResources.ViewModels;
     using Newtonsoft.Json;
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class LeaveRecallsController : Controller
     {        
         [HttpPost]
