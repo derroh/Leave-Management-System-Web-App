@@ -20,10 +20,12 @@ namespace HumanResources.Controllers
         public ActionResult Index()
         {
             string status = Request.QueryString["status"];
+            string ApproverId = HttpContext.Session["EmployeeNo"].ToString();
+
             List<ApprovalEntriesListViewModel> _ApprovalEntriesListViewModel = new List<ApprovalEntriesListViewModel>();
 
             if (status == "pending") status = "open";
-            var approvalentries = _db.ApprovalEntries.Where(a => a.Status == status).ToList();
+            var approvalentries = _db.ApprovalEntries.Where(a => a.Status == status && a.ApproverId == ApproverId).ToList();
 
             foreach (var approvalentry in approvalentries)
             {

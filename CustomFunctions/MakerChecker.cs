@@ -12,6 +12,7 @@ namespace HumanResources.CustomFunctions
     class MakerChecker
     {
         private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
+       
         /**
         * Function returns true if approval request is sent
         * @param _DocumentType | The record document type     
@@ -61,7 +62,7 @@ namespace HumanResources.CustomFunctions
                     }
                     //create Approval Entry
 
-                    ApprovalEntryCreated = CreateApprovalEntry(_DocumentNumber, ApprovalSequence, Approver, ApprovalStatus, ApprovalUser.Approver, "Derrick", DateTime.Now);                   
+                    ApprovalEntryCreated = CreateApprovalEntry(_DocumentNumber, ApprovalSequence, Approver, ApprovalStatus, ApprovalUser.Approver, HttpContext.Current.Session["EmployeeNo"].ToString(), DateTime.Now);                   
                 }
                 //Update Parent Table
 
@@ -153,7 +154,7 @@ namespace HumanResources.CustomFunctions
             bool ApprovalEntryCreated = false;
             string status = null, message = null, senderemail = null, SenderName = null;
             // Update status to 'Approved' for specified DocumentNumber and Document Type where Approver is loggedIn user
-            bool IsRecordApproved = UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, "Approved", "Derrick");
+            bool IsRecordApproved = UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, "Approved", HttpContext.Current.Session["EmployeeNo"].ToString());
 
             if (IsRecordApproved)
             {
@@ -178,7 +179,7 @@ namespace HumanResources.CustomFunctions
 
                     UpdateParentTableStatus(_DocumentNumber, "Approved");
 
-                    UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, "Approved", "Derrick");
+                    UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, "Approved", HttpContext.Current.Session["EmployeeNo"].ToString());
 
                     var SenderInfo = _db.ApprovalEntries.Where(a => a.DocumentNo == _DocumentNumber).FirstOrDefault();
                     var EmployeeRec = _db.Employees.Where(e => e.EmployeeNo == SenderInfo.SenderId).FirstOrDefault();

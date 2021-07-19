@@ -103,6 +103,7 @@ namespace HumanResources.Controllers
 
                         // setting.
                         this.Session["role_id"] = Role;
+                        this.Session["EmployeeNo"] = logindetails.EmployeeNo;
 
                         // Info.
                         if (String.IsNullOrEmpty(returnUrl))

@@ -20,13 +20,14 @@ namespace HumanResources.Controllers
         public ActionResult Index()
         {
             string status = Request.QueryString["status"];
+            string SenderId = HttpContext.Session["EmployeeNo"].ToString();
 
             List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
 
             if (!string.IsNullOrEmpty(status))
             {
                 if (status == "pending") status = "Pending Approval";
-                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == status).ToList();
+                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == status && a.EmployeeNo == SenderId).ToList();
 
                 foreach (var leave in leaves)
                 {
@@ -40,12 +41,12 @@ namespace HumanResources.Controllers
         {
             //  string s = Request.QueryString["status"];
             List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
-           
+            string SenderId = HttpContext.Session["EmployeeNo"].ToString();
 
             if (!string.IsNullOrEmpty(status))
             {
                 if (status == "pending") status = "Pending Approval";
-                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == status).ToList();
+                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == status && a.EmployeeNo == SenderId).ToList();
 
                 foreach (var leave in leaves)
                 {
@@ -55,7 +56,7 @@ namespace HumanResources.Controllers
             
             return View(_LeavesListViewModel);
         }
-        [Authorize(Roles = "Admin")]
+       
         public ActionResult Create()
         {
             var leavetypes = _db.LeaveTypes.ToList();
