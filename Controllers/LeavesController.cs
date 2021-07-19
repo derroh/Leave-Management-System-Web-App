@@ -422,9 +422,9 @@ namespace HumanResources.Controllers
 
             string approvalrequestresponse = MakerChecker.SendApprovalRequest(LeaveDocumentNo);
 
-            ApprovalRequestResponse googlecalendar = JsonConvert.DeserializeObject<ApprovalRequestResponse>(approvalrequestresponse);
+            ApprovalRequestResponse _ApprovalRequestResponse = JsonConvert.DeserializeObject<ApprovalRequestResponse>(approvalrequestresponse);
 
-            status = googlecalendar.Status;
+            status = _ApprovalRequestResponse.Status;
 
 
             if (status == "000")
@@ -442,9 +442,9 @@ namespace HumanResources.Controllers
                     body = reader.ReadToEnd();
                 }
                 body = body.Replace("{Link}", domainName + url);
-                body = body.Replace("{UserName}", googlecalendar.ApproverEmail);
+                body = body.Replace("{UserName}", _ApprovalRequestResponse.ApproverEmail);
 
-                bool IsSendEmail = EmailFunctions.SendMail(googlecalendar.ApproverEmail, googlecalendar.ApproverEmail, "Approval Notification", body);
+                bool IsSendEmail = EmailFunctions.SendMail(_ApprovalRequestResponse.ApproverEmail, _ApprovalRequestResponse.ApproverEmail, "Approval Notification", body);
 
                 status = "000";
                 message = "Submit Success! for leave " + DocumentNo;

@@ -10,6 +10,7 @@ namespace HumanResources.Controllers
     using Newtonsoft.Json;
     using HumanResources.ViewModels;
     using HumanResources.CustomFunctions;
+    using System.IO;
 
     public class ApprovalEntriesController : Controller
     {
@@ -40,8 +41,33 @@ namespace HumanResources.Controllers
                 int SequenceNo = Convert.ToInt32(approvalentries.SequenceNo);
                 string DocumentNo = approvalentries.DocumentNo;
 
-                if (MakerChecker.ApproveAppovalRequest(EntryNo, SequenceNo, "Leave", DocumentNo))
+                string approvalrequestresponse = MakerChecker.ApproveAppovalRequest(EntryNo, SequenceNo, "Leave", DocumentNo);
+
+                ApprovedRequestResponse _ApprovedRequestResponse = JsonConvert.DeserializeObject<ApprovedRequestResponse>(approvalrequestresponse);
+
+                status = _ApprovedRequestResponse.Status;
+
+                if (status == "000")
                 {
+                    string body = string.Empty;
+
+                    string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                    string url = Url.Action("Login", "Account");
+
+                    string pathToTemplate = Server.MapPath("~/MailTemplates/ApprovalCompletedNotification.html");
+
+                    using (StreamReader reader = new StreamReader(pathToTemplate))
+                    {
+                        body = reader.ReadToEnd();
+                    }
+                    body = body.Replace("{Link}", domainName + url);
+                    body = body.Replace("{LeaveNo}", _ApprovedRequestResponse.DocumentNo);
+                    body = body.Replace("{UserName}", _ApprovedRequestResponse.SenderEmail);
+
+                    bool IsSendEmail = EmailFunctions.SendMail(_ApprovedRequestResponse.SenderEmail, _ApprovedRequestResponse.SenderEmail, "Approval Complete!", body);
+
+
                     status = "000";
                     message = "Approval success for leave " + approvalentries.DocumentNo;
                 }

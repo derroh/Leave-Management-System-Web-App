@@ -148,10 +148,10 @@ namespace HumanResources.CustomFunctions
 
         * @return bool | return true if approval entry is created / return false if not created
         */
-        public static bool ApproveAppovalRequest(int EntryNumber, int SequenceNumber, string _DocumentType, string _DocumentNumber)
+        public static string ApproveAppovalRequest(int EntryNumber, int SequenceNumber, string _DocumentType, string _DocumentNumber)
         {
             bool ApprovalEntryCreated = false;
-
+            string status = null, message = null, senderemail = null, SenderName = null;
             // Update status to 'Approved' for specified DocumentNumber and Document Type where Approver is loggedIn user
             bool IsRecordApproved = UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, "Approved", "Derrick");
 
@@ -179,9 +179,27 @@ namespace HumanResources.CustomFunctions
                     UpdateParentTableStatus(_DocumentNumber, "Approved");
 
                     UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, "Approved", "Derrick");
+
+                    var SenderInfo = _db.ApprovalEntries.Where(a => a.DocumentNo == _DocumentNumber).FirstOrDefault();
+                    var EmployeeRec = _db.Employees.Where(e => e.EmployeeNo == SenderInfo.SenderId).FirstOrDefault();
+
+                    message = "An approval entry has been successfully approved";
+                    status = "000";
+
+                    senderemail = EmployeeRec.EMail;
+                    SenderName = EmployeeRec.FirstName;
                 }
             }
-            return ApprovalEntryCreated;
+            var _ApprovalRequestResponse = new ApprovedRequestResponse
+            {
+                Status = status,
+                Message = message,
+                SenderEmail = senderemail,
+                SenderName = SenderName,
+                DocumentNo = _DocumentNumber
+            };
+
+            return JsonConvert.SerializeObject(_ApprovalRequestResponse);
         }
         private static bool UpdateApprovalEntrySequence(int SequenceNumber, string DocumentType, string DocumentNumber, string Status)
         {

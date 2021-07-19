@@ -38,4 +38,12 @@ namespace HumanResources.Models
         public string Status { get; set; }
         public string ApproverEmail { get; set; }
     }
+    public class ApprovedRequestResponse
+    {
+        public string Message { get; set; }
+        public string Status { get; set; }
+        public string SenderEmail { get; set; }
+        public string SenderName { get; set; }
+        public string DocumentNo { get; set; }
+    }
 }
