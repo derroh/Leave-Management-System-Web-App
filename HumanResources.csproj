@@ -586,13 +586,6 @@
     <Content Include="assets\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="assets\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="assets\static\months.json" />
-    <EntityDeploy Include="Models\LeaveManagementSystemModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>LeaveManagementSystemModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\LeaveManagementSystemModel.edmx.diagram">
-      <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
-    </Content>
     <Content Include="assets\front\fonts\fa-brands-400.eot" />
     <Content Include="assets\front\fonts\fa-brands-400.ttf" />
     <Content Include="assets\front\fonts\fa-brands-400.woff" />
@@ -644,6 +637,13 @@
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
     </None>
+    <EntityDeploy Include="Models\LeaveManagementSystemModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LeaveManagementSystemModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\LeaveManagementSystemModel.edmx.diagram">
+      <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -689,6 +689,8 @@
     <Content Include="Views\Settings\Holidays.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Employees\Create.cshtml" />
+    <Content Include="Views\Leaves\ViewLeave.cshtml" />
+    <Content Include="Views\Employees\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,7 +11,7 @@ namespace HumanResources.CustomFunctions
 {
     class MakerChecker
     {
-        private static LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
+        private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
         /**
         * Function returns true if approval request is sent
         * @param _DocumentType | The record document type     
@@ -96,7 +96,7 @@ namespace HumanResources.CustomFunctions
             try
             {
 
-                using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
                 {
                     var leaves = dbEntities.Leaves.Where(a => a.DocumentNo == documentNumber).FirstOrDefault();
 
@@ -122,7 +122,7 @@ namespace HumanResources.CustomFunctions
             {
                 var approvalEntry = new ApprovalEntry { DocumentNo = documentNumber, SequenceNo = approvalSequence, Status = approvalStatus, ApproverId = ApproverId, DocumentType = "Leave", SenderId = SenderId, DateSent = DateSent };
 
-                using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
                 {
                     dbEntities.Configuration.ValidateOnSaveEnabled = false;
                     dbEntities.ApprovalEntries.Add(approvalEntry);
@@ -207,7 +207,7 @@ namespace HumanResources.CustomFunctions
 
             try
             {
-                using (var db = new LeaveManagementSystemEntities())
+                using (var db = new HumanResourcesManagementSystemEntities())
                 {
                     var approvalentry = db.ApprovalEntries.Where(x => x.SequenceNo == SequenceNumber && x.DocumentType == DocumentType && x.DocumentNo == DocumentNumber).SingleOrDefault();
 
@@ -232,7 +232,7 @@ namespace HumanResources.CustomFunctions
 
             try
             {
-                using (var db = new LeaveManagementSystemEntities())
+                using (var db = new HumanResourcesManagementSystemEntities())
                 {
                     var approvalentry = db.ApprovalEntries.Where(x => x.EntryNumber == EntryNumber && x.DocumentType == DocumentType && x.DocumentNo == DocumentNumber && x.ApproverId == ApproverId).SingleOrDefault();
 
@@ -294,7 +294,7 @@ namespace HumanResources.CustomFunctions
 
             try
             {
-                using (var db = new LeaveManagementSystemEntities())
+                using (var db = new HumanResourcesManagementSystemEntities())
                 {
                     var approvalentry = db.ApprovalEntries.Where(x => x.EntryNumber == entryNumber).SingleOrDefault();
 

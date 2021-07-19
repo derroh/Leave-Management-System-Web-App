@@ -14,7 +14,7 @@ namespace HumanResources.Controllers
 
     public class ApprovalEntriesController : Controller
     {
-        private static LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
+        private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
         // GET: ApprovalEntries
         public ActionResult Index()
         {
@@ -101,6 +101,10 @@ namespace HumanResources.Controllers
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ViewApprovalEntries(string id)
+        {
+            return RedirectToAction("ViewLeave", "Leaves", new { id = id });
         }
     }
 }

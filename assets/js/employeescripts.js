@@ -7,30 +7,7 @@
     $("#EndDate").change(function () {
         $('#LeaveEndDate').val($('#EndDate').val());
     });
-
-    //$("#EndDate").change(function () {
-    //    //Get Leave Quantity And ReturnDate
-    //    jQuery.ajax({
-    //        url: '/Leaves/LeaveQuantityAndReturnDate',
-    //        type: "POST",
-    //        data: '{Code:"' + $('#LeaveType').val() + '",StartDate:"' + $('#StartDate').val() + '", EndDate:"' + $('#EndDate').val() + '"}',
-    //        dataType: "json",
-    //        contentType: "application/json; charset=utf-8",
-    //        success: function (response) {
-
-    //            if (response != null) {
-    //                //console.log(JSON.stringify(response)); //it comes out to be string 
-
-    //                //we need to parse it to JSON
-    //                var data = $.parseJSON(response);
-
-    //                //set fields values
-    //                $('#LeaveDaysApplied').val(data.LeaveDaysApplied);
-    //                $('#ReturnDate').val(data.ReturnDate);
-    //            }
-    //        }
-    //    });
-    //});
+     
 
     $("#LeaveDaysApplied").keyup(function () {
         //Get Leave Quantity And ReturnDate
@@ -1889,5 +1866,250 @@
         e.preventDefault();
     });
 
+
+    //employee
+
+    $("#SaveEmployee").click(function (event) {
+
+        if ($('#employeeform').valid()) {
+            //Serialize the form datas.  
+            var valdata = $("#employeeform").serialize();
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/Employees/CreateEmployee',
+                type: "POST",
+                data: valdata,
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+                        //console.log(data.Message);
+                        bootbox.dialog({
+                            message: data.Message,
+                            buttons: {
+                                "success": {
+                                    "label": "OK",
+                                    "className": "btn-sm btn-primary"
+                                }
+                            }
+                        });
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
+    });
+    $("#UpdateEmployee").click(function (event) {
+
+        if ($('#employeeform').valid()) {
+            //Serialize the form datas.  
+            var valdata = $("#employeeform").serialize();
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/Employees/UpdateEmployee',
+                type: "POST",
+                data: valdata,
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+                        //console.log(data.Message);
+                        bootbox.dialog({
+                            message: data.Message,
+                            buttons: {
+                                "success": {
+                                    "label": "OK",
+                                    "className": "btn-sm btn-primary"
+                                }
+                            }
+                        });
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
+    });
+
+    $.mask.definitions['~'] = '[+-]';
+    $('#Phone').mask('+254 999-999999');
+
+    jQuery.validator.addMethod("Phone", function (value, element) {
+        return this.optional(element) || /^\+\d{3}\ \d{3}\-\d{6}( x\d{1,6})?$/.test(value);
+    }, "Enter a valid phone number.");
+
+    $('#employeeform').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            Email: {
+                required: true,
+                email: true
+            },
+            Password: {
+                required: true,
+                minlength: 5
+            },
+            ConfirmPassword: {
+                required: true,
+                minlength: 5,
+                equalTo: "#Password"
+            },
+            Phone: {
+                required: true,
+                Phone: 'required'
+            },
+            FirstName: {
+                required: true
+            },
+            LastName: {
+                required: true
+            },
+            Name: {
+                required: true
+            },
+            Faculty: {
+                required: true
+            },
+            Gender: {
+                required: true,
+            },
+            YearOfStudy: {
+                required: true,
+            }
+        },
+
+        messages: {
+            Email: {
+                required: "Please provide a valid email.",
+                email: "Please provide a valid email."
+            },
+            Password: {
+                required: "Please specify a password.",
+                minlength: "Please specify a secure password."
+            },
+            Phone: "Please provide a valid number",
+            Faculty: "Please choose faculty",
+            YearOfStudy: "Please choose year of study"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+                var controls = element.closest('div[class*="col-"]');
+                if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
+                else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+            }
+            else if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else if (element.is('.chosen-select')) {
+                error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
+    });
+
+    var employeestable =
+        $('#employees-table')
+            //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+            .DataTable({
+                bAutoWidth: false,
+                "aoColumns": [
+                    { "bSortable": false },
+                    null, null, null, null, null, null, 
+                    { "bSortable": false }
+                ],
+                "aaSorting": [],
+                select: {
+                    style: 'multi'
+                }
+            });
+
+
+    setTimeout(function () {
+        $($('.tableTools-container')).find('a.dt-button').each(function () {
+            var div = $(this).find(' > div').first();
+            if (div.length == 1) div.tooltip({ container: 'body', title: div.parent().text() });
+            else $(this).tooltip({ container: 'body', title: $(this).text() });
+        });
+    }, 500);
+
+
+    employeestable.on('select', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(employeestable.row(index).node()).find('input:checkbox').prop('checked', true);
+        }
+    });
+    employeestable.on('deselect', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(employeestable.row(index).node()).find('input:checkbox').prop('checked', false);
+        }
+    });
+
+    /////////////////////////////////
+    //table checkboxes
+    $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+
+    //select/deselect all rows according to table header checkbox
+    $('#employees-table > thead > tr > th input[type=checkbox], #employees-table_wrapper input[type=checkbox]').eq(0).on('click', function () {
+        var th_checked = this.checked;//checkbox inside "TH" table header
+
+        $('#employees-table').find('tbody > tr').each(function () {
+            var row = this;
+            if (th_checked) employeestable.row(row).select();
+            else employeestable.row(row).deselect();
+        });
+    });
+
+    //select/deselect a row when the checkbox is checked/unchecked
+    $('#employees-table').on('click', 'td input[type=checkbox]', function () {
+        var row = $(this).closest('tr').get(0);
+        if (this.checked) employeestable.row(row).deselect();
+        else employeestable.row(row).select();
+    });
+
+
+
+    $(document).on('click', '#employees-table .dropdown-toggle', function (e) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        e.preventDefault();
+    });
 
 })

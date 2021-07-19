@@ -28,5 +28,6 @@ namespace HumanResources.Models
         public string LeaveNumbers { get; set; }
         public string LeaveRecallNumbers { get; set; }
         public string DepartmentNumbers { get; set; }
+        public string EmployeeNumbers { get; set; }
     }
 }

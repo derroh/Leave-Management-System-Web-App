@@ -11,7 +11,7 @@ namespace HumanResources.Controllers
 {
     public class SettingsController : Controller
     {
-        LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
+        HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
         // GET: Settings
         public ActionResult Index()
         {
@@ -43,7 +43,7 @@ namespace HumanResources.Controllers
                 List<PublicHolidays> sortedList = _PublicHolidays.Where(f => f.HolidayDate > DateTime.Now).OrderBy(o => o.HolidayDate).ToList();
                 //  Console.WriteLine((int)ElectionStatus.Created);
 
-                using (var db = new LeaveManagementSystemEntities())
+                using (var db = new HumanResourcesManagementSystemEntities())
                 {
                     foreach (var holday in sortedList)
                     {

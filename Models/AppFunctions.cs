@@ -12,7 +12,7 @@ namespace HumanResources
 {
     public class AppFunctions
     {
-        private static  LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
+        private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
 
         [DllImport("wininet.dll")]
         private extern static bool InternetGetConnectedState(out int description, int reservedValue);

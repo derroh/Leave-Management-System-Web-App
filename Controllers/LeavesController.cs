@@ -14,7 +14,7 @@ namespace HumanResources.Controllers
 
     public class LeavesController : Controller
     {
-        private static LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
+        private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
         static string LeaveDocumentNo = null;
         public ActionResult Index()
         {
@@ -67,7 +67,7 @@ namespace HumanResources.Controllers
         {
             List<LeaveType> leavetypelist = new List<LeaveType>();
 
-            using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+            using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
             {
                 var leavetypes = dbEntities.LeaveTypes.ToList();
 
@@ -88,7 +88,7 @@ namespace HumanResources.Controllers
         {
             List<LeaveType> leavetypelist = new List<LeaveType>();
 
-            using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+            using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
             {
                 var leavetypes = dbEntities.LeaveTypes.ToList();
 
@@ -118,7 +118,7 @@ namespace HumanResources.Controllers
         }
         public JsonResult LeaveQuantityAndReturnDate(string Code, string StartDate, string EndDate)
         {
-            using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+            using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
             {              
                 var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
                 //
@@ -153,7 +153,7 @@ namespace HumanResources.Controllers
         {
             string EndDate = null;
 
-            using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+            using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
             {
                 var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
 
@@ -188,7 +188,7 @@ namespace HumanResources.Controllers
             string message = "", DocumentNo = "", status = "";
 
             //create Leave Header here
-            LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
+            HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
 
             try
             {
@@ -217,7 +217,7 @@ namespace HumanResources.Controllers
                         ApprovalStatus = "Open"
                     };
 
-                    using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+                    using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
                     {
                         dbEntities.Configuration.ValidateOnSaveEnabled = false;
                         dbEntities.Leaves.Add(leave);
@@ -256,7 +256,7 @@ namespace HumanResources.Controllers
 
             try
             {             
-                using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
                 {
                     var leave = dbEntities.Leaves.Where(s => s.DocumentNo == LeaveDocumentNo).SingleOrDefault();
 
@@ -334,7 +334,7 @@ namespace HumanResources.Controllers
         [HttpPost]
         public FileResult DownloadFile(int? fileId)
         {
-            LeaveManagementSystemEntities entities = new LeaveManagementSystemEntities();
+            HumanResourcesManagementSystemEntities entities = new HumanResourcesManagementSystemEntities();
             var file = entities.Attachments.ToList().Find(p => p.Id == fileId.Value);
             return File(file.Data, file.ContentType, file.FileName);
         }
@@ -343,7 +343,7 @@ namespace HumanResources.Controllers
         {
             try
             {
-                using (LeaveManagementSystemEntities dbEntities = new LeaveManagementSystemEntities())
+                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
                 {
                     byte[] bytes;
 
@@ -464,6 +464,10 @@ namespace HumanResources.Controllers
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
+        public ActionResult ViewLeave(string id)
+        {
+            return View();
+        }
         public ActionResult Cancel(string DocumentNo)
         {
             var _RequestResponse = new RequestResponse
@@ -502,7 +506,7 @@ namespace HumanResources.Controllers
 
             try
             {
-                using (var db = new LeaveManagementSystemEntities())
+                using (var db = new HumanResourcesManagementSystemEntities())
                 {
                     var NoOfApprovals = db.ApprovalEntries.Where(x =>  x.DocumentNo == DocumentNumber).ToList();
                     var NoOfApproved = db.ApprovalEntries.Where(x => x.DocumentNo == DocumentNumber && x.Status =="Approved").ToList();

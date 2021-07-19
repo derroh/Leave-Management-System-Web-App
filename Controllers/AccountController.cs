@@ -23,7 +23,7 @@ namespace HumanResources.Controllers
         /// <summary>
         /// Database Store property.
         /// </summary>
-        private LeaveManagementSystemEntities databaseManager = new LeaveManagementSystemEntities();
+        private HumanResourcesManagementSystemEntities databaseManager = new HumanResourcesManagementSystemEntities();
 
         #endregion
 

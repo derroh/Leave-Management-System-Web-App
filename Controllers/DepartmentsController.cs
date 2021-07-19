@@ -11,7 +11,7 @@ namespace HumanResources.Controllers
 {
     public class DepartmentsController : Controller
     {
-        private static LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
+        private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
         // GET: Departments
         public ActionResult Index()
         {
@@ -38,7 +38,7 @@ namespace HumanResources.Controllers
 
             try
             {
-                using (var db = new LeaveManagementSystemEntities())
+                using (var db = new HumanResourcesManagementSystemEntities())
                 {
                     //Generate Department number here
                     var settings = db.Settings.Where(s => s.Id == 1).SingleOrDefault();
@@ -138,7 +138,7 @@ namespace HumanResources.Controllers
 
             try
             {
-                using (var db = new LeaveManagementSystemEntities())
+                using (var db = new HumanResourcesManagementSystemEntities())
                 {                   
 
                     var dept = _db.Departments.Where(s => s.Code == deparment.Code).SingleOrDefault();
@@ -176,7 +176,7 @@ namespace HumanResources.Controllers
 
             try
             {
-                using (var db = new LeaveManagementSystemEntities())
+                using (var db = new HumanResourcesManagementSystemEntities())
                 {
                     var department = db.Departments.Where(d => d.Code == DocumentNo).FirstOrDefault();
 

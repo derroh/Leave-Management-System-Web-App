@@ -30,8 +30,8 @@ namespace HumanResources.Models
         public string FullName { get; set; }
         public string IDNumber { get; set; }
         public string PassportNumber { get; set; }
-        public int Gender { get; set; }
-        public System.DateTime DateOfBirth { get; set; }
+        public string Gender { get; set; }
+        public Nullable<System.DateTime> DateOfBirth { get; set; }
         public string PINNo { get; set; }
         public string NSSFNo { get; set; }
         public string NHIFNo { get; set; }
@@ -50,18 +50,18 @@ namespace HumanResources.Models
         public string EMail { get; set; }
         public string CompanyEMail { get; set; }
         public string JobTitle { get; set; }
-        public int MaritalStatus { get; set; }
-        public int Disabled { get; set; }
-        public System.DateTime ResignationDate { get; set; }
-        public System.DateTime SuspensionDate { get; set; }
-        public System.DateTime DemisedDate { get; set; }
-        public System.DateTime Retirementdate { get; set; }
-        public System.DateTime RetrenchmentDate { get; set; }
-        public System.DateTime DateOfLeaving { get; set; }
-        public System.DateTime EndOfContractDate { get; set; }
+        public Nullable<int> MaritalStatus { get; set; }
+        public Nullable<int> Disabled { get; set; }
+        public Nullable<System.DateTime> ResignationDate { get; set; }
+        public Nullable<System.DateTime> SuspensionDate { get; set; }
+        public Nullable<System.DateTime> DemisedDate { get; set; }
+        public Nullable<System.DateTime> Retirementdate { get; set; }
+        public Nullable<System.DateTime> RetrenchmentDate { get; set; }
+        public Nullable<System.DateTime> DateOfLeaving { get; set; }
+        public Nullable<System.DateTime> EndOfContractDate { get; set; }
         public System.DateTime Date_Of_Joining_the_Company { get; set; }
-        public System.DateTime Date_Of_Leaving_the_Company { get; set; }
-        public int Termination_Grounds { get; set; }
+        public Nullable<System.DateTime> Date_Of_Leaving_the_Company { get; set; }
+        public Nullable<int> Termination_Grounds { get; set; }
         public string Bank { get; set; }
         public string BankBranch { get; set; }
         public string BankAccountNumber { get; set; }

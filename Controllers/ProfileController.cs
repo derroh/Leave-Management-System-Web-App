@@ -11,7 +11,7 @@ namespace HumanResources.Controllers
     using HumanResources.ViewModels;
     public class ProfileController : Controller
     {
-        LeaveManagementSystemEntities _db = new LeaveManagementSystemEntities();
+        HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
         // GET: Profile
         public ActionResult Index()
         {

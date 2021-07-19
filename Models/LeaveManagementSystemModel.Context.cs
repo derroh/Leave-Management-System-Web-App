@@ -13,10 +13,10 @@ namespace HumanResources.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class LeaveManagementSystemEntities : DbContext
+    public partial class HumanResourcesManagementSystemEntities : DbContext
     {
-        public LeaveManagementSystemEntities()
-            : base("name=LeaveManagementSystemEntities")
+        public HumanResourcesManagementSystemEntities()
+            : base("name=HumanResourcesManagementSystemEntities")
         {
         }
     
@@ -35,9 +35,9 @@ namespace HumanResources.Models
         public virtual DbSet<Leaf> Leaves { get; set; }
         public virtual DbSet<LeaveType> LeaveTypes { get; set; }
         public virtual DbSet<NumberSery> NumberSeries { get; set; }
+        public virtual DbSet<PublicHoliday> PublicHolidays { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<PublicHoliday> PublicHolidays { get; set; }
     }
 }

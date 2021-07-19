@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ApprovalEntries">
           <Key>
             <PropertyRef Name="EntryNumber" />
@@ -73,52 +73,52 @@
             <PropertyRef Name="EmployeeNo" />
           </Key>
           <Property Name="EmployeeNo" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="80" Nullable="false" />
-          <Property Name="MiddleName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Initials" Type="nvarchar" MaxLength="15" Nullable="false" />
-          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="IDNumber" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="PassportNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="Gender" Type="int" Nullable="false" />
-          <Property Name="DateOfBirth" Type="datetime" Nullable="false" />
-          <Property Name="PINNo" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="NSSFNo" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="NHIFNo" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="HELBNo" Type="nvarchar" MaxLength="10" Nullable="false" />
-          <Property Name="Religion" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="Citizenship" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="80" />
+          <Property Name="MiddleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Initials" Type="nvarchar" MaxLength="15" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IDNumber" Type="nvarchar" MaxLength="30" />
+          <Property Name="PassportNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateOfBirth" Type="datetime" />
+          <Property Name="PINNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="NSSFNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="NHIFNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="HELBNo" Type="nvarchar" MaxLength="10" />
+          <Property Name="Religion" Type="nvarchar" MaxLength="20" />
+          <Property Name="Citizenship" Type="nvarchar" MaxLength="10" />
           <Property Name="Picture" Type="image" />
-          <Property Name="PostalAddress" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="ResidentialAddress" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="City" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="PostCode" Type="nvarchar" MaxLength="10" Nullable="false" />
-          <Property Name="Country" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="HomePhoneNumber" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="CellularPhoneNumber" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="WorkPhoneNumber" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="PostalAddress" Type="nvarchar" MaxLength="30" />
+          <Property Name="ResidentialAddress" Type="nvarchar" MaxLength="40" />
+          <Property Name="City" Type="nvarchar" MaxLength="30" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="Country" Type="nvarchar" MaxLength="30" />
+          <Property Name="HomePhoneNumber" Type="nvarchar" MaxLength="30" />
+          <Property Name="CellularPhoneNumber" Type="nvarchar" MaxLength="30" />
+          <Property Name="WorkPhoneNumber" Type="nvarchar" MaxLength="30" />
           <Property Name="EMail" Type="nvarchar" MaxLength="80" Nullable="false" />
-          <Property Name="CompanyEMail" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="CompanyEMail" Type="nvarchar" MaxLength="80" />
           <Property Name="JobTitle" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="MaritalStatus" Type="int" Nullable="false" />
-          <Property Name="Disabled" Type="int" Nullable="false" />
-          <Property Name="ResignationDate" Type="datetime" Nullable="false" />
-          <Property Name="SuspensionDate" Type="datetime" Nullable="false" />
-          <Property Name="DemisedDate" Type="datetime" Nullable="false" />
-          <Property Name="Retirementdate" Type="datetime" Nullable="false" />
-          <Property Name="RetrenchmentDate" Type="datetime" Nullable="false" />
-          <Property Name="DateOfLeaving" Type="datetime" Nullable="false" />
-          <Property Name="EndOfContractDate" Type="datetime" Nullable="false" />
+          <Property Name="MaritalStatus" Type="int" />
+          <Property Name="Disabled" Type="int" />
+          <Property Name="ResignationDate" Type="datetime" />
+          <Property Name="SuspensionDate" Type="datetime" />
+          <Property Name="DemisedDate" Type="datetime" />
+          <Property Name="Retirementdate" Type="datetime" />
+          <Property Name="RetrenchmentDate" Type="datetime" />
+          <Property Name="DateOfLeaving" Type="datetime" />
+          <Property Name="EndOfContractDate" Type="datetime" />
           <Property Name="Date Of Joining the Company" Type="datetime" Nullable="false" />
-          <Property Name="Date Of Leaving the Company" Type="datetime" Nullable="false" />
-          <Property Name="Termination Grounds" Type="int" Nullable="false" />
-          <Property Name="Bank" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="BankBranch" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="BankAccountNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Date Of Leaving the Company" Type="datetime" />
+          <Property Name="Termination Grounds" Type="int" />
+          <Property Name="Bank" Type="nvarchar" MaxLength="30" />
+          <Property Name="BankBranch" Type="nvarchar" MaxLength="30" />
+          <Property Name="BankAccountNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="Department Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="AnnualLeaveDaysEntitled" Type="decimal" Precision="38" Scale="20" Nullable="false" />
-          <Property Name="HROrgUnit" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="HRPosition" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="HROrgUnit" Type="nvarchar" MaxLength="20" />
+          <Property Name="HRPosition" Type="nvarchar" MaxLength="20" />
           <Property Name="CurrentYear" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
@@ -172,7 +172,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="HolidayName" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="HolidayName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="HolidayDate" Type="datetime" Nullable="false" />
           <Property Name="IsObserved" Type="tinyint" />
         </EntityType>
@@ -201,6 +201,7 @@
           <Property Name="LeaveNumbers" Type="nvarchar" MaxLength="50" />
           <Property Name="LeaveRecallNumbers" Type="nvarchar" MaxLength="50" />
           <Property Name="DepartmentNumbers" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeNumbers" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -319,7 +320,8 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -393,52 +395,52 @@
             <PropertyRef Name="EmployeeNo" />
           </Key>
           <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Initials" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IDNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PassportNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Gender" Type="Int32" Nullable="false" />
-          <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="PINNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NSSFNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NHIFNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="HELBNo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Religion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Citizenship" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Initials" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IDNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="PassportNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
+          <Property Name="PINNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NSSFNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NHIFNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HELBNo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Religion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Citizenship" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Picture" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="PostalAddress" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ResidentialAddress" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PostCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Country" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="HomePhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CellularPhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="WorkPhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PostalAddress" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ResidentialAddress" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="PostCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="HomePhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CellularPhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="WorkPhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="EMail" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CompanyEMail" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CompanyEMail" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
           <Property Name="JobTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MaritalStatus" Type="Int32" Nullable="false" />
-          <Property Name="Disabled" Type="Int32" Nullable="false" />
-          <Property Name="ResignationDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="SuspensionDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DemisedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Retirementdate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="RetrenchmentDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateOfLeaving" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EndOfContractDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MaritalStatus" Type="Int32" />
+          <Property Name="Disabled" Type="Int32" />
+          <Property Name="ResignationDate" Type="DateTime" Precision="3" />
+          <Property Name="SuspensionDate" Type="DateTime" Precision="3" />
+          <Property Name="DemisedDate" Type="DateTime" Precision="3" />
+          <Property Name="Retirementdate" Type="DateTime" Precision="3" />
+          <Property Name="RetrenchmentDate" Type="DateTime" Precision="3" />
+          <Property Name="DateOfLeaving" Type="DateTime" Precision="3" />
+          <Property Name="EndOfContractDate" Type="DateTime" Precision="3" />
           <Property Name="Date_Of_Joining_the_Company" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Date_Of_Leaving_the_Company" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Termination_Grounds" Type="Int32" Nullable="false" />
-          <Property Name="Bank" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BankBranch" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BankAccountNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Date_Of_Leaving_the_Company" Type="DateTime" Precision="3" />
+          <Property Name="Termination_Grounds" Type="Int32" />
+          <Property Name="Bank" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BankBranch" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Department_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="AnnualLeaveDaysEntitled" Type="Decimal" Precision="38" Scale="20" Nullable="false" />
-          <Property Name="HROrgUnit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="HRPosition" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HROrgUnit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HRPosition" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CurrentYear" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <NavigationProperty Name="EmployeeLedgerEntries" Relationship="Self.FK_EmployeeLedgerEntries_Employees" FromRole="Employees" ToRole="EmployeeLedgerEntries" />
@@ -494,6 +496,15 @@
           <Property Name="EndingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastUsedNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="PublicHoliday">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HolidayName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HolidayDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsObserved" Type="Byte" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Roled" />
@@ -519,6 +530,7 @@
           <Property Name="LeaveNumbers" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LeaveRecallNumbers" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DepartmentNumbers" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeNumbers" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -602,7 +614,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="LeaveManagementSystemEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="HumanResourcesManagementSystemEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ApprovalEntries" EntityType="Self.ApprovalEntry" />
           <EntitySet Name="ApprovalUsers" EntityType="Self.ApprovalUser" />
           <EntitySet Name="Attachments" EntityType="Self.Attachment" />
@@ -613,6 +625,7 @@
           <EntitySet Name="Leaves" EntityType="Self.Leaf" />
           <EntitySet Name="LeaveTypes" EntityType="Self.LeaveType" />
           <EntitySet Name="NumberSeries" EntityType="Self.NumberSery" />
+          <EntitySet Name="PublicHolidays" EntityType="Self.PublicHoliday" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="Settings" EntityType="Self.Setting" />
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -636,23 +649,13 @@
             <End Role="Leaves" EntitySet="Leaves" />
             <End Role="LeaveRecalls" EntitySet="LeaveRecalls" />
           </AssociationSet>
-          <EntitySet Name="PublicHolidays" EntityType="Model.PublicHoliday" />
         </EntityContainer>
-        <EntityType Name="PublicHoliday">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HolidayName" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="HolidayDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IsObserved" Type="Byte" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="LeaveManagementSystemEntities">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="HumanResourcesManagementSystemEntities">
           <EntitySetMapping Name="ApprovalEntries">
             <EntityTypeMapping TypeName="Model.ApprovalEntry">
               <MappingFragment StoreEntitySet="ApprovalEntries">
@@ -825,6 +828,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PublicHolidays">
+            <EntityTypeMapping TypeName="Model.PublicHoliday">
+              <MappingFragment StoreEntitySet="PublicHolidays">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="HolidayName" ColumnName="HolidayName" />
+                <ScalarProperty Name="HolidayDate" ColumnName="HolidayDate" />
+                <ScalarProperty Name="IsObserved" ColumnName="IsObserved" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="Model.Role">
               <MappingFragment StoreEntitySet="Roles">
@@ -850,6 +863,7 @@
                 <ScalarProperty Name="LeaveNumbers" ColumnName="LeaveNumbers" />
                 <ScalarProperty Name="LeaveRecallNumbers" ColumnName="LeaveRecallNumbers" />
                 <ScalarProperty Name="DepartmentNumbers" ColumnName="DepartmentNumbers" />
+                <ScalarProperty Name="EmployeeNumbers" ColumnName="EmployeeNumbers" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -864,16 +878,6 @@
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PublicHolidays">
-            <EntityTypeMapping TypeName="Model.PublicHoliday">
-              <MappingFragment StoreEntitySet="PublicHolidays">
-                <ScalarProperty Name="IsObserved" ColumnName="IsObserved" />
-                <ScalarProperty Name="HolidayDate" ColumnName="HolidayDate" />
-                <ScalarProperty Name="HolidayName" ColumnName="HolidayName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
