@@ -562,6 +562,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="MailTemplates\ApprovalNotification.html" />
     <Content Include="Models\LeaveManagementSystemModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>

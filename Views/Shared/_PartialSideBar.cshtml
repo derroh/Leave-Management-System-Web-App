@@ -218,15 +218,6 @@
             </ul>
         </li>*@
 
-    <li class="@Html.IsActive("Profile", "Index")">
-        <a href="@Url.Action("Index", "Profile")">
-            <i class="menu-icon fa fa-user"></i>
-            <span class="menu-text"> Profile </span>
-        </a>
-
-        <b class="arrow"></b>
-    </li>
-
     <li class="@Html.IsActive("Reports", "Index")">
         <a href="@Url.Action("Index", "Reports")">
             <i class="menu-icon fa fa-file-pdf-o"></i>
@@ -284,6 +275,14 @@
                 <b class="arrow"></b>
             </li>
         </ul>
+    </li>
+    <li class="@Html.IsActive("Profile", "Index")">
+        <a href="@Url.Action("Index", "Profile")">
+            <i class="menu-icon fa fa-user"></i>
+            <span class="menu-text"> Profile </span>
+        </a>
+
+        <b class="arrow"></b>
     </li>
 
 
