@@ -9,6 +9,8 @@ namespace HumanResources.Controllers
 {
     using HumanResources.Models;
     using HumanResources.ViewModels;
+
+    [Authorize]
     public class ProfileController : Controller
     {
         HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();

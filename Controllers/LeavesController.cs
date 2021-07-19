@@ -12,6 +12,7 @@ namespace HumanResources.Controllers
     using System.IO;
     using HumanResources.CustomFunctions;
 
+    [Authorize]
     public class LeavesController : Controller
     {
         private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();

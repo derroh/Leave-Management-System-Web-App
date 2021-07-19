@@ -12,7 +12,7 @@ namespace HumanResources.ViewModels
         [Required(ErrorMessage = "Please enter username")]
         //[IsValidEmailAddress(ErrorMessage = "Please enter a valid email")]
         //  [IsEmailAddressAvailable(ErrorMessage = "An account with the email provided already exists")]
-        public string Username { get; set; }
+        public string Email { get; set; }
 
 
         [Required(ErrorMessage = "Please enter a password")]

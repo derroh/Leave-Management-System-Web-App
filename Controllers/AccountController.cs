@@ -16,6 +16,9 @@ namespace HumanResources.Controllers
     using Microsoft.Owin.Security;
     using HumanResources.Models;
     using HumanResources.ViewModels;
+    using System.Security.Cryptography;
+    using System.Text;
+
     public class AccountController : Controller
     {
         #region Private Properties
@@ -80,10 +83,11 @@ namespace HumanResources.Controllers
         {
             try
             {
+                string password = GetMD5(model.Password);
                 // Verification.
                 if (ModelState.IsValid)
                 {
-                    var loginInfo = this.databaseManager.Users.Where(m => m.Email == model.Username && m.Password == model.Password).ToList();
+                    var loginInfo = this.databaseManager.Users.Where(m => m.Email == model.Email && m.Password == password).ToList();
 
                     // Verification.
                     if (loginInfo != null && loginInfo.Count() > 0)
@@ -101,7 +105,14 @@ namespace HumanResources.Controllers
                         this.Session["role_id"] = Role;
 
                         // Info.
-                        return this.RedirectToLocal(returnUrl);
+                        if (String.IsNullOrEmpty(returnUrl))
+                        {
+                            return RedirectToAction("Index", "Dashboard");
+                        }
+                        else
+                        {
+                            return this.RedirectToLocal(returnUrl);
+                        }
                     }
                     else
                     {
@@ -220,5 +231,81 @@ namespace HumanResources.Controllers
         #endregion
 
         #endregion
+
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RegisterAccount(HumanResources.ViewModels.RegisterViewModel ep)
+        {
+            if (ModelState.IsValid)
+            {
+                var employee = new Employee
+                {
+                    EmployeeNo = ep.EmployeeNo,
+                    FirstName = ep.FirstName,
+                    LastName = ep.LastName,
+                    FullName = ep.FirstName + " "+ ep.LastName,
+                    CellularPhoneNumber = "",
+                    Gender = "",
+                    EMail = ep.Email,
+                    JobTitle = "Dev",
+                    Date_Of_Joining_the_Company = DateTime.Now,
+                    Department_Name = "",
+                    AnnualLeaveDaysEntitled = 28,
+                    CurrentYear = DateTime.Now.Year,
+                    Status = 1
+
+                };
+
+                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                {
+                    dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                    dbEntities.Employees.Add(employee);
+                    dbEntities.SaveChanges();
+                }
+                var user = new User
+                {
+                    Email = ep.Email,
+                    Password = GetMD5(ep.Password),
+                    FirstName = ep.FirstName,
+                    LastName = ep.LastName,
+                   // Phone = _user.Phone,
+                    Role = "Admin",
+                    EmployeeNo = employee.EmployeeNo
+
+                };
+
+                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                {
+                    dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                    dbEntities.Users.Add(user);
+                    dbEntities.SaveChanges();
+                }
+             //   AppFunctions.SendTextMessage(_user.Phone, " Dear " + _user.FirstName + ", your account on Bettie's voting system has been created at " + DateTime.Now.ToShortTimeString());
+
+                ViewBag.Message = "Account Created successfully";
+
+                return View();
+            }
+            return View();
+        }
+        public static string GetMD5(string str)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] fromData = Encoding.UTF8.GetBytes(str);
+            byte[] targetData = md5.ComputeHash(fromData);
+            string byte2String = null;
+
+            for (int i = 0; i < targetData.Length; i++)
+            {
+                byte2String += targetData[i].ToString("x2");
+
+            }
+            return byte2String;
+        }
     }
 }

@@ -48,9 +48,9 @@
                     <div class="login-container">
                         <div class="center">
                             <h1>
-                                <i class="ace-icon fa fa-leaf green"></i>
-                                <span class="red">Bettie's</span>
-                                <span class="white" id="id-text2"> Voting System</span>
+                                <i class="ace-icon fa fa-briefcase green"></i>
+                                <span class="red">Halima's</span>
+                                <span class="white" id="id-text2"> Leave Management System</span>
                             </h1>
                             <h4 class="blue" id="id-company-text">&copy; Bettie's</h4>
                         </div>
@@ -66,19 +66,7 @@
                                             Please Enter Your Information
                                         </h4>
 
-                                        <div class="space-6"></div>
-                                        @if (@ViewBag.Message != null)
-                                        {
-                                            <div class="alert alert-block alert-danger">
-                                                <button type="button" class="close" data-dismiss="alert">
-                                                    <i class="ace-icon fa fa-times"></i>
-                                                </button>
-
-                                                <i class="ace-icon fa fa-check green"></i>
-
-                                                @ViewBag.Message
-                                            </div>
-                                        }
+                                        <div class="space-6"></div>                                       
 
 
                                         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))

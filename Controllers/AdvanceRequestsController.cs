@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace HumanResources.Controllers
 {
+    [Authorize]
     public class AdvanceRequestsController : Controller
     {
         // GET: AdvanceRequests

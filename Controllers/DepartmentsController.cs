@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace HumanResources.Controllers
 {
+    [Authorize]
     public class DepartmentsController : Controller
     {
         private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
