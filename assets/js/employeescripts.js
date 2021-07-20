@@ -1621,7 +1621,7 @@
                     jQuery.ajax({
                         url: '/Departments/Delete',
                         type: "POST",
-                        data: '{EntryNo:"' + pid + '" }',
+                        data: '{DocumentNo:"' + pid + '" }',
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (response) {

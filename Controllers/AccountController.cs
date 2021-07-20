@@ -18,6 +18,7 @@ namespace HumanResources.Controllers
     using HumanResources.ViewModels;
     using System.Security.Cryptography;
     using System.Text;
+    using System.IO;
 
     public class AccountController : Controller
     {
@@ -329,6 +330,116 @@ namespace HumanResources.Controllers
 
             }
             return byte2String;
+        }
+
+        public ActionResult ResetPassword(string id)
+        {
+            //Verify the reset password link
+            //Find account associated with this link
+            //redirect to reset password page
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return HttpNotFound();
+            }
+
+            using (var context = new LeaveManagementEntities())
+            {
+                var user = context.Users.Where(a => a.ResetPasswordCode == id).FirstOrDefault();
+                if (user != null)
+                {
+                    ResetPasswordViewModel model = new ResetPasswordViewModel();
+                    model.ResetCode = id;
+                    return View(model);
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPassword(ResetPasswordViewModel model)
+        {
+            var message = "";
+            if (ModelState.IsValid)
+            {
+                using (var context = new LeaveManagementEntities())
+                {
+                    var user = context.Users.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
+                    if (user != null)
+                    {
+                        //you can encrypt password here, we are not doing it
+                        user.Password = GetMD5(model.NewPassword);
+                        //make resetpasswordcode empty string now
+                        user.ResetPasswordCode = "";
+                        //to avoid validation issues, disable it
+                        context.Configuration.ValidateOnSaveEnabled = false;
+                        context.SaveChanges();
+                        message = "New password updated successfully";
+                    }
+                }
+            }
+            else
+            {
+                message = "Some fields were not populated";
+            }
+            ViewBag.Message = message;
+
+            // return this.RedirectToAction("Login", "Account");
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Reset()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(ForgotPasswordViewModel p)
+        {
+            if (ModelState.IsValid)
+            {
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
+                {
+                    var user = dbEntities.Users.Where(u => u.Email == p.Email).SingleOrDefault();
+
+                    if (user != null)
+                    {
+                        string resetCode = Guid.NewGuid().ToString();
+                        var verifyUrl = "/Account/ResetPassword/" + resetCode;
+                        var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
+
+                        user.ResetPasswordCode = resetCode;
+
+                        //This line I have added here to avoid confirm password not match issue , as we had added a confirm password property 
+
+                        dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                        dbEntities.SaveChanges();
+
+                        string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                        string body = string.Empty;
+
+                        string pathToTemplate = Server.MapPath("~/MailTemplates/ForgotPassword.html");
+
+                        using (StreamReader reader = new StreamReader(pathToTemplate))
+                        {
+                            body = reader.ReadToEnd();
+                        }
+                        body = body.Replace("{ResetLink}", domainName + verifyUrl);
+                        body = body.Replace("{UserName}", user.FirstName);
+
+                        bool IsSendEmail = EmailFunctions.SendMail(p.Email, user.FirstName, "Password Reset Success", body);
+
+                      
+
+                        ViewBag.Message = "Reset password link has been sent to your email address";
+                    }
+                }
+            }
+            return this.RedirectToAction("Login", "Account");
         }
     }
 }

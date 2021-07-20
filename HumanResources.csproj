@@ -270,6 +270,7 @@
     <Compile Include="ViewModels\CreateApproverViewModel.cs" />
     <Compile Include="ViewModels\DepartmentsViewModel.cs" />
     <Compile Include="ViewModels\EmployeeProfileViewModel.cs" />
+    <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\LeaveApplicationViewModel.cs" />
     <Compile Include="ViewModels\LeaveRecallsListViewModel.cs" />
     <Compile Include="ViewModels\LeavesListViewModel.cs" />
@@ -295,6 +296,7 @@
     <Content Include="assets\css\bootstrap.min.css" />
     <Content Include="assets\css\chosen.min.css" />
     <Content Include="assets\css\colorbox.min.css" />
+    <Content Include="assets\css\custom.css" />
     <Content Include="assets\css\daterangepicker.min.css" />
     <Content Include="assets\css\dropzone.min.css" />
     <Content Include="assets\css\font-awesome.min.css" />
@@ -570,6 +572,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="MailTemplates\ApprovalCompletedNotification.html" />
     <Content Include="MailTemplates\ApprovalNotification.html" />
+    <Content Include="MailTemplates\ForgotPassword.html" />
     <Content Include="Models\LeaveManagementSystemModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
@@ -702,6 +705,8 @@
     <Content Include="Views\Settings\EditApprover.cshtml" />
     <Content Include="Views\Settings\CreateApprover.cshtml" />
     <Content Include="Views\Settings\LeaveTypes.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\Reset.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -22,6 +22,7 @@ namespace HumanResources.Models
         public string Phone { get; set; }
         public string EmployeeNo { get; set; }
         public string Role { get; set; }
+        public string ResetPasswordCode { get; set; }
     
         public virtual Employee Employee { get; set; }
     }
