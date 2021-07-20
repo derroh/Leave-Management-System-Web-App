@@ -205,6 +205,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppFunctions.cs" />
+    <Compile Include="Models\ApprovalDocumentType.cs">
+      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ApprovalEntry.cs">
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
@@ -264,6 +267,7 @@
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ApprovalEntriesListViewModel.cs" />
+    <Compile Include="ViewModels\CreateApproverViewModel.cs" />
     <Compile Include="ViewModels\DepartmentsViewModel.cs" />
     <Compile Include="ViewModels\EmployeeProfileViewModel.cs" />
     <Compile Include="ViewModels\LeaveApplicationViewModel.cs" />
@@ -693,6 +697,9 @@
     <Content Include="Views\Leaves\ViewLeave.cshtml" />
     <Content Include="Views\Employees\Edit.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Settings\ApprovalUsers.cshtml" />
+    <Content Include="Views\Settings\EditApprover.cshtml" />
+    <Content Include="Views\Settings\CreateApprover.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

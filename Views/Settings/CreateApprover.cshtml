@@ -1,0 +1,148 @@
+﻿@model HumanResources.ViewModels.CreateApproverViewModel
+
+@{
+    ViewBag.Title = "CreateApprover";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="page-header">
+        <h1>
+            Create Approver
+        </h1>
+    </div>
+    <!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+
+            <div class="widget-box">
+                <div class="widget-header widget-header-blue widget-header-flat">
+                    <h4 class="widget-title lighter">New Approver Wizard</h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div id="fuelux-wizard-container">
+
+                            <div class="step-content pos-rel">
+                                <h3 class="lighter block green">Enter the following information</h3>
+                                @using (Html.BeginForm("CreateApprovalUser", "Settings", FormMethod.Post, new { @id = "createapproverform", @class = "form-horizontal" }))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+
+                                    <div class="hr hr-dotted"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="state">Document Type</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+
+                                                @Html.DropDownListFor(m => m.DocumentType,
+                                                                    new SelectList(ViewBag.ApprovalDDocumentTypes, "Code", "Name", ""),
+                                                                    "Select Document Type",
+                                                                    new { @class = "select2", @data_placeholder = "Click to Choose..." })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.DocumentType, "", new { @class = "text-danger  " })
+                                        </div>
+                                    </div>
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="ApprovalSequence">Approval sequence:</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.ApprovalSequence, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.ApprovalSequence, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr-dotted"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Approver">Approver</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+
+                                                @Html.DropDownListFor(m => m.Approver,
+                                                                    new SelectList(ViewBag.Employees, "EmployeeNo", "FullName", ""),
+                                                                    "Select Employee",
+                                                                    new { @class = "select2", @data_placeholder = "Click to Choose..." })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.Approver, "", new { @class = "text-danger  " })
+                                        </div>
+                                    </div>
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="ApproverEmail">Approver Email:</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.ApproverEmail, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.ApproverEmail, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                    <div class="hr hr-dotted"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="SubstituteApprover">Substitute</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+
+                                                @Html.DropDownListFor(m => m.SubstituteApprover,
+                                                                     new SelectList(ViewBag.Employees, "EmployeeNo", "FullName", ""),
+                                                                    "Select Employee",
+                                                                    new { @class = "select2", @data_placeholder = "Click to Choose..." })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.SubstituteApprover, "", new { @class = "text-danger  " })
+                                        </div>
+                                    </div>
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Name">Substitute Approver Email</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.SubstituteApproverEmail, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.SubstituteApproverEmail, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                }
+                            </div>
+                        </div>
+
+                        <hr />
+                        <div class="wizard-actions center">
+                            <button class="btn btn-success btn-next" id="SaveApprovalUser">
+                                Save
+                                <i class="ace-icon fa fa-floppy-o  icon-on-right"></i>
+                            </button>
+                        </div>
+                    </div><!-- /.widget-main -->
+                </div><!-- /.widget-body -->
+            </div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+
+</div>
+

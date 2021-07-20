@@ -104,6 +104,8 @@ namespace HumanResources.Controllers
                         // setting.
                         this.Session["role_id"] = Role;
                         this.Session["EmployeeNo"] = logindetails.EmployeeNo;
+                        this.Session["FirstName"] = logindetails.FirstName;
+                        
 
                         // Info.
                         if (String.IsNullOrEmpty(returnUrl))
@@ -143,6 +145,27 @@ namespace HumanResources.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
+        {
+            try
+            {
+                // Setting.
+                var ctx = Request.GetOwinContext();
+                var authenticationManager = ctx.Authentication;
+
+                // Sign Out.
+                authenticationManager.SignOut();
+            }
+            catch (Exception ex)
+            {
+                // Info
+                throw ex;
+            }
+
+            // Info.
+            return this.RedirectToAction("Login", "Account");
+        }
+
+        public ActionResult LogOut()
         {
             try
             {

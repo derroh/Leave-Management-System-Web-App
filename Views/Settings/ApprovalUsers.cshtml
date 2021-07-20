@@ -1,0 +1,142 @@
+﻿@model IEnumerable<HumanResources.Models.ApprovalUser>
+
+@{
+    ViewBag.Title = "ApprovalUsers";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="page-header">
+        <h1>
+            Approval Users
+        </h1>
+    </div><!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="clearfix">
+                        <div class="pull-right tableTools-container"></div>
+                    </div>
+                    <div class="table-header">
+                        Results for "approval users"
+                    </div>
+
+                    <!-- div.table-responsive -->
+                    <!-- div.dataTables_borderWrap -->
+                    <div>
+                        <table id="approvalusers-table" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </th>
+                                    <th>
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Document
+                                    </th>
+                                    <th>
+                                        <i class="ace-icon fa fa-clipboard bigger-110 hidden-480"></i>
+                                        Approval Sequence
+                                    </th>
+                                    <th>
+                                        <i class="ace-icon fa fa-envelope bigger-110 hidden-480"></i>
+                                        Approver
+                                    </th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Approver Email
+                                    </th>
+
+                                    <th>
+                                        <i class="ace-icon fa fa-briefcase bigger-110 hidden-480"></i>
+                                        Substitute Approve
+                                    </th>
+                                    <th>
+                                        <i class="ace-icon fa fa-briefcase bigger-110 hidden-480"></i>
+                                        Subtitute Email
+                                    </th>
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var approvaluser in Model)
+                                {
+                                    <tr>
+                                        <td class="center">
+                                            <label class="pos-rel">
+                                                <input type="checkbox" class="ace" />
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </td>
+
+                                        <td>
+                                            @approvaluser.DocumentType
+                                        </td>
+                                        <td>@approvaluser.ApprovalSequence</td>
+                                        <td>@approvaluser.Approver</td>
+                                        <td class="hidden-480">@approvaluser.ApproverEmail</td>
+                                        <td>@approvaluser.SubstituteApprover</td>
+                                        <td>@approvaluser.SubstituteApproverEmail</td>
+
+                                        <td>
+                                            <div class="hidden-sm hidden-xs action-buttons">                                               
+
+                                                <a class="green" href="@Url.Action("EditApprover", "Settings", new { id = approvaluser.Id })">
+                                                    <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                </a>
+
+                                                <a class="red deleteapprover" href="#" data-docno="@approvaluser.Id">
+                                                    <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                </a>
+
+                                            </div>
+
+                                            <div class="hidden-md hidden-lg">
+                                                <div class="inline pos-rel">
+                                                    <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                        <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                                    </button>
+
+                                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                                        
+                                                        <li>
+                                                            <a href="@Url.Action("EditApprover", "Settings", new { id = approvaluser.Id })" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                                <span class="green">
+                                                                    <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+
+
+                                                        <li>
+                                                            <a href="" class="tooltip-error deleteapprover" data-docno="@approvaluser.ApprovalSequence" data-rel="tooltip" title="Delete">
+                                                                <span class="red">
+                                                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div>
+

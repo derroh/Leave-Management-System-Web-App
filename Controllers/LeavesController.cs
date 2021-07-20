@@ -155,22 +155,33 @@ namespace HumanResources.Controllers
         {
             string EndDate = null;
 
+            Code = Code.Trim();
+
+            DateTime LeaveStartDate = Convert.ToDateTime(StartDate);
+
+            IEnumerable<DateTime> holidays;
+
+            holidays = _db.PublicHolidays.Where(h => h.HolidayDate >= LeaveStartDate).Select(h => h.HolidayDate).ToList();
+
             using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
             {
                 var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
 
-                string AnnualLeaveDaysType = leaveType.AnnualLeaveDaysType;
+                if(leaveType != null)
+                {
+                    string AnnualLeaveDaysType = leaveType.AnnualLeaveDaysType;
 
-                if (AnnualLeaveDaysType.Trim() == "Consecutive Days")
-                {
-                    var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), Convert.ToInt32(LeaveDaysApplied));
-                    EndDate = dtResult.ToString("MM/dd/yyyy");
-                }
-                else if (AnnualLeaveDaysType.Trim() == "Working Days")
-                {
-                    var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), Convert.ToInt32(LeaveDaysApplied));
-                    EndDate = dtResult.ToString("MM/dd/yyyy");
-                }
+                    if (AnnualLeaveDaysType.Trim() == "Consecutive Days")
+                    {
+                        var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), Convert.ToInt32(LeaveDaysApplied), holidays);
+                        EndDate = dtResult.ToString("MM/dd/yyyy");
+                    }
+                    else if (AnnualLeaveDaysType.Trim() == "Working Days")
+                    {
+                        var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), Convert.ToInt32(LeaveDaysApplied), holidays);
+                        EndDate = dtResult.ToString("MM/dd/yyyy");
+                    }
+                }               
 
             }
 
@@ -188,6 +199,8 @@ namespace HumanResources.Controllers
         public ActionResult SaveSelection(LeaveApplicationViewModel ep)
         {
             string message = "", DocumentNo = "", status = "";
+
+            string SenderId = HttpContext.Session["EmployeeNo"].ToString();
 
             //create Leave Header here
             HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
@@ -215,7 +228,7 @@ namespace HumanResources.Controllers
                     {
                         DocumentNo = DocumentNo,
                         LeaveType = ep.LeaveType,
-                      //  EmployeeNo = "Derrick",
+                        EmployeeNo = SenderId,
                         ApprovalStatus = "Open"
                     };
 
@@ -468,7 +481,30 @@ namespace HumanResources.Controllers
         }
         public ActionResult ViewLeave(string id)
         {
-            return View();
+            LeaveApplicationViewModel leaveApp = new LeaveApplicationViewModel();
+            var leavetypes = _db.LeaveTypes.ToList();
+            ViewBag.LeaveTypes = leavetypes;
+
+            var leave = _db.Leaves.Where(x => x.DocumentNo == id).FirstOrDefault();
+
+            leaveApp.LeaveType = leave.LeaveType;
+            leaveApp.LeaveDaysEntitled = "0";
+            leaveApp.LeaveDaysTaken = "0";
+            leaveApp.LeaveBalance = "0";
+            leaveApp.LeaveAccruedDays = "0";
+            leaveApp.LeaveOpeningBalance = "0";
+
+            //selection
+            leaveApp.SelectionType = "";
+            leaveApp.StartDate = Convert.ToDateTime(leave.StartDate).ToString("MM/dd/yyyy");
+            leaveApp.EndDate = Convert.ToDateTime(leave.EndDate).ToString("MM/dd/yyyy");
+            leaveApp.LeaveDates = leave.LeaveDates;
+            leaveApp.LeaveDaysApplied = leave.LeaveDaysApplied.ToString();
+            leaveApp.LeaveStartDate = Convert.ToDateTime(leave.StartDate).ToString("MM/dd/yyyy");
+            leaveApp.LeaveEndDate = Convert.ToDateTime(leave.EndDate).ToString("MM/dd/yyyy");
+            leaveApp.ReturnDate = Convert.ToDateTime(leave.ReturnDate).ToString("MM/dd/yyyy");
+
+            return View(leaveApp);
         }
         public ActionResult Cancel(string DocumentNo)
         {

@@ -24,6 +24,7 @@
         <AssociationConnector Association="Model.FK_Leaves_Employees" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_Users_Employees" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_LeaveRecalls_Leaves" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Model.ApprovalDocumentType" Width="1.5" PointX="12.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

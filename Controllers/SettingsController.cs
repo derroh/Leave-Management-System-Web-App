@@ -68,5 +68,77 @@ namespace HumanResources.Controllers
             return View(from publicholidays in _db.PublicHolidays.Where(h =>h.HolidayDate <= SixmonthsFromToday).OrderBy(h=>h.HolidayDate)
                         select publicholidays);
         }
+        public ActionResult ApprovalUsers()
+        {
+            return View( from approvers in _db.ApprovalUsers 
+                         select approvers);
+        }
+        public ActionResult EditApprover()
+        {
+            return View();
+        }
+        public ActionResult DeleteApprover(string id)
+        {
+            var _RequestResponse = new RequestResponse
+            {
+                Status = "900",
+                Message = "Delete Success! for leave approver" + id
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult CreateApprover()
+        {
+            ViewModels.CreateApproverViewModel approver = new ViewModels.CreateApproverViewModel();
+            var Employees = _db.Employees.ToList();
+            var ApprovalDDocumentTypes = _db.ApprovalDocumentTypes.ToList();
+
+            ViewBag.Employees = Employees;
+            ViewBag.ApprovalDDocumentTypes = ApprovalDDocumentTypes;
+
+            return View(approver);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateApprovalUser(ViewModels.CreateApproverViewModel app)
+        {
+            string message = "", status = "";            
+
+            try
+            {
+                var approvaluser = new ApprovalUser
+                {
+                    ApprovalSequence = app.ApprovalSequence,
+                    Approver = app.Approver,
+                    ApproverEmail = app.ApproverEmail,
+                    DocumentType = app.DocumentType,
+                    SubstituteApprover = app.SubstituteApprover,
+                    SubstituteApproverEmail = app.SubstituteApproverEmail
+                };
+
+                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                {
+                    dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                    dbEntities.ApprovalUsers.Add(approvaluser);
+                    dbEntities.SaveChanges();
+
+                    status = "000";
+                    message = "Approval user saved successfully";
+                }
+            }
+            catch (Exception es)
+            {
+                status = "900";
+                message = es.Message;
+            }
+
+            var _RequestResponse = new RequestResponse
+            {
+                Status = status,
+                Message = message
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
     }
 }

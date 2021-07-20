@@ -116,7 +116,7 @@
 
                 <ul class="submenu">
                     <li class="@Html.IsLastChildActive("Leaves", "List", "open")">
-                        <a href="@Url.Action("List", "Leaves", new { status = "open" })">
+                        <a href="@Url.Action("Index", "Leaves", new { status = "open" })">
                             <i class="menu-icon fa fa-folder-open grey"></i>
                             Open
                         </a>
@@ -208,6 +208,23 @@
                     <a href="@Url.Action("Holidays", "Settings")">
                         <i class="menu-icon fa fa-cog orange"></i>
                         Holidays
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+                <li class="">
+                    <a href="@Url.Action("CreateApprover", "Settings")">
+                        <i class="menu-icon fa fa-users red"></i>
+                        Create Approval User
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="">
+                    <a href="@Url.Action("ApprovalUsers", "Settings")">
+                        <i class="menu-icon fa fa-users red"></i>
+                        Approval Users
                     </a>
 
                     <b class="arrow"></b>

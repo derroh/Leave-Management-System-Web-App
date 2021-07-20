@@ -7,7 +7,8 @@
     $("#EndDate").change(function () {
         $('#LeaveEndDate').val($('#EndDate').val());
     });
-     
+
+    $('#viewleave-wizard-container').ace_wizard();
 
     $("#LeaveDaysApplied").keyup(function () {
         //Get Leave Quantity And ReturnDate
@@ -746,7 +747,6 @@
         });
     });
 
-
     $("#leaves-table").on("click", ".deleteleaves", function (e) {
         e.preventDefault();
 
@@ -807,7 +807,6 @@
 
     //Approval Entries
 
-
     var approvalentriestable =
         $('#approvalentries-table')
             //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
@@ -866,8 +865,6 @@
         if (this.checked) approvalentriestable.row(row).deselect();
         else approvalentriestable.row(row).select();
     });
-
-
 
     $(document).on('click', '#approvalentries-table .dropdown-toggle', function (e) {
         e.stopImmediatePropagation();
@@ -2110,6 +2107,247 @@
         e.stopImmediatePropagation();
         e.stopPropagation();
         e.preventDefault();
+    });
+
+
+    //Approval users
+
+    var approvaluserstable =
+        $('#approvalusers-table')
+            //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+            .DataTable({
+                bAutoWidth: false,
+                "aoColumns": [
+                    { "bSortable": false },
+                    null, null, null, null, null, null,
+                    { "bSortable": false }
+                ],
+                "aaSorting": [],
+                select: {
+                    style: 'multi'
+                }
+            });
+
+
+    setTimeout(function () {
+        $($('.tableTools-container')).find('a.dt-button').each(function () {
+            var div = $(this).find(' > div').first();
+            if (div.length == 1) div.tooltip({ container: 'body', title: div.parent().text() });
+            else $(this).tooltip({ container: 'body', title: $(this).text() });
+        });
+    }, 500);
+
+
+    approvaluserstable.on('select', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(approvaluserstable.row(index).node()).find('input:checkbox').prop('checked', true);
+        }
+    });
+    approvaluserstable.on('deselect', function (e, dt, type, index) {
+        if (type === 'row') {
+            $(approvaluserstable.row(index).node()).find('input:checkbox').prop('checked', false);
+        }
+    });
+
+    /////////////////////////////////
+    //table checkboxes
+    $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+
+    //select/deselect all rows according to table header checkbox
+    $('#approvalusers-table > thead > tr > th input[type=checkbox], #approvalusers-table_wrapper input[type=checkbox]').eq(0).on('click', function () {
+        var th_checked = this.checked;//checkbox inside "TH" table header
+
+        $('#approvalusers-table').find('tbody > tr').each(function () {
+            var row = this;
+            if (th_checked) approvaluserstable.row(row).select();
+            else approvaluserstable.row(row).deselect();
+        });
+    });
+
+    //select/deselect a row when the checkbox is checked/unchecked
+    $('#approvalusers-table').on('click', 'td input[type=checkbox]', function () {
+        var row = $(this).closest('tr').get(0);
+        if (this.checked) approvaluserstable.row(row).deselect();
+        else approvaluserstable.row(row).select();
+    });
+
+
+
+    $(document).on('click', '#approvalusers-table .dropdown-toggle', function (e) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        e.preventDefault();
+    });
+
+    $("#approvalusers-table").on("click", ".deleteapprover", function (e) {
+        e.preventDefault();
+
+        var docno = $(this).attr('data-docno');
+
+        bootbox.confirm({
+            title: "<i class='fa fa-trash'></i> Delete?",
+            message: "Do you wish to delete approver sequence number " + docno + "?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true) {
+
+                    jQuery.ajax({
+                        url: '/Settings/DeleteApprover',
+                        type: "POST",
+                        data: '{DocumentNo:"' + docno + '" }',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
+
+
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    $('#createapproverform').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            DocumentType: {
+                required: true
+            },
+            Approver: {
+                required: true
+            },
+            ApproverEmail: {
+                required: true,
+                email: true
+            },
+            SubstituteApprover: {
+                required: true
+            },
+            SubstituteApproverEmail: {
+                required: true,
+                email: true
+            },
+            ApprovalSequence: {
+                required: true,
+                number: true
+            }
+        },
+
+        messages: {
+            ApproverEmail: {
+                required: "Please provide a valid email.",
+                email: "Please provide a valid email."
+            },
+            SubstituteApproverEmail: {
+                required: "Please provide a valid email.",
+                email: "Please provide a valid email."
+            },            
+            YearOfStudy: "Please choose year of study"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+                var controls = element.closest('div[class*="col-"]');
+                if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
+                else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+            }
+            else if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else if (element.is('.chosen-select')) {
+                error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
+    });
+
+    $("#SaveApprovalUser").click(function (event) {
+
+        if ($('#createapproverform').valid()) {
+            //Serialize the form datas.  
+            var valdata = $("#createapproverform").serialize();
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/Settings/CreateApprovalUser',
+                type: "POST",
+                data: valdata,
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+                        //console.log(data.Message);
+                        bootbox.dialog({
+                            message: data.Message,
+                            buttons: {
+                                "success": {
+                                    "label": "OK",
+                                    "className": "btn-sm btn-primary"
+                                }
+                            }
+                        });
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
     });
 
 })
