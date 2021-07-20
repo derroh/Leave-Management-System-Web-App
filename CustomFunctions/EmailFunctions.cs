@@ -11,7 +11,7 @@ namespace HumanResources
 {
     class EmailFunctions
     {
-        private static Models.HumanResourcesManagementSystemEntities _db = new Models.HumanResourcesManagementSystemEntities();
+        private static Models.LeaveManagementEntities _db = new Models.LeaveManagementEntities();
         //function sends emails
         public static bool SendMail(string RecipientMail, string RecipientName, string MailSubject, string MailBody)
         {

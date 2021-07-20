@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ApprovalDocumentTypes">
           <Key>
             <PropertyRef Name="Code" />
@@ -23,7 +23,7 @@
           <Property Name="SequenceNo" Type="int" />
           <Property Name="ApproverId" Type="nvarchar" MaxLength="50" />
           <Property Name="DateSent" Type="date" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="int" />
         </EntityType>
         <EntityType Name="ApprovalUsers">
           <Key>
@@ -152,7 +152,7 @@
           <Property Name="LeaveDaysApplied" Type="int" />
           <Property Name="ReturnDate" Type="date" />
           <Property Name="EmployeeNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApprovalStatus" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="LeaveTypes">
           <Key>
@@ -328,10 +328,18 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ApprovalDocumentType">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+        </EntityType>
         <EntityType Name="ApprovalEntry">
           <Key>
             <PropertyRef Name="EntryNumber" />
@@ -343,7 +351,7 @@
           <Property Name="SequenceNo" Type="Int32" />
           <Property Name="ApproverId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateSent" Type="DateTime" Precision="0" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
         </EntityType>
         <EntityType Name="ApprovalUser">
           <Key>
@@ -478,7 +486,7 @@
           <Property Name="LeaveDaysApplied" Type="Int32" />
           <Property Name="ReturnDate" Type="DateTime" Precision="0" />
           <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ApprovalStatus" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Attachments" Relationship="Self.FK_Attachments_Leaves" FromRole="Leaves" ToRole="Attachments" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Leaves_Employees" FromRole="Leaves" ToRole="Employees" />
           <NavigationProperty Name="LeaveRecalls" Relationship="Self.FK_LeaveRecalls_Leaves" FromRole="Leaves" ToRole="LeaveRecalls" />
@@ -621,7 +629,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="HumanResourcesManagementSystemEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="LeaveManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ApprovalDocumentTypes" EntityType="Self.ApprovalDocumentType" />
           <EntitySet Name="ApprovalEntries" EntityType="Self.ApprovalEntry" />
           <EntitySet Name="ApprovalUsers" EntityType="Self.ApprovalUser" />
           <EntitySet Name="Attachments" EntityType="Self.Attachment" />
@@ -656,21 +665,21 @@
             <End Role="Leaves" EntitySet="Leaves" />
             <End Role="LeaveRecalls" EntitySet="LeaveRecalls" />
           </AssociationSet>
-          <EntitySet Name="ApprovalDocumentTypes" EntityType="Model.ApprovalDocumentType" />
         </EntityContainer>
-        <EntityType Name="ApprovalDocumentType">
-          <Key>
-            <PropertyRef Name="Code" />
-          </Key>
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="HumanResourcesManagementSystemEntities">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="LeaveManagementEntities">
+          <EntitySetMapping Name="ApprovalDocumentTypes">
+            <EntityTypeMapping TypeName="Model.ApprovalDocumentType">
+              <MappingFragment StoreEntitySet="ApprovalDocumentTypes">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ApprovalEntries">
             <EntityTypeMapping TypeName="Model.ApprovalEntry">
               <MappingFragment StoreEntitySet="ApprovalEntries">
@@ -893,14 +902,6 @@
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ApprovalDocumentTypes">
-            <EntityTypeMapping TypeName="Model.ApprovalDocumentType">
-              <MappingFragment StoreEntitySet="ApprovalDocumentTypes">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

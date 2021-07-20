@@ -30,7 +30,7 @@ namespace HumanResources.Models
         public Nullable<int> LeaveDaysApplied { get; set; }
         public Nullable<System.DateTime> ReturnDate { get; set; }
         public string EmployeeNo { get; set; }
-        public string ApprovalStatus { get; set; }
+        public int ApprovalStatus { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Attachment> Attachments { get; set; }

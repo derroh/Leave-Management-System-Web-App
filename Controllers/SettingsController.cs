@@ -12,7 +12,7 @@ namespace HumanResources.Controllers
     [Authorize(Roles = "Admin")]
     public class SettingsController : Controller
     {
-        HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
+        LeaveManagementEntities _db = new LeaveManagementEntities();
         // GET: Settings
         public ActionResult Index()
         {
@@ -44,7 +44,7 @@ namespace HumanResources.Controllers
                 List<PublicHolidays> sortedList = _PublicHolidays.Where(f => f.HolidayDate > DateTime.Now).OrderBy(o => o.HolidayDate).ToList();
                 //  Console.WriteLine((int)ElectionStatus.Created);
 
-                using (var db = new HumanResourcesManagementSystemEntities())
+                using (var db = new LeaveManagementEntities())
                 {
                     foreach (var holday in sortedList)
                     {
@@ -116,7 +116,7 @@ namespace HumanResources.Controllers
                     SubstituteApproverEmail = app.SubstituteApproverEmail
                 };
 
-                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                 {
                     dbEntities.Configuration.ValidateOnSaveEnabled = false;
                     dbEntities.ApprovalUsers.Add(approvaluser);

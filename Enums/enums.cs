@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace HumanResources.Enums
+namespace HumanResources
 {
     //Approval status should be mapped to what Dynamics Business Central/NAV have for neat code!
-    enum ApprovalStatus
+    public enum DocumentApprovalStatus
     {
         Created = 0,
         Open = 1,
         Canceled = 2,
-        Approved = 3,
-        Rejected = 4,
+        ApprovalPending = 3,
+        Approved = 4,
+        Rejected = 5,
     }
 }

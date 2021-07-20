@@ -15,21 +15,31 @@ namespace HumanResources.Controllers
     [Authorize(Roles = "Admin")]
     public class ApprovalEntriesController : Controller
     {
-        private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
+        private static LeaveManagementEntities _db = new LeaveManagementEntities();
         // GET: ApprovalEntries
         public ActionResult Index()
         {
             string status = Request.QueryString["status"];
+
+            int approvalentrystatus = 0;
+
+            if (string.IsNullOrEmpty(status))
+                return HttpNotFound();
+
+            if (status == "pending")
+            {
+                approvalentrystatus = (int)DocumentApprovalStatus.Open;
+            }
+
             string ApproverId = HttpContext.Session["EmployeeNo"].ToString();
 
             List<ApprovalEntriesListViewModel> _ApprovalEntriesListViewModel = new List<ApprovalEntriesListViewModel>();
 
-            if (status == "pending") status = "open";
-            var approvalentries = _db.ApprovalEntries.Where(a => a.Status == status && a.ApproverId == ApproverId).ToList();
+            var approvalentries = _db.ApprovalEntries.Where(a => a.Status == approvalentrystatus && a.ApproverId == ApproverId).ToList();
 
             foreach (var approvalentry in approvalentries)
             {
-                _ApprovalEntriesListViewModel.Add(new ApprovalEntriesListViewModel { EntryNo = approvalentry.EntryNumber, DocumentType = "Leave", DocumentNo = approvalentry.DocumentNo, DateSubmitted = AppFunctions.GetReadableDate((approvalentry.DateSent).ToString()), EmployeeName = approvalentry.SenderId, EndDate = "July 6 2021", LeaveDays = "1", StartDate = "July 6 2021", ApprovedLeaveType = "Annual Leave", ApprovalStatus = approvalentry.Status });
+                _ApprovalEntriesListViewModel.Add(new ApprovalEntriesListViewModel { EntryNo = approvalentry.EntryNumber, DocumentType = "Leave", DocumentNo = approvalentry.DocumentNo, DateSubmitted = AppFunctions.GetReadableDate((approvalentry.DateSent).ToString()), EmployeeName = approvalentry.SenderId, EndDate = "July 6 2021", LeaveDays = "1", StartDate = "July 6 2021", ApprovedLeaveType = "Annual Leave", ApprovalStatus = ((DocumentApprovalStatus)Convert.ToInt32(approvalentry.Status)).ToString() });
             }
             return View(_ApprovalEntriesListViewModel);
         }

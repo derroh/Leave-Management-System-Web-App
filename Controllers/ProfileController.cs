@@ -13,7 +13,7 @@ namespace HumanResources.Controllers
     [Authorize]
     public class ProfileController : Controller
     {
-        HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
+        LeaveManagementEntities _db = new LeaveManagementEntities();
         // GET: Profile
         public ActionResult Index()
         {

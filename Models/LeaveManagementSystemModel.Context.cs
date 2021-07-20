@@ -13,10 +13,10 @@ namespace HumanResources.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class HumanResourcesManagementSystemEntities : DbContext
+    public partial class LeaveManagementEntities : DbContext
     {
-        public HumanResourcesManagementSystemEntities()
-            : base("name=HumanResourcesManagementSystemEntities")
+        public LeaveManagementEntities()
+            : base("name=LeaveManagementEntities")
         {
         }
     
@@ -25,6 +25,7 @@ namespace HumanResources.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<ApprovalDocumentType> ApprovalDocumentTypes { get; set; }
         public virtual DbSet<ApprovalEntry> ApprovalEntries { get; set; }
         public virtual DbSet<ApprovalUser> ApprovalUsers { get; set; }
         public virtual DbSet<Attachment> Attachments { get; set; }
@@ -39,6 +40,5 @@ namespace HumanResources.Models
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<ApprovalDocumentType> ApprovalDocumentTypes { get; set; }
     }
 }

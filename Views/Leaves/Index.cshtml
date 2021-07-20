@@ -21,7 +21,7 @@
                         <div class="pull-right tableTools-container"></div>
                     </div>
                     <div class="table-header">
-                        Results for "Open Leave applications"
+                        Results for "@ViewBag.ListType Leave applications"
                     </div>
 
                     <!-- div.table-responsive -->
@@ -94,7 +94,23 @@
                                         <td>@leave.EndDate</td>
                                         <td> @leave.LeaveDays day(s)</td>
                                         <td class="hidden-480">
-                                            <span class="label label-sm label-warning">@leave.ApprovalStatus</span>
+                                            @if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Open).ToString())
+                                            {
+                                                <span class="label label-sm label-warning">@((DocumentApprovalStatus)Convert.ToInt32(leave.ApprovalStatus))</span>
+                                            }
+                                            else if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.ApprovalPending).ToString())
+                                            {
+                                                <span class="label label-sm label-warning">@((DocumentApprovalStatus)Convert.ToInt32(leave.ApprovalStatus))</span>
+                                            }
+                                            else if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Approved).ToString())
+                                            {
+                                                <span class="label label-sm label-success">@((DocumentApprovalStatus)Convert.ToInt32(leave.ApprovalStatus))</span>
+                                            }
+                                            else if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Rejected).ToString())
+                                            {
+                                                <span class="label label-sm label-danger">@((DocumentApprovalStatus)Convert.ToInt32(leave.ApprovalStatus))</span>
+                                            }
+
                                         </td>
                                         <td class="hidden-480">
                                             <div class="progress pos-rel" data-percent="@leave.ApprovalProgress%">
@@ -104,27 +120,51 @@
 
                                         <td>
                                             <div class="hidden-sm hidden-xs action-buttons">
-                                                <a class="blue" href="@Url.Action("ViewLeave", "Leaves", new { id = leave.DocumentNo })">
-                                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
-                                                </a>
 
-                                                @if (leave.ApprovalStatus == "open")
+                                                @if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Open).ToString())
                                                 {
+                                                    <a class="blue" href="@Url.Action("ViewLeave", "Leaves", new { id = leave.DocumentNo })">
+                                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                    </a>
+
                                                     <a class="green" href="#">
                                                         <i class="ace-icon fa fa-pencil bigger-130"></i>
                                                     </a>
+
+                                                    <a class="green submitleave" href="#" data-docno="@leave.DocumentNo">
+                                                        <i class="ace-icon fa fa-paper-plane-o bigger-130"></i>
+                                                    </a>
+
+                                                    <a class="red deleteleaves" href="#" data-docno="@leave.DocumentNo">
+                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                    </a>
                                                 }
-                                                <a class="green submitleave" href="#" data-docno="@leave.DocumentNo">
-                                                    <i class="ace-icon fa fa-paper-plane-o bigger-130"></i>
-                                                </a>
+                                                else if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.ApprovalPending).ToString())
+                                                {
+                                                    <a class="blue" href="@Url.Action("ViewLeave", "Leaves", new { id = leave.DocumentNo })">
+                                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                    </a>
 
-                                                <a class="red cancelleave" href="#" data-docno="@leave.DocumentNo">
-                                                    <i class="ace-icon fa fa-times bigger-130"></i>
-                                                </a>
+                                                    <a class="red cancelleave" href="#" data-docno="@leave.DocumentNo">
+                                                        <i class="ace-icon fa fa-times bigger-130"></i>
+                                                    </a>
+                                                }
+                                                else if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Approved).ToString())
+                                                {
+                                                    <a class="blue" href="@Url.Action("ViewLeave", "Leaves", new { id = leave.DocumentNo })">
+                                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                    </a>
+                                                }
+                                                else if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Rejected).ToString())
+                                                {
+                                                    <a class="blue" href="@Url.Action("ViewLeave", "Leaves", new { id = leave.DocumentNo })">
+                                                        <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                    </a>
 
-                                                <a class="red deleteleaves" href="#" data-docno="@leave.DocumentNo">
-                                                    <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                                </a>
+                                                    <a class="red deleteleaves" href="#" data-docno="@leave.DocumentNo">
+                                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                                    </a>
+                                                }
 
                                             </div>
 

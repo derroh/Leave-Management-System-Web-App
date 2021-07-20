@@ -15,47 +15,52 @@ namespace HumanResources.Controllers
     [Authorize]
     public class LeavesController : Controller
     {
-        private static HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
+        private static LeaveManagementEntities _db = new LeaveManagementEntities();
         static string LeaveDocumentNo = null;
         public ActionResult Index()
         {
             string status = Request.QueryString["status"];
             string SenderId = HttpContext.Session["EmployeeNo"].ToString();
 
+            int approvalstatus = 0;
+           
+
             List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
 
             if (!string.IsNullOrEmpty(status))
-            {
-                if (status == "pending") status = "Pending Approval";
-                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == status && a.EmployeeNo == SenderId).ToList();
+            {              
+
+                if (status == "open")
+                {
+                    approvalstatus = (int)DocumentApprovalStatus.Open;
+                }
+
+                if (status == "pending")
+                {
+                    approvalstatus = (int)DocumentApprovalStatus.ApprovalPending;
+                }
+
+                if (status == "approved")
+                {
+                    approvalstatus = (int)DocumentApprovalStatus.Approved;
+                }
+
+                if (status == "rejected")
+                {
+                    approvalstatus = (int)DocumentApprovalStatus.Rejected;
+                }
+
+                ViewBag.ListType = (DocumentApprovalStatus)Convert.ToInt32(approvalstatus);
+
+                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == approvalstatus && a.EmployeeNo == SenderId).ToList();
 
                 foreach (var leave in leaves)
                 {
-                    _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = leave.DocumentNo, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = status, DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = leave.LeaveDaysApplied.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = GetApprovalProgress(leave.DocumentNo) });
+                    _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = leave.DocumentNo, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = leave.ApprovalStatus.ToString(), DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = leave.LeaveDaysApplied.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = GetApprovalProgress(leave.DocumentNo, approvalstatus) });
                 }
             }
             return View(_LeavesListViewModel);
-        }
-        [HttpGet]
-        public ActionResult List(string status)
-        {
-            //  string s = Request.QueryString["status"];
-            List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
-            string SenderId = HttpContext.Session["EmployeeNo"].ToString();
-
-            if (!string.IsNullOrEmpty(status))
-            {
-                if (status == "pending") status = "Pending Approval";
-                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == status && a.EmployeeNo == SenderId).ToList();
-
-                foreach (var leave in leaves)
-                {
-                    _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = leave.DocumentNo, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = status, DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = leave.LeaveDaysApplied.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = GetApprovalProgress(leave.DocumentNo) });
-                }
-            }    
-            
-            return View(_LeavesListViewModel);
-        }
+        }       
        
         public ActionResult Create()
         {
@@ -69,7 +74,7 @@ namespace HumanResources.Controllers
         {
             List<LeaveType> leavetypelist = new List<LeaveType>();
 
-            using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+            using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
             {
                 var leavetypes = dbEntities.LeaveTypes.ToList();
 
@@ -90,7 +95,7 @@ namespace HumanResources.Controllers
         {
             List<LeaveType> leavetypelist = new List<LeaveType>();
 
-            using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+            using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
             {
                 var leavetypes = dbEntities.LeaveTypes.ToList();
 
@@ -120,7 +125,7 @@ namespace HumanResources.Controllers
         }
         public JsonResult LeaveQuantityAndReturnDate(string Code, string StartDate, string EndDate)
         {
-            using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+            using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
             {              
                 var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
                 //
@@ -165,7 +170,7 @@ namespace HumanResources.Controllers
 
             //only holidays on business days
 
-            using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+            using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
             {
                 var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
 
@@ -206,7 +211,7 @@ namespace HumanResources.Controllers
             string SenderId = HttpContext.Session["EmployeeNo"].ToString();
 
             //create Leave Header here
-            HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
+            LeaveManagementEntities _db = new LeaveManagementEntities();
 
             try
             {
@@ -232,10 +237,10 @@ namespace HumanResources.Controllers
                         DocumentNo = DocumentNo,
                         LeaveType = ep.LeaveType,
                         EmployeeNo = SenderId,
-                        ApprovalStatus = "Open"
-                    };
+                        ApprovalStatus = (int)DocumentApprovalStatus.Open
+                };
 
-                    using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                    using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                     {
                         dbEntities.Configuration.ValidateOnSaveEnabled = false;
                         dbEntities.Leaves.Add(leave);
@@ -274,7 +279,7 @@ namespace HumanResources.Controllers
 
             try
             {             
-                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                 {
                     var leave = dbEntities.Leaves.Where(s => s.DocumentNo == LeaveDocumentNo).SingleOrDefault();
 
@@ -352,7 +357,7 @@ namespace HumanResources.Controllers
         [HttpPost]
         public FileResult DownloadFile(int? fileId)
         {
-            HumanResourcesManagementSystemEntities entities = new HumanResourcesManagementSystemEntities();
+            LeaveManagementEntities entities = new LeaveManagementEntities();
             var file = entities.Attachments.ToList().Find(p => p.Id == fileId.Value);
             return File(file.Data, file.ContentType, file.FileName);
         }
@@ -361,7 +366,7 @@ namespace HumanResources.Controllers
         {
             try
             {
-                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                 {
                     byte[] bytes;
 
@@ -521,10 +526,38 @@ namespace HumanResources.Controllers
         }
         public ActionResult Delete(string DocumentNo)
         {
+
+            string status = "", message = "";
+
+            try
+            {
+                using (var db = new LeaveManagementEntities())
+                {
+                    var leave = db.Leaves.Where(x => x.DocumentNo == DocumentNo).SingleOrDefault();
+
+                    if (leave != null)
+                    {
+                        db.Leaves.Remove(leave);
+                        db.SaveChanges();
+                        status = "000";
+                        message = "Leave " + DocumentNo +" has been successfully deleted";
+                    }
+                    else
+                    {
+                        status = "900";
+                        message = "Couldn't find leave " + DocumentNo;
+                    }
+                }
+            }
+            catch (Exception es)
+            {
+                message = es.Message;
+            }
+
             var _RequestResponse = new RequestResponse
             {
-                Status = "900",
-                Message = "Delete Success! for leave " + DocumentNo
+                Status = status,
+                Message = message
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
@@ -541,19 +574,27 @@ namespace HumanResources.Controllers
 
             return dates.ToString();
         }
-        private static int GetApprovalProgress( string DocumentNumber)
+        private static int GetApprovalProgress( string DocumentNumber, int status)
         {
             int progress = 0;
 
             try
             {
-                using (var db = new HumanResourcesManagementSystemEntities())
+                if(status != (int)DocumentApprovalStatus.Approved)
                 {
-                    var NoOfApprovals = db.ApprovalEntries.Where(x =>  x.DocumentNo == DocumentNumber).ToList();
-                    var NoOfApproved = db.ApprovalEntries.Where(x => x.DocumentNo == DocumentNumber && x.Status =="Approved").ToList();
+                    using (var db = new LeaveManagementEntities())
+                    {
+                        var NoOfApprovals = db.ApprovalEntries.Where(x => x.DocumentNo == DocumentNumber).ToList();
+                        var NoOfApproved = db.ApprovalEntries.Where(x => x.DocumentNo == DocumentNumber && x.Status == (int)DocumentApprovalStatus.Approved).ToList();
 
-                    progress = (Convert.ToInt32(NoOfApproved) / Convert.ToInt32(NoOfApprovals)) * 100;
+                        progress = (Convert.ToInt32(NoOfApproved) / Convert.ToInt32(NoOfApprovals)) * 100;
+                    }
                 }
+                else
+                {
+                    progress = 100;
+                }
+               
             }
             catch (Exception ex)
             {

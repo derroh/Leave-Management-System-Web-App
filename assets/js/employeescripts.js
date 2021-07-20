@@ -790,6 +790,10 @@
                                         text: data.Message,
                                         class_name: 'gritter-info gritter-center'
                                     });
+
+                                    window.setTimeout(function () {
+                                        location.reload(true);
+                                    }, 2000);
                                 } else {
                                     $.gritter.add({
                                         title: 'Delete Notification',
@@ -1425,6 +1429,9 @@
                                         text: data.Message,
                                         class_name: 'gritter-info gritter-center'
                                     });
+                                    window.setTimeout(function () {
+                                        location.reload(true);
+                                    }, 2000);
                                 } else {
                                     $.gritter.add({
                                         title: 'Delete Notification',
@@ -1631,6 +1638,11 @@
                                         text: data.Message,
                                         class_name: 'gritter-info gritter-center'
                                     });
+
+                                    window.setTimeout(function () {
+                                        location.reload(true);
+                                    }, 2000);
+
                                 } else {
                                     $.gritter.add({
                                         title: 'Action Notification',
@@ -2222,6 +2234,11 @@
                                         text: data.Message,
                                         class_name: 'gritter-info gritter-center'
                                     });
+
+                                    window.setTimeout(function () {
+                                        location.reload(true);
+                                    }, 2000);
+
                                 } else {
                                     $.gritter.add({
                                         title: 'Delete Notification',

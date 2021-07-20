@@ -26,7 +26,7 @@ namespace HumanResources.Controllers
         /// <summary>
         /// Database Store property.
         /// </summary>
-        private HumanResourcesManagementSystemEntities databaseManager = new HumanResourcesManagementSystemEntities();
+        private LeaveManagementEntities databaseManager = new LeaveManagementEntities();
 
         #endregion
 
@@ -285,7 +285,7 @@ namespace HumanResources.Controllers
 
                 };
 
-                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                 {
                     dbEntities.Configuration.ValidateOnSaveEnabled = false;
                     dbEntities.Employees.Add(employee);
@@ -303,7 +303,7 @@ namespace HumanResources.Controllers
 
                 };
 
-                using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                 {
                     dbEntities.Configuration.ValidateOnSaveEnabled = false;
                     dbEntities.Users.Add(user);

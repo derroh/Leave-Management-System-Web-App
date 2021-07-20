@@ -11,7 +11,7 @@ namespace HumanResources.Controllers
     [Authorize(Roles = "Admin")]
     public class EmployeesController : Controller
     {
-        HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
+        LeaveManagementEntities _db = new LeaveManagementEntities();
 
         // GET: Employees
         public ActionResult Index()
@@ -34,7 +34,7 @@ namespace HumanResources.Controllers
             string message = "", DocumentNo = "", status = "";
 
             //create Leave Header here
-            HumanResourcesManagementSystemEntities _db = new HumanResourcesManagementSystemEntities();
+            LeaveManagementEntities _db = new LeaveManagementEntities();
 
             try
             {
@@ -73,7 +73,7 @@ namespace HumanResources.Controllers
 
                     };
 
-                    using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
+                    using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                     {
                         dbEntities.Configuration.ValidateOnSaveEnabled = false;
                         dbEntities.Employees.Add(employee);
@@ -139,7 +139,7 @@ namespace HumanResources.Controllers
             string message = "", status = "";
             try
             {
-                using (var _db = new HumanResourcesManagementSystemEntities())
+                using (var _db = new LeaveManagementEntities())
                 {
                     var employee = _db.Employees.Where(s => s.EmployeeNo == ep.EmployeeNo).SingleOrDefault();
 

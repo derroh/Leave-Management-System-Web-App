@@ -21,6 +21,6 @@ namespace HumanResources.Models
         public Nullable<int> SequenceNo { get; set; }
         public string ApproverId { get; set; }
         public Nullable<System.DateTime> DateSent { get; set; }
-        public string Status { get; set; }
+        public Nullable<int> Status { get; set; }
     }
 }
