@@ -140,5 +140,11 @@ namespace HumanResources.Controllers
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult LeaveTypes()
+        {
+            return View(from leaveTypes in _db.LeaveTypes
+                        select leaveTypes);
+        }
     }
 }

@@ -1,0 +1,119 @@
+﻿@model IEnumerable<HumanResources.Models.LeaveType>
+
+@{
+    ViewBag.Title = "Leave Types";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="page-header">
+        <h1>
+            Leave Types
+        </h1>
+    </div>
+    <!-- /.page-header -->
+
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="clearfix">
+                        <div class="pull-right tableTools-container"></div>
+                    </div>
+                    <div class="table-header">
+                        Results for "Leave types"
+                    </div>
+
+                    <!-- div.table-responsive -->
+                    <!-- div.dataTables_borderWrap -->
+                    <div>
+                        <table id="holidays-table" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </th>
+
+                                    <th>
+                                        <i class="ace-icon fa fa-clipboard bigger-110 hidden-480"></i>
+                                        Leave Type
+                                    </th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Annual Leave Days Type
+                                    </th>
+
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-calculator bigger-110 hidden-480"></i>
+                                        Total Absence days
+                                    </th>
+
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var leavetype in Model)
+                                {
+                                <tr>
+                                    <td class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        @leavetype.Description
+                                    </td>
+                                    <td>@leavetype.AnnualLeaveDaysType</td>
+
+                                    <td>@leavetype.TotalAbsence</td>
+
+                                    <td>
+                                        <div class="hidden-sm hidden-xs action-buttons">
+
+                                            <a class="red rejectapprovalentry" href="#" data-id="@leavetype.Code" data-docno="@leavetype.Code">
+                                                <i class="ace-icon fa fa-times-circle-o bigger-130"></i>
+                                            </a>
+                                        </div>
+
+                                        <div class="hidden-md hidden-lg">
+                                            <div class="inline pos-rel">
+                                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                                </button>
+
+                                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+
+                                                    <li>
+                                                        <a href="#" class="tooltip-error rejectapprovalentry" data-id="@leavetype.Code" data-docno="@leavetype.Code" data-rel="tooltip" title="Delete">
+                                                            <span class="red">
+                                                                <i class="ace-icon fa fa-times-circle-o bigger-120"></i>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div>
+

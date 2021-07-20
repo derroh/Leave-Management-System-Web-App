@@ -163,6 +163,8 @@ namespace HumanResources.Controllers
 
             holidays = _db.PublicHolidays.Where(h => h.HolidayDate >= LeaveStartDate).Select(h => h.HolidayDate).ToList();
 
+            //only holidays on business days
+
             using (HumanResourcesManagementSystemEntities dbEntities = new HumanResourcesManagementSystemEntities())
             {
                 var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
@@ -173,8 +175,9 @@ namespace HumanResources.Controllers
 
                     if (AnnualLeaveDaysType.Trim() == "Consecutive Days")
                     {
-                        var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), Convert.ToInt32(LeaveDaysApplied), holidays);
-                        EndDate = dtResult.ToString("MM/dd/yyyy");
+                        var dtResult = LeaveStartDate.AddDays(Convert.ToInt32(LeaveDaysApplied));
+
+                        EndDate = dtResult.ToString("MM/dd/yyyy");//
                     }
                     else if (AnnualLeaveDaysType.Trim() == "Working Days")
                     {

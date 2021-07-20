@@ -700,6 +700,7 @@
     <Content Include="Views\Settings\ApprovalUsers.cshtml" />
     <Content Include="Views\Settings\EditApprover.cshtml" />
     <Content Include="Views\Settings\CreateApprover.cshtml" />
+    <Content Include="Views\Settings\LeaveTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
