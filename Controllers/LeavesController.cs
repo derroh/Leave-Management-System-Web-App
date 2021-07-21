@@ -240,7 +240,7 @@ namespace HumanResources.Controllers
                         LeaveType = ep.LeaveType,
                         EmployeeNo = SenderId,
                         ApprovalStatus = (int)DocumentApprovalStatus.Open
-                };
+                    };
 
                     using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                     {
@@ -396,42 +396,92 @@ namespace HumanResources.Controllers
         public ActionResult SubmitForApproval()
         {
             string status = "", message = "";
-            //submit for approval
-            string approvalrequestresponse = MakerChecker.SendApprovalRequest(LeaveDocumentNo);
 
-            ApprovalRequestResponse googlecalendar = JsonConvert.DeserializeObject<ApprovalRequestResponse>(approvalrequestresponse);
+            //check if user has leave days based on ledger entries
+            //count number of leave days taken
 
-            status = googlecalendar.Status;
-
-            if (status=="000")
+            try 
             {
-                string body = string.Empty;
-
-                string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
-
-                string url = Url.Action("Login", "Account");
-
-                string pathToTemplate = Server.MapPath("~/MailTemplates/ApprovalNotification.html");
-
-                using (StreamReader reader = new StreamReader(pathToTemplate))
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                 {
-                    body = reader.ReadToEnd();
+                    var leave = dbEntities.Leaves.Where(s => s.DocumentNo == LeaveDocumentNo).SingleOrDefault();
+
+                    if (leave != null)
+                    {
+
+                        //get number of days entilted
+
+                        var LeaveType = dbEntities.LeaveTypes.Where(lt => lt.Code == leave.LeaveType).FirstOrDefault();
+
+                        if (LeaveType != null)
+                        {
+                            var result = dbEntities.EmployeeLedgerEntries.Where(s => s.EmployeeNo == leave.EmployeeNo).GroupBy(o => o.LeaveType)
+                                                                         .Select(g => new { leavetype = g.Key, total = g.Sum(i => i.Quantity) });
+                            int TotalDaysTaken = 0;
+
+                            foreach (var group in result)
+                            {
+                                TotalDaysTaken = Convert.ToInt32(group.total);
+                            }
+
+                            int DaysEntitled = Convert.ToInt32(LeaveType.TotalAbsence);
+
+                            int LeaveBalance = (DaysEntitled - TotalDaysTaken);
+
+                            //Balance - Appled  should be more than or equal to 0
+                            if (LeaveBalance - leave.LeaveDaysApplied > 0)
+                            {
+                                //submit for approval
+
+                                string approvalrequestresponse = MakerChecker.SendApprovalRequest(LeaveDocumentNo);
+
+                                ApprovalRequestResponse _ApprovalRequestResponse = JsonConvert.DeserializeObject<ApprovalRequestResponse>(approvalrequestresponse);
+
+                                status = _ApprovalRequestResponse.Status;
+
+
+                                if (status == "000")
+                                {
+                                    string body = string.Empty;
+
+                                    string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                                    string url = Url.Action("Login", "Account");
+
+                                    string pathToTemplate = Server.MapPath("~/MailTemplates/ApprovalNotification.html");
+
+                                    using (StreamReader reader = new StreamReader(pathToTemplate))
+                                    {
+                                        body = reader.ReadToEnd();
+                                    }
+                                    body = body.Replace("{Link}", domainName + url);
+                                    body = body.Replace("{UserName}", _ApprovalRequestResponse.ApproverEmail);
+
+                                    bool IsSendEmail = EmailFunctions.SendMail(_ApprovalRequestResponse.ApproverEmail, _ApprovalRequestResponse.ApproverEmail, "Approval Notification", body);
+
+                                    status = "000";
+                                    message = "Submit Success! for leave " + LeaveDocumentNo;
+                                }
+                                else
+                                {
+                                    status = "999";
+                                    message = "Submit Failed for leave " + LeaveDocumentNo;
+                                }
+                            }
+                            else
+                            {
+                                status = "999";
+                                message = "Submit Failed for leave " + LeaveDocumentNo + ". You have exhausted your leave days. Your leave balance is " + LeaveBalance.ToString();
+                            }
+                        }
+                    }
                 }
-                body = body.Replace("{Link}", domainName+url);
-                body = body.Replace("{UserName}", googlecalendar.ApproverEmail);
-
-                bool IsSendEmail = EmailFunctions.SendMail(googlecalendar.ApproverEmail, googlecalendar.ApproverEmail, "Approval Notification", body);
-
-                status = "000";
-                message = "Submit Success! for leave " + LeaveDocumentNo;
             }
-            else
+            catch(Exception es)
             {
                 status = "999";
-                message = "Submit Failed for leave " + LeaveDocumentNo;
+                message = es.Message;
             }
-
-
             var _RequestResponse = new RequestResponse
             {
                 Status = status,
@@ -443,42 +493,92 @@ namespace HumanResources.Controllers
         public ActionResult Submit(string DocumentNo)
         {
             string status = "", message = "";
-            //submit for approval
 
-            string approvalrequestresponse = MakerChecker.SendApprovalRequest(LeaveDocumentNo);
-
-            ApprovalRequestResponse _ApprovalRequestResponse = JsonConvert.DeserializeObject<ApprovalRequestResponse>(approvalrequestresponse);
-
-            status = _ApprovalRequestResponse.Status;
-
-
-            if (status == "000")
+            //check if user has leave days based on ledger entries
+            //count number of leave days taken
+            //
+            try
             {
-                string body = string.Empty;
-
-                string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
-
-                string url = Url.Action("Login", "Account");
-
-                string pathToTemplate = Server.MapPath("~/MailTemplates/ApprovalNotification.html");
-
-                using (StreamReader reader = new StreamReader(pathToTemplate))
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                 {
-                    body = reader.ReadToEnd();
+                    var leave = dbEntities.Leaves.Where(s => s.DocumentNo == DocumentNo).SingleOrDefault();
+
+                    if (leave != null)
+                    {
+
+                        //get number of days entilted
+
+                        var LeaveType = dbEntities.LeaveTypes.Where(lt => lt.Code == leave.LeaveType).FirstOrDefault();
+
+                        if (LeaveType != null)
+                        {
+                            var result = dbEntities.EmployeeLedgerEntries.Where(s => s.EmployeeNo == leave.EmployeeNo).GroupBy(o => o.LeaveType)
+                                                                         .Select(g => new { leavetype = g.Key, total = g.Sum(i => i.Quantity) });
+                            int TotalDaysTaken = 0;
+
+                            foreach (var group in result)
+                            {
+                                TotalDaysTaken = Convert.ToInt32(group.total);
+                            }
+
+                            int DaysEntitled = Convert.ToInt32(LeaveType.TotalAbsence);
+
+                            int LeaveBalance = (DaysEntitled - TotalDaysTaken);
+
+                            //Balance - Appled  should be more than or equal to 0
+                            if (LeaveBalance - leave.LeaveDaysApplied > 0)
+                            {
+                                //submit for approval
+
+                                string approvalrequestresponse = MakerChecker.SendApprovalRequest(DocumentNo);
+
+                                ApprovalRequestResponse _ApprovalRequestResponse = JsonConvert.DeserializeObject<ApprovalRequestResponse>(approvalrequestresponse);
+
+                                status = _ApprovalRequestResponse.Status;
+
+
+                                if (status == "000")
+                                {
+                                    string body = string.Empty;
+
+                                    string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                                    string url = Url.Action("Login", "Account");
+
+                                    string pathToTemplate = Server.MapPath("~/MailTemplates/ApprovalNotification.html");
+
+                                    using (StreamReader reader = new StreamReader(pathToTemplate))
+                                    {
+                                        body = reader.ReadToEnd();
+                                    }
+                                    body = body.Replace("{Link}", domainName + url);
+                                    body = body.Replace("{UserName}", _ApprovalRequestResponse.ApproverEmail);
+
+                                    bool IsSendEmail = EmailFunctions.SendMail(_ApprovalRequestResponse.ApproverEmail, _ApprovalRequestResponse.ApproverEmail, "Approval Notification", body);
+
+                                    status = "000";
+                                    message = "Submit Success! for leave " + DocumentNo;
+                                }
+                                else
+                                {
+                                    status = "999";
+                                    message = "Submit Failed for leave " + DocumentNo;
+                                }
+                            }
+                            else
+                            {
+                                status = "999";
+                                message = "Submit Failed for leave " + DocumentNo + ". You have exhausted your leave days. Your leave balance is " + LeaveBalance.ToString();
+                            }
+                        }
+                    }
                 }
-                body = body.Replace("{Link}", domainName + url);
-                body = body.Replace("{UserName}", _ApprovalRequestResponse.ApproverEmail);
-
-                bool IsSendEmail = EmailFunctions.SendMail(_ApprovalRequestResponse.ApproverEmail, _ApprovalRequestResponse.ApproverEmail, "Approval Notification", body);
-
-                status = "000";
-                message = "Submit Success! for leave " + DocumentNo;
             }
-            else
+            catch(Exception es)
             {
                 status = "999";
-                message = "Submit Failed for leave " + DocumentNo;
-            }               
+                message = es.Message;
+            }
 
 
             var _RequestResponse = new RequestResponse
