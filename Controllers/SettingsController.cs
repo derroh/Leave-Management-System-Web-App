@@ -79,13 +79,43 @@ namespace HumanResources.Controllers
         }
         public ActionResult DeleteApprover(string id)
         {
+            string status = "", message = "";
+
+            int Id = Convert.ToInt32(id);
+
+            try
+            {
+                using (var db = new LeaveManagementEntities())
+                {
+                    var approver = db.ApprovalUsers.Where(d => d.Id == Id).FirstOrDefault();
+
+                    if (approver != null)
+                    {
+                        db.ApprovalUsers.Remove(approver);
+                        db.SaveChanges();
+
+                        status = "000";
+                        message = "Delete for approver " + approver.Approver + " successful";
+                    }
+                    else
+                    {
+                        status = "900";
+                        message = "Approver not found";
+                    }
+                }
+            }
+            catch (Exception es)
+            {
+                status = "900";
+                message = es.Message;
+            }
             var _RequestResponse = new RequestResponse
             {
-                Status = "900",
-                Message = "Delete Success! for leave approver" + id
+                Status = status,
+                Message = message
             };
 
-            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);        
         }
         public ActionResult CreateApprover()
         {

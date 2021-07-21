@@ -2208,7 +2208,7 @@
 
         bootbox.confirm({
             title: "<i class='fa fa-trash'></i> Delete?",
-            message: "Do you wish to delete approver sequence number " + docno + "?",
+            message: "Do you wish to delete approver?",
             buttons: {
                 confirm: {
                     label: 'Yes',
@@ -2226,7 +2226,7 @@
                     jQuery.ajax({
                         url: '/Settings/DeleteApprover',
                         type: "POST",
-                        data: '{DocumentNo:"' + docno + '" }',
+                        data: '{id:"' + docno + '" }',
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (response) {
