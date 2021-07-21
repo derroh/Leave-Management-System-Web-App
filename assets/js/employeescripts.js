@@ -2376,5 +2376,54 @@
 
         event.preventDefault();
     });
+    $("#UpdateApprovalUser").click(function (event) {
+
+        if ($('#createapproverform').valid()) {
+            //Serialize the form datas.  
+            var valdata = $("#createapproverform").serialize();
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/Settings/UpdateApprovalUser',
+                type: "POST",
+                data: valdata,
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+                        //console.log(data.Message);
+                        if (data.Status == "000") {
+                            $.gritter.add({
+                                title: 'Approval users Notification',
+                                text: data.Message,
+                                class_name: 'gritter-info'
+                            });
+
+                            window.setTimeout(function () {
+                                window.location.href = '/Settings/ApprovalUsers';
+                            }, 2000);
+
+                        } else {
+                            $.gritter.add({
+                                title: 'Approval users Notification',
+                                text: data.Message,
+                                class_name: 'gritter-error'
+                            });
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
+    });
 
 })

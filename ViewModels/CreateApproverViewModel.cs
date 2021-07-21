@@ -7,6 +7,7 @@ namespace HumanResources.ViewModels
 {
     public class CreateApproverViewModel
     {
+        public int Id { get; set; }
         public string DocumentType { get; set; }
         public string Approver { get; set; }
         public int ApprovalSequence { get; set; }
