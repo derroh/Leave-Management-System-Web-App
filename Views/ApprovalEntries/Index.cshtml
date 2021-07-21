@@ -100,7 +100,22 @@
                                     <td>@approvalentry.LeaveDays</td>
 
                                     <td class="hidden-480">
-                                        <span class="label label-sm label-warning">@approvalentry.ApprovalStatus</span>
+                                        @if (approvalentry.ApprovalStatus == ((int)DocumentApprovalStatus.Open).ToString())
+                                        {
+                                            <span class="label label-sm label-warning">@((DocumentApprovalStatus)Convert.ToInt32(approvalentry.ApprovalStatus))</span>
+                                        }
+                                        else if (approvalentry.ApprovalStatus == ((int)DocumentApprovalStatus.ApprovalPending).ToString())
+                                        {
+                                            <span class="label label-sm label-warning">@((DocumentApprovalStatus)Convert.ToInt32(approvalentry.ApprovalStatus))</span>
+                                        }
+                                        else if (approvalentry.ApprovalStatus == ((int)DocumentApprovalStatus.Approved).ToString())
+                                        {
+                                            <span class="label label-sm label-success">@((DocumentApprovalStatus)Convert.ToInt32(approvalentry.ApprovalStatus))</span>
+                                        }
+                                        else if (approvalentry.ApprovalStatus == ((int)DocumentApprovalStatus.Rejected).ToString())
+                                        {
+                                            <span class="label label-sm label-danger">@((DocumentApprovalStatus)Convert.ToInt32(approvalentry.ApprovalStatus))</span>
+                                        }
                                     </td>
 
                                     <td>

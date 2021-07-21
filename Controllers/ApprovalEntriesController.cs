@@ -31,6 +31,16 @@ namespace HumanResources.Controllers
                 approvalentrystatus = (int)DocumentApprovalStatus.Open;
             }
 
+            if (status == "approved")
+            {
+                approvalentrystatus = (int)DocumentApprovalStatus.Approved;
+            }
+
+            if (status == "rejected")
+            {
+                approvalentrystatus = (int)DocumentApprovalStatus.Rejected;
+            }
+
             string ApproverId = HttpContext.Session["EmployeeNo"].ToString();
 
             List<ApprovalEntriesListViewModel> _ApprovalEntriesListViewModel = new List<ApprovalEntriesListViewModel>();
@@ -39,7 +49,7 @@ namespace HumanResources.Controllers
 
             foreach (var approvalentry in approvalentries)
             {
-                _ApprovalEntriesListViewModel.Add(new ApprovalEntriesListViewModel { EntryNo = approvalentry.EntryNumber, DocumentType = "Leave", DocumentNo = approvalentry.DocumentNo, DateSubmitted = AppFunctions.GetReadableDate((approvalentry.DateSent).ToString()), EmployeeName = approvalentry.SenderId, EndDate = "July 6 2021", LeaveDays = "1", StartDate = "July 6 2021", ApprovedLeaveType = "Annual Leave", ApprovalStatus = ((DocumentApprovalStatus)Convert.ToInt32(approvalentry.Status)).ToString() });
+                _ApprovalEntriesListViewModel.Add(new ApprovalEntriesListViewModel { EntryNo = approvalentry.EntryNumber, DocumentType = "Leave", DocumentNo = approvalentry.DocumentNo, DateSubmitted = AppFunctions.GetReadableDate((approvalentry.DateSent).ToString()), EmployeeName = approvalentry.SenderId, EndDate = "July 6 2021", LeaveDays = "1", StartDate = "July 6 2021", ApprovedLeaveType = "Annual Leave", ApprovalStatus = approvalentry.Status.ToString() });
             }
             return View(_ApprovalEntriesListViewModel);
         }

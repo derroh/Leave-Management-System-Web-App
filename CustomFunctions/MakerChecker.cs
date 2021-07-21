@@ -242,6 +242,8 @@ namespace HumanResources.CustomFunctions
             catch (Exception ex)
             {
                 status = false;
+                AppFunctions.WriteLog("Emp Ledger Entries: " + ex.Message);
+                AppFunctions.WriteLog("Emp Ledger Entries: " + ex.InnerException.Message);
             }
             return status;
         }

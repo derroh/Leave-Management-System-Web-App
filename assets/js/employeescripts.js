@@ -194,35 +194,38 @@
             if (info.step == 3 && $validation) {
                 if (!$('#leaveattachments-form').valid()) e.preventDefault();
 
-                //Attachments
-                var files = jQuery("#LeaveAttachments").get(0).files;
-                var fileData = new FormData();
+                if ($('#leaveattachments-form').valid()) {
+                    //Attachments
+                    var files = jQuery("#LeaveAttachments").get(0).files;
+                    var fileData = new FormData();
 
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append("LeaveAttachments", files[i]);
-                }
-
-                jQuery.ajax({
-                    type: "POST",
-                    url: "/Leaves/SaveLeaveAttachments",
-                    dataType: "json",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function (result, status, xhr) {
-                        //  alert(result);
-
-                        $.gritter.add({
-                            title: 'Action Notification',
-                            text: result,
-                            class_name: 'gritter-info'
-                        });
-                       
-                    },
-                    error: function (xhr, status, error) {
-                        console.log(status);
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append("LeaveAttachments", files[i]);
                     }
-                });
+
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "/Leaves/SaveLeaveAttachments",
+                        dataType: "json",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result, status, xhr) {
+
+                            var data = $.parseJSON(result);
+
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-info'
+                            });
+
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(status);
+                        }
+                    });
+                }                
             }
         })
         //.on('changed.fu.wizard', function() {

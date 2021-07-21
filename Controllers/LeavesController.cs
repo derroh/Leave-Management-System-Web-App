@@ -23,42 +23,44 @@ namespace HumanResources.Controllers
             string SenderId = HttpContext.Session["EmployeeNo"].ToString();
 
             int approvalstatus = 0;
-           
+
+            if (string.IsNullOrEmpty(status))
+            {
+                approvalstatus = (int)DocumentApprovalStatus.Open;
+            }            
 
             List<LeavesListViewModel> _LeavesListViewModel = new List<LeavesListViewModel>();
 
-            if (!string.IsNullOrEmpty(status))
-            {              
-
-                if (status == "open")
-                {
-                    approvalstatus = (int)DocumentApprovalStatus.Open;
-                }
-
-                if (status == "pending")
-                {
-                    approvalstatus = (int)DocumentApprovalStatus.ApprovalPending;
-                }
-
-                if (status == "approved")
-                {
-                    approvalstatus = (int)DocumentApprovalStatus.Approved;
-                }
-
-                if (status == "rejected")
-                {
-                    approvalstatus = (int)DocumentApprovalStatus.Rejected;
-                }
-
-                ViewBag.ListType = (DocumentApprovalStatus)Convert.ToInt32(approvalstatus);
-
-                var leaves = _db.Leaves.Where(a => a.ApprovalStatus == approvalstatus && a.EmployeeNo == SenderId).ToList();
-
-                foreach (var leave in leaves)
-                {
-                    _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = leave.DocumentNo, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = leave.ApprovalStatus.ToString(), DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = leave.LeaveDaysApplied.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = GetApprovalProgress(leave.DocumentNo, approvalstatus) });
-                }
+           
+            if (status == "open")
+            {
+                approvalstatus = (int)DocumentApprovalStatus.Open;
             }
+
+            if (status == "pending")
+            {
+                approvalstatus = (int)DocumentApprovalStatus.ApprovalPending;
+            }
+
+            if (status == "approved")
+            {
+                approvalstatus = (int)DocumentApprovalStatus.Approved;
+            }
+
+            if (status == "rejected")
+            {
+                approvalstatus = (int)DocumentApprovalStatus.Rejected;
+            }
+
+            ViewBag.ListType = (DocumentApprovalStatus)Convert.ToInt32(approvalstatus);
+
+            var leaves = _db.Leaves.Where(a => a.ApprovalStatus == approvalstatus && a.EmployeeNo == SenderId).ToList();
+
+            foreach (var leave in leaves)
+            {
+                _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = leave.DocumentNo, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = leave.ApprovalStatus.ToString(), DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = leave.LeaveDaysApplied.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = GetApprovalProgress(leave.DocumentNo, approvalstatus) });
+            }
+            
             return View(_LeavesListViewModel);
         }       
        
