@@ -1636,7 +1636,7 @@
                                     $.gritter.add({
                                         title: 'Action Notification',
                                         text: data.Message,
-                                        class_name: 'gritter-info gritter-center'
+                                        class_name: 'gritter-success gritter-center'
                                     });
 
                                     window.setTimeout(function () {
@@ -1737,8 +1737,13 @@
                             $.gritter.add({
                                 title: 'Action Notification',
                                 text: data.Message,
-                                class_name: 'gritter-info gritter-center'
+                                class_name: 'gritter-success gritter-center'
                             });
+
+                            window.setTimeout(function () {
+                                window.location.href = '/Departments/Index';
+                            }, 2000);
+
                         } else {
                             $.gritter.add({
                                 title: 'Action Notification',
@@ -1786,8 +1791,13 @@
                             $.gritter.add({
                                 title: 'Action Notification',
                                 text: data.Message,
-                                class_name: 'gritter-info gritter-center'
+                                class_name: 'gritter-info'
                             });
+
+                            window.setTimeout(function () {
+                                window.location.href = '/Departments/Index';
+                            }, 2000);
+
                         } else {
                             $.gritter.add({
                                 title: 'Action Notification',
