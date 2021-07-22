@@ -61,10 +61,17 @@ namespace HumanResources.Controllers
                 _LeavesListViewModel.Add(new LeavesListViewModel { DocumentNo = leave.DocumentNo, EmployeeName = "Derrick Witness Abucheri", ApprovalStatus = leave.ApprovalStatus.ToString(), DateSubmitted = AppFunctions.GetReadableDate(DateTime.Now.ToString()), EndDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), StartDate = AppFunctions.GetReadableDate(DateTime.Now.ToString()), LeaveDays = leave.LeaveDaysApplied.ToString(), DocumentType = "Leave", LeaveType = "Annual Leave", ApprovalProgress = GetApprovalProgress(leave.DocumentNo, approvalstatus) });
             }
             
-            return View(_LeavesListViewModel);
+            return View(_LeavesListViewModel.OrderByDescending(x =>x.DocumentNo));
         }       
        
         public ActionResult Create()
+        {
+            var leavetypes = _db.LeaveTypes.ToList();
+            ViewBag.LeaveTypes = leavetypes;
+
+            return View();
+        }
+        public ActionResult Edit()
         {
             var leavetypes = _db.LeaveTypes.ToList();
             ViewBag.LeaveTypes = leavetypes;
@@ -603,6 +610,7 @@ namespace HumanResources.Controllers
             leaveApp.LeaveBalance = "0";
             leaveApp.LeaveAccruedDays = "0";
             leaveApp.LeaveOpeningBalance = "0";
+            leaveApp.DocumentNo = id;
 
             //selection
             leaveApp.SelectionType = "";
@@ -703,6 +711,23 @@ namespace HumanResources.Controllers
                 progress = 0;
             }
             return progress;
+        }
+        //partial views
+
+        public PartialViewResult LeaveAttachments(string id)
+        {
+            var attachments = _db.Attachments.Where(a => a.DocumentNo == id);
+            List<LeaveAttachmentsViewModel> _LeaveAttachmentsViewModel = new List<LeaveAttachmentsViewModel>();
+
+            if(attachments != null)
+            {
+                foreach (var attachment in attachments)
+                {
+                    _LeaveAttachmentsViewModel.Add(new LeaveAttachmentsViewModel { Id = attachment.Id, Name = attachment.FileName, DateUploaded = attachment.DateUploaded.ToString(), FileType = attachment.ContentType });
+                }
+            }
+
+            return PartialView("LeaveAttachmentsView", _LeaveAttachmentsViewModel);
         }
     }
 }

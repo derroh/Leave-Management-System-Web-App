@@ -272,6 +272,7 @@
     <Compile Include="ViewModels\EmployeeProfileViewModel.cs" />
     <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\LeaveApplicationViewModel.cs" />
+    <Compile Include="ViewModels\LeaveAttachmentsViewModel.cs" />
     <Compile Include="ViewModels\LeaveRecallsListViewModel.cs" />
     <Compile Include="ViewModels\LeavesListViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -687,7 +688,6 @@
     <Content Include="Views\LeaveRecalls\Create.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
-    <Content Include="Views\Leaves\List.cshtml" />
     <Content Include="Views\ApprovalEntries\Index.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Departments\Index.cshtml" />
@@ -707,6 +707,8 @@
     <Content Include="Views\Settings\LeaveTypes.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\Reset.cshtml" />
+    <Content Include="Views\Leaves\Edit.cshtml" />
+    <Content Include="Views\Leaves\LeaveAttachmentsView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

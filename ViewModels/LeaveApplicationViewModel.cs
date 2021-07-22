@@ -7,6 +7,7 @@ namespace HumanResources.ViewModels
 {
     public class LeaveApplicationViewModel
     {
+        public string DocumentNo { get; set; }
         public string LeaveType { get; set; }
         public string LeaveDaysEntitled { get; set; }
         public string LeaveDaysTaken { get; set; }

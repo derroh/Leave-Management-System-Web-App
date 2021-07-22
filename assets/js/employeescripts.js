@@ -40,27 +40,17 @@
 
     //autofill leavetypes on LeaveType
 
-    //$.ajax({
-    //    url: '/Leaves/ListLeaveTypes',
+   // AttachmentsListSection
+    setInterval(timingLoad, 3000);
 
-    //    type: "POST",
-    //    dataType: "json",
-    //    contentType: "application/json; charset=utf-8",
-    //    success: function (response) {
-    //        if (response != null) {
+    function timingLoad()
+    {
+        var id = $('#DocumentNo').val();
 
-    //            var data = $.parseJSON(response);
-
-    //            $.each(data, function (i, item) {
-    //                $("#LeaveType").append($('<option></option>').attr("value", item.Code).text(item.Description));
-    //            });
-
-    //        }
-    //    },
-    //    error: function (e) {
-    //        console.log(e.responseText);
-    //    }
-    //});
+        $('#AttachmentsListSection').load('/Leaves/LeaveAttachments/' + id, function () {
+            /// can add another function here
+        });
+    }
 
     //get leave selected details
     $("#LeaveType").change(function () {
