@@ -11,5 +11,6 @@ namespace HumanResources.ViewModels
         public string Name { get; set; }
         public string FileType { get; set; }
         public string DateUploaded { get; set; }
+        public int status { get; set; }
     }
 }

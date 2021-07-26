@@ -3,7 +3,7 @@
 <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="comment">Uploaded attachments</label>
 
 <div class="col-xs-12 col-sm-6">
-    <table id="simple-table" class="table  table-bordered table-hover">
+    <table id="attachments-table" class="table  table-bordered table-hover">
         <thead>
             <tr>
                 <th>Attachment Name</th>
@@ -22,29 +22,32 @@
                     <td class="hidden-480">@attachment.DateUploaded</td>
 
                     <td>
-                        <div class="hidden-sm hidden-xs btn-group">
-                            <button class="btn btn-xs btn-danger">
-                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                            </button>
-                        </div>
-
-                        <div class="hidden-md hidden-lg">
-                            <div class="inline pos-rel">
-                                <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                    <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                                </button>
-
-                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                    <li>
-                                        <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-                                            <span class="red">
-                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
+                        @if (attachment.status == (int)DocumentApprovalStatus.Open)
+                        {
+                            <div class="hidden-sm hidden-xs btn-group">
+                                <a href="#" data-docno="@attachment.Id" class="btn btn-xs btn-danger deleteattachment">
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </a>
                             </div>
-                        </div>
+
+                            <div class="hidden-md hidden-lg">
+                                <div class="inline pos-rel">
+                                    <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                        <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                        <li>
+                                            <a href="#" data-docno="@attachment.Id" class="tooltip-error deleteattachment" data-rel="tooltip" title="Delete">
+                                                <span class="red">
+                                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
                     </td>
                 </tr>
             }

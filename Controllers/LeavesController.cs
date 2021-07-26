@@ -636,7 +636,6 @@ namespace HumanResources.Controllers
         }
         public ActionResult Delete(string DocumentNo)
         {
-
             string status = "", message = "";
 
             try
@@ -716,18 +715,60 @@ namespace HumanResources.Controllers
 
         public PartialViewResult LeaveAttachments(string id)
         {
+            var leave = _db.Leaves.Where(a => a.DocumentNo == id).FirstOrDefault();
+
             var attachments = _db.Attachments.Where(a => a.DocumentNo == id);
+
             List<LeaveAttachmentsViewModel> _LeaveAttachmentsViewModel = new List<LeaveAttachmentsViewModel>();
 
             if(attachments != null)
             {
                 foreach (var attachment in attachments)
                 {
-                    _LeaveAttachmentsViewModel.Add(new LeaveAttachmentsViewModel { Id = attachment.Id, Name = attachment.FileName, DateUploaded = attachment.DateUploaded.ToString(), FileType = attachment.ContentType });
+                    _LeaveAttachmentsViewModel.Add(new LeaveAttachmentsViewModel { Id = attachment.Id, Name = attachment.FileName, DateUploaded = attachment.DateUploaded.ToString(), FileType = attachment.ContentType , status = leave .ApprovalStatus });
                 }
             }
 
             return PartialView("LeaveAttachmentsView", _LeaveAttachmentsViewModel);
+        }
+        public ActionResult DeleteAttachment(string Id)
+        {
+            string status = "", message = "";
+
+            int id = Convert.ToInt32(Id);
+
+            try
+            {
+                using (var db = new LeaveManagementEntities())
+                {
+                    var attachment = db.Attachments.Where(x => x.Id == id).SingleOrDefault();
+
+                    if (attachment != null)
+                    {
+                        db.Attachments.Remove(attachment);
+                        db.SaveChanges();
+                        status = "000";
+                        message = "Attachment has been successfully deleted";
+                    }
+                    else
+                    {
+                        status = "900";
+                        message = "Couldn't find attachment " + Id;
+                    }
+                }
+            }
+            catch (Exception es)
+            {
+                message = es.Message;
+            }
+
+            var _RequestResponse = new RequestResponse
+            {
+                Status = status,
+                Message = message
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
     }
 }

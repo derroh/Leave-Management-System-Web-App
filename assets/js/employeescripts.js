@@ -802,6 +802,69 @@
         });
     });
 
+    //attachments
+    $("#attachments-table").on("click", ".deleteattachment", function (e) {
+        e.preventDefault();
+
+        var docno = $(this).attr('data-docno');
+
+        bootbox.confirm({
+            title: "<i class='fa fa-trash'></i> Delete?",
+            message: "Do you wish to delete attachment " + docno + "?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true) {
+
+                    jQuery.ajax({
+                        url: '/Leaves/DeleteAttachment',
+                        type: "POST",
+                        data: '{Id:"' + docno + '" }',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
+
+
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+
+                                    window.setTimeout(function () {
+                                        location.reload(true);
+                                    }, 2000);
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
     //Approval Entries
 
     var approvalentriestable =
