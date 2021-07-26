@@ -237,7 +237,12 @@
 
                                 <div class="step-pane" data-step="3">
                                     <h3 class="lighter block green">Add relevant Attachments For this application</h3>
-                                    <form class="form-horizontal" id="leaveattachments-form" method="get">
+                                    @using (Html.BeginForm("SaveLeaveSelection", "Leaves", FormMethod.Post, new { @id = "leaveattachments-form", @class = "form-horizontal" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+
+                                        HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
 
                                         <div class="hr hr-dotted"></div>
 
@@ -246,8 +251,10 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="col-xs-12 col-sm-6">
-
-                                                    <input multiple="" type="file" id="LeaveAttachments" name="LeaveAttachments" />
+                                                    <div class="clearfix">
+                                                        @Html.TextBoxFor(m => m.LeaveAttachments, new { type = "file", multiple = "true" })
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.LeaveAttachments, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                         </div>
@@ -260,11 +267,12 @@
 
                                             <div class="col-xs-12 col-sm-9">
                                                 <div class="clearfix">
-                                                    <textarea class="autosize-transition limited form-control" maxlength="50" name="LeaveComment" id="LeaveComment"></textarea>
+                                                    @Html.TextAreaFor(m => m.LeaveComment, new { @class = "autosize-transition limited form-control" })                                                 
                                                 </div>
+                                                @Html.ValidationMessageFor(m => m.LeaveComment, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
-                                    </form>
+                                    }
                                 </div>
 
                                 <div class="step-pane" data-step="4">

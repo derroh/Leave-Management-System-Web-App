@@ -389,7 +389,8 @@
         ignore: "",
         rules: {
             LeaveAttachments: {
-                required: false,
+                required: true
+              //  extension: "mp3|mpeg|mp4" //specify format. 
             },
             LeaveComment: {
                 required: true,

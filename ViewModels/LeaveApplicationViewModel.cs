@@ -24,5 +24,7 @@ namespace HumanResources.ViewModels
         public string LeaveStartDate { get; set; }
         public string LeaveEndDate { get; set; }
         public string ReturnDate { get; set; }
+        public string LeaveComment { get; set; }
+        public string LeaveAttachments { get; set; }
     }
 }
