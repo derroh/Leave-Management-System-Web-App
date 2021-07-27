@@ -19,6 +19,7 @@ namespace HumanResources.Controllers
     using System.Security.Cryptography;
     using System.Text;
     using System.IO;
+    using System.Threading.Tasks;
 
     public class AccountController : Controller
     {
@@ -397,7 +398,7 @@ namespace HumanResources.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ForgotPassword(ForgotPasswordViewModel p)
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel p)
         {
             if (ModelState.IsValid)
             {
@@ -431,7 +432,7 @@ namespace HumanResources.Controllers
                         body = body.Replace("{ResetLink}", domainName + verifyUrl);
                         body = body.Replace("{UserName}", user.FirstName);
 
-                        bool IsSendEmail = EmailFunctions.SendMail(p.Email, user.FirstName, "Password Reset Success", body);
+                        bool IsSendEmail = await Task.Run(() => EmailFunctions.SendMailAsync(p.Email, user.FirstName, "Password Reset Success", body));
 
                       
 

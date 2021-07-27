@@ -13,7 +13,7 @@ namespace HumanResources
     {
         private static Models.LeaveManagementEntities _db = new Models.LeaveManagementEntities();
         //function sends emails
-        public static bool SendMail(string RecipientMail, string RecipientName, string MailSubject, string MailBody)
+        public static async Task<bool> SendMailAsync(string RecipientMail, string RecipientName, string MailSubject, string MailBody)
         {
             bool status = false;
             var settings = _db.Settings.Where(s => s.Id == 1).SingleOrDefault();
@@ -51,6 +51,7 @@ namespace HumanResources
                             MailClient.EnableSsl = true;
                             MailClient.Credentials = new System.Net.NetworkCredential(Username, Password);
                             MailClient.Send(emailMessage);
+                           // MailClient.SendAsync(emailMessage, null);
                         }
                     }
                     

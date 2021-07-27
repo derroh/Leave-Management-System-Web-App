@@ -1,5 +1,6 @@
 ﻿jQuery(function ($) {
 
+
     $("#StartDate").change(function () {
         $('#LeaveStartDate').val($('#StartDate').val());
     });
@@ -769,6 +770,9 @@
                         data: '{DocumentNo:"' + docno + '" }',
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
+                        headers: {
+                            'RequestVerificationToken': '@TokenHeaderValue()'
+                        },
                         success: function (response) {
 
                             if (response != null) {
@@ -796,6 +800,9 @@
                                     });
                                 }
                             }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(errorThrown);
                         }
                     });
                 }

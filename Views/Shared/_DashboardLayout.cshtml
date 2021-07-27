@@ -181,7 +181,7 @@
                 <div class="footer-content">
                     <span class="bigger-120">
                         <span class="blue bolder"> Leave Management System</span>
-                         &copy; @Html.Raw(DateTime.Now.Year.ToString())
+                        &copy; @Html.Raw(DateTime.Now.Year.ToString())
                     </span>
 
                     &nbsp; &nbsp;
@@ -254,6 +254,17 @@
     <script src="/assets/js/ace.min.js"></script>
 
     <!-- inline scripts related to this page -->
+    <script>
+    @functions{
+        public string TokenHeaderValue()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;
+        }
+    }
+    
+    </script>
     <script src="/assets/js/employeescripts.js"></script>
 </body>
 </html>

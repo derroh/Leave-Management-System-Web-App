@@ -11,6 +11,7 @@ namespace HumanResources.Controllers
     using HumanResources.ViewModels;
     using HumanResources.CustomFunctions;
     using System.IO;
+    using System.Threading.Tasks;
 
     [Authorize(Roles = "Admin")]
     public class ApprovalEntriesController : Controller
@@ -53,7 +54,7 @@ namespace HumanResources.Controllers
             }
             return View(_ApprovalEntriesListViewModel);
         }
-        public JsonResult Approve(int EntryNo)
+        public async Task<JsonResult> Approve(int EntryNo)
         {
             string status = "", message = "";
 
@@ -88,7 +89,7 @@ namespace HumanResources.Controllers
                     body = body.Replace("{LeaveNo}", _ApprovedRequestResponse.DocumentNo);
                     body = body.Replace("{UserName}", _ApprovedRequestResponse.SenderEmail);
 
-                    bool IsSendEmail = EmailFunctions.SendMail(_ApprovedRequestResponse.SenderEmail, _ApprovedRequestResponse.SenderEmail, "Approval Complete!", body);
+                    bool IsSendEmail = await Task.Run(() =>EmailFunctions.SendMailAsync(_ApprovedRequestResponse.SenderEmail, _ApprovedRequestResponse.SenderEmail, "Approval Complete!", body));
 
 
                     status = "000";

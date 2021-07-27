@@ -11,6 +11,9 @@ namespace HumanResources.Controllers
     using Newtonsoft.Json;
     using System.IO;
     using HumanResources.CustomFunctions;
+    using System.Web.Helpers;
+    using System.Net.Http;
+    using System.Threading.Tasks;
 
     [Authorize]
     public class LeavesController : Controller
@@ -66,26 +69,13 @@ namespace HumanResources.Controllers
        
         public ActionResult Create()
         {
-            var leavetypes = _db.LeaveTypes.ToList();
-            ViewBag.LeaveTypes = leavetypes;
-
-            return View();
-        }
-        public ActionResult Edit()
-        {
-            var leavetypes = _db.LeaveTypes.ToList();
-            ViewBag.LeaveTypes = leavetypes;
-
-            return View();
-        }
-        //Get LeaveTypes
-        public JsonResult ListLeaveTypes()
-        {
+            string EmployeeNo = HttpContext.Session["EmployeeNo"].ToString();
             List<LeaveType> leavetypelist = new List<LeaveType>();
 
             using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
             {
                 var leavetypes = dbEntities.LeaveTypes.ToList();
+                var employee = dbEntities.Employees.Where(x => x.EmployeeNo == EmployeeNo).FirstOrDefault();
 
                 //if Male add Paternity. If female add maternity
 
@@ -96,6 +86,99 @@ namespace HumanResources.Controllers
                         Code = leavetype.Code,
                         Description = leavetype.Description
                     });
+                }
+
+                if (employee.Gender.Trim() == "Male")
+                {
+                    var itemToRemove = leavetypelist.Single(r => r.Code == "MATERNITY");
+                    leavetypelist.Remove(itemToRemove);
+                }
+                else if (employee.Gender.Trim() == "Female")
+                {
+                    var itemToRemove = leavetypelist.Single(r => r.Code == "PATERNITY");
+                    leavetypelist.Remove(itemToRemove);
+                }
+            }
+
+            ViewBag.LeaveTypes = leavetypelist;
+
+            return View();
+        }
+        public ActionResult Edit()
+        {
+            string EmployeeNo = HttpContext.Session["EmployeeNo"].ToString();
+            List<LeaveType> leavetypelist = new List<LeaveType>();
+
+            using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
+            {
+                var leavetypes = dbEntities.LeaveTypes.ToList();
+                var employee = dbEntities.Employees.Where(x => x.EmployeeNo == EmployeeNo).FirstOrDefault();
+
+                //if Male add Paternity. If female add maternity
+
+                foreach (var leavetype in leavetypes)
+                {
+                    leavetypelist.Add(new LeaveType
+                    {
+                        Code = leavetype.Code,
+                        Description = leavetype.Description
+                    });              
+                }
+
+                if (employee.Gender.Trim() == "Male")
+                {
+                    var itemToRemove = leavetypelist.Single(r => r.Code == "MATERNITY");
+                    leavetypelist.Remove(itemToRemove);
+                }
+                else if (employee.Gender.Trim() == "Female")
+                {
+                    var itemToRemove = leavetypelist.Single(r => r.Code == "PATERNITY");
+                    leavetypelist.Remove(itemToRemove);
+                }
+            }
+
+            ViewBag.LeaveTypes = leavetypelist;
+
+            return View();
+        }
+        //Get LeaveTypes
+        public JsonResult ListLeaveTypes()
+        {
+            string EmployeeNo = HttpContext.Session["EmployeeNo"].ToString();
+            List<LeaveType> leavetypelist = new List<LeaveType>();
+
+            using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
+            {
+                var leavetypes = dbEntities.LeaveTypes.ToList();
+                var employee = dbEntities.Employees.Where(x => x.EmployeeNo == EmployeeNo).FirstOrDefault();
+
+                //if Male add Paternity. If female add maternity
+
+                foreach (var leavetype in leavetypes)
+                {
+                    if(employee.Gender.Trim() == "Male")
+                    {
+                        if(leavetype.Code != "MATERNITY")
+                        {
+                            leavetypelist.Add(new LeaveType
+                            {
+                                Code = leavetype.Code,
+                                Description = leavetype.Description
+                            });
+                        }
+                    }
+                    else if (employee.Gender.Trim() == "Female")
+                    {
+                        if (leavetype.Code != "PATERNITY")
+                        {
+                            leavetypelist.Add(new LeaveType
+                            {
+                                Code = leavetype.Code,
+                                Description = leavetype.Description
+                            });
+                        }
+                    }
+
                 }
             }
             return Json(JsonConvert.SerializeObject(leavetypelist), JsonRequestBehavior.AllowGet);
@@ -400,7 +483,7 @@ namespace HumanResources.Controllers
         // Leave Entry Type -> Opening Balance",Accrue,Deduct,Use,Closing,Recall
 
         //Approal stuff
-        public ActionResult SubmitForApproval()
+        public async Task<ActionResult> SubmitForApproval()
         {
             string status = "", message = "";
 
@@ -464,7 +547,7 @@ namespace HumanResources.Controllers
                                     body = body.Replace("{Link}", domainName + url);
                                     body = body.Replace("{UserName}", _ApprovalRequestResponse.ApproverEmail);
 
-                                    bool IsSendEmail = EmailFunctions.SendMail(_ApprovalRequestResponse.ApproverEmail, _ApprovalRequestResponse.ApproverEmail, "Approval Notification", body);
+                                    bool IsSendEmail = await Task.Run(() =>EmailFunctions.SendMailAsync(_ApprovalRequestResponse.ApproverEmail, _ApprovalRequestResponse.ApproverEmail, "Approval Notification", body));
 
                                     status = "000";
                                     message = "Submit Success! for leave " + LeaveDocumentNo;
@@ -497,7 +580,7 @@ namespace HumanResources.Controllers
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Submit(string DocumentNo)
+        public async Task<ActionResult> Submit(string DocumentNo)
         {
             string status = "", message = "";
 
@@ -561,7 +644,7 @@ namespace HumanResources.Controllers
                                     body = body.Replace("{Link}", domainName + url);
                                     body = body.Replace("{UserName}", _ApprovalRequestResponse.ApproverEmail);
 
-                                    bool IsSendEmail = EmailFunctions.SendMail(_ApprovalRequestResponse.ApproverEmail, _ApprovalRequestResponse.ApproverEmail, "Approval Notification", body);
+                                    bool IsSendEmail = await Task.Run(() => EmailFunctions.SendMailAsync(_ApprovalRequestResponse.ApproverEmail, _ApprovalRequestResponse.ApproverEmail, "Approval Notification", body));
 
                                     status = "000";
                                     message = "Submit Success! for leave " + DocumentNo;
@@ -634,9 +717,10 @@ namespace HumanResources.Controllers
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
         public ActionResult Delete(string DocumentNo)
         {
-            string status = "", message = "";
+            string status = "", message = "";        
 
             try
             {
@@ -649,7 +733,7 @@ namespace HumanResources.Controllers
                         db.Leaves.Remove(leave);
                         db.SaveChanges();
                         status = "000";
-                        message = "Leave " + DocumentNo +" has been successfully deleted";
+                        message = "Leave " + DocumentNo + " has been successfully deleted";
                     }
                     else
                     {
