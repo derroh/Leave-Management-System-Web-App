@@ -156,13 +156,13 @@
     {
 
         @*<li class="@Html.IsActive("Reports", "Index")">
-            <a href="@Url.Action("Index", "Reports")">
-                <i class="menu-icon fa fa-file-pdf-o"></i>
-                <span class="menu-text"> Reports </span>
-            </a>
+                <a href="@Url.Action("Index", "Reports")">
+                    <i class="menu-icon fa fa-file-pdf-o"></i>
+                    <span class="menu-text"> Reports </span>
+                </a>
 
-            <b class="arrow"></b>
-        </li>*@
+                <b class="arrow"></b>
+            </li>*@
 
         <li class="">
             <a href="#" class="dropdown-toggle">
@@ -196,7 +196,7 @@
         <li class="">
             <a href="#" class="dropdown-toggle">
                 <i class="menu-icon fa fa-cogs"></i>
-                <span class="menu-text"> Settings </span>
+                <span class="menu-text"> Approval users </span>
 
                 <b class="arrow fa fa-angle-down"></b>
             </a>
@@ -204,16 +204,9 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-                <li class="">
-                    <a href="@Url.Action("Holidays", "Settings")">
-                        <i class="menu-icon fa fa-cog orange"></i>
-                        Holidays
-                    </a>
 
-                    <b class="arrow"></b>
-                </li>
                 <li class="">
-                    <a href="@Url.Action("CreateApprover", "Settings")">
+                    <a href="@Url.Action("CreateApprover", "Approvers")">
                         <i class="menu-icon fa fa-users red"></i>
                         Create Approval User
                     </a>
@@ -222,17 +215,65 @@
                 </li>
 
                 <li class="">
-                    <a href="@Url.Action("ApprovalUsers", "Settings")">
+                    <a href="@Url.Action("Index", "Approvers")">
                         <i class="menu-icon fa fa-users red"></i>
                         Approval Users
                     </a>
 
                     <b class="arrow"></b>
                 </li>
+            </ul>
+        </li>
+
+        <li class="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-cogs"></i>
+                <span class="menu-text"> Holiday </span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+                
                 <li class="">
-                    <a href="@Url.Action("LeaveTypes", "Settings")">
-                        <i class="menu-icon fa fa-list green"></i>
-                        Leave Types
+                    <a href="@Url.Action("Holidays", "Settings")">
+                        <i class="menu-icon fa fa-cogs green"></i>
+                        View Holidays
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+
+        //leave types
+        <li class="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-cogs"></i>
+                <span class="menu-text"> Leave Types </span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+
+                <li class="">
+                    <a href="@Url.Action("Create", "LeaveTypes")">
+                        <i class="menu-icon fa fa-users red"></i>
+                        Create Leave Type
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="">
+                    <a href="@Url.Action("index", "LeaveTypes")">
+                        <i class="menu-icon fa fa-users red"></i>
+                        View Leave Types
                     </a>
 
                     <b class="arrow"></b>

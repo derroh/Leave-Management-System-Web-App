@@ -21,7 +21,7 @@
                         <div class="step-content pos-rel">
                             <h3 class="lighter block green">Enter the following information</h3>
 
-                            @using (Html.BeginForm("CreateStudent", "Students", FormMethod.Post, new { @id = "employeeform", @class = "form-horizontal" }))
+                            @using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post, new { @id = "employeeform", @class = "form-horizontal" }))
                             {
                                 @Html.AntiForgeryToken()
 

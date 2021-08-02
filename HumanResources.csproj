@@ -187,12 +187,14 @@
     <Compile Include="Controllers\AdvanceRequestsController.cs" />
     <Compile Include="Controllers\AdvanceSurrendersController.cs" />
     <Compile Include="Controllers\ApprovalEntriesController.cs" />
+    <Compile Include="Controllers\ApproversController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeaveRecallsController.cs" />
     <Compile Include="Controllers\LeavesController.cs" />
+    <Compile Include="Controllers\LeaveTypesController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -275,6 +277,7 @@
     <Compile Include="ViewModels\LeaveAttachmentsViewModel.cs" />
     <Compile Include="ViewModels\LeaveRecallsListViewModel.cs" />
     <Compile Include="ViewModels\LeavesListViewModel.cs" />
+    <Compile Include="ViewModels\LeaveTypeViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\Requests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -701,14 +704,16 @@
     <Content Include="Views\Leaves\ViewLeave.cshtml" />
     <Content Include="Views\Employees\Edit.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Settings\ApprovalUsers.cshtml" />
-    <Content Include="Views\Settings\EditApprover.cshtml" />
-    <Content Include="Views\Settings\CreateApprover.cshtml" />
-    <Content Include="Views\Settings\LeaveTypes.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\Reset.cshtml" />
     <Content Include="Views\Leaves\Edit.cshtml" />
     <Content Include="Views\Leaves\LeaveAttachmentsView.cshtml" />
+    <Content Include="Views\LeaveTypes\Index.cshtml" />
+    <Content Include="Views\Approvers\Index.cshtml" />
+    <Content Include="Views\Approvers\CreateApprover.cshtml" />
+    <Content Include="Views\Approvers\EditApprover.cshtml" />
+    <Content Include="Views\LeaveTypes\Create.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
