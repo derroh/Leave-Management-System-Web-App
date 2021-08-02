@@ -80,8 +80,15 @@
                                         <td>
                                             <div class="hidden-sm hidden-xs action-buttons">
 
-                                                <a class="red rejectapprovalentry" href="#" data-id="@leavetype.Code" data-docno="@leavetype.Code">
-                                                    <i class="ace-icon fa fa-times-circle-o bigger-130"></i>
+                                                <a class="blue" href="@Url.Action("Details", "LeaveTypes", new { id = leavetype.Code })">
+                                                    <i class="ace-icon fa fa-search-plus bigger-130"></i>
+                                                </a>
+                                                <a class="green" href="@Url.Action("Edit", "LeaveTypes", new { id = leavetype.Code })">
+                                                    <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                                </a>
+
+                                                <a class="red deleteLeaveType" href="#" data-id="@leavetype.Code" data-docno="@leavetype.Code">
+                                                    <i class="ace-icon fa fa-trash bigger-130"></i>
                                                 </a>
                                             </div>
 
@@ -94,9 +101,24 @@
                                                     <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 
                                                         <li>
-                                                            <a href="#" class="tooltip-error rejectapprovalentry" data-id="@leavetype.Code" data-docno="@leavetype.Code" data-rel="tooltip" title="Delete">
+                                                            <a href="@Url.Action("Details", "LeaveTypes", new { id = leavetype.Code  })" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                <span class="blue">
+                                                                    <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="@Url.Action("Edit", "LeaveTypes", new { id = leavetype.Code  })" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                <span class="green">
+                                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                                </span>
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="#" class="tooltip-error deleteLeaveType" data-id="@leavetype.Code" data-docno="@leavetype.Code" data-rel="tooltip" title="Delete">
                                                                 <span class="red">
-                                                                    <i class="ace-icon fa fa-times-circle-o bigger-120"></i>
+                                                                    <i class="ace-icon fa fa-trash bigger-120"></i>
                                                                 </span>
                                                             </a>
                                                         </li>

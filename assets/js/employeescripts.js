@@ -2491,6 +2491,118 @@
     });
 
     //leave types
+
+    //validate
+    $('#leavetypeform').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            Code: {
+                required: true,
+            },
+            Description: {
+                required: true,
+            },
+            TotalAbsenceDays: {
+                required: true,
+            },
+            UnitofMeasure: {
+                required: true
+            },
+            AnnualLeaveDaysType: {
+                required: true
+            }
+        },
+
+        messages: {
+            Code: "Please specify code"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+                var controls = element.closest('div[class*="col-"]');
+                if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
+                else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+            }
+            else if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else if (element.is('.chosen-select')) {
+                error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
+    });
+
+    $("#SaveLeaveType").click(function (event) {
+        
+        if (!$('#leavetypeform').valid()) e.preventDefault();
+
+
+        if ($('#leavetypeform').valid()) {
+            //Serialize the form datas.  
+            var valdata = $("#leavetypeform").serialize();
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/LeaveTypes/CreateLeaveType',
+                type: "POST",
+                data: valdata,
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+
+                        if (data.Status == "000") {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-success gritter-center'
+                            });
+
+                            window.setTimeout(function () {
+                                window.location.href = '/LeaveTypes/Index';
+                            }, 2000);
+
+                        } else {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-error gritter-center'
+                            });
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
+    });
     
     var leaveslisttable =
         $('#leaveslist-table')
@@ -2559,121 +2671,76 @@
         e.preventDefault();
     });
 
-    //validate
-    $('#leavetypeform').validate({
-        errorElement: 'div',
-        errorClass: 'help-block',
-        focusInvalid: false,
-        ignore: "",
-        rules: {
-            Code: {
-                required: true,
-            },
-            Description: {
-                required: true,
-            },
-            TotalAbsenceDays: {
-                required: true,
-            },
-            UnitofMeasure: {
-                required: true
-            },
-            AnnualLeaveDaysType: {
-                required: true
-            }
-        },
 
-        messages: {
-            Code: "Please specify code"
-        },
+    //
 
+    $("#leaveslist-table").on("click", ".deleteLeaveType", function (e) {
+        e.preventDefault();
 
-        highlight: function (e) {
-            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
-        },
+        var docno = $(this).attr('data-docno');
 
-        success: function (e) {
-            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
-            $(e).remove();
-        },
-
-        errorPlacement: function (error, element) {
-            if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
-                var controls = element.closest('div[class*="col-"]');
-                if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
-                else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
-            }
-            else if (element.is('.select2')) {
-                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
-            }
-            else if (element.is('.chosen-select')) {
-                error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
-            }
-            else error.insertAfter(element.parent());
-        },
-
-        submitHandler: function (form) {
-        },
-        invalidHandler: function (form) {
-        }
-    });
-
-    $("#SaveLeaveType").click(function (event) {
-
-        //var formAction = $("#electralpositionform").attr('action');
-
-        //console.log(formAction);
-
-        alert('sdjsd');
-
-        if (!$('#leavetypeform').valid()) e.preventDefault();
-
-
-        if ($('#leavetypeform').valid()) {
-            //Serialize the form datas.  
-            var valdata = $("#leavetypeform").serialize();
-            //to get alert popup  	
-
-            jQuery.ajax({
-                url: '/LeaveTypes/CreateLeaveType',
-                type: "POST",
-                data: valdata,
-                dataType: "json",
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                success: function (response) {
-                    if (response != null) {
-                        //console.log(JSON.stringify(response)); //it comes out to be string 
-
-                        //we need to parse it to JSON
-                        var data = $.parseJSON(response);
-
-
-                        if (data.Status == "000") {
-                            $.gritter.add({
-                                title: 'Action Notification',
-                                text: data.Message,
-                                class_name: 'gritter-success gritter-center'
-                            });
-
-                            window.setTimeout(function () {
-                                window.location.href = '/LeaveTypes/Index';
-                            }, 2000);
-
-                        } else {
-                            $.gritter.add({
-                                title: 'Action Notification',
-                                text: data.Message,
-                                class_name: 'gritter-error gritter-center'
-                            });
-                        }
-                    }
+        bootbox.confirm({
+            title: "<i class='fa fa-trash'></i> Delete?",
+            message: "Do you wish to delete this leave type " + docno + "?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
                 },
-                error: function (e) {
-                    console.log(e.responseText);
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
                 }
-            });
-        }
+            },
+            callback: function (result) {
 
-        event.preventDefault();
+                if (result == true) {
+
+                    jQuery.ajax({
+                        url: '/LeaveTypes/Delete',
+                        type: "POST",
+                        data: '{Code:"' + docno + '" }',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        headers: {
+                            'RequestVerificationToken': '@TokenHeaderValue()'
+                        },
+                        success: function (response) {
+
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
+
+
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+
+                                    window.setTimeout(function () {
+                                        location.reload(true);
+                                    }, 2000);
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(errorThrown);
+                        }
+                    });
+                }
+            }
+        });
     });
+
+    
 })

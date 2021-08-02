@@ -275,6 +275,7 @@
     <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\LeaveApplicationViewModel.cs" />
     <Compile Include="ViewModels\LeaveAttachmentsViewModel.cs" />
+    <Compile Include="ViewModels\LeaveBalancesView.cs" />
     <Compile Include="ViewModels\LeaveRecallsListViewModel.cs" />
     <Compile Include="ViewModels\LeavesListViewModel.cs" />
     <Compile Include="ViewModels\LeaveTypeViewModel.cs" />
@@ -714,6 +715,8 @@
     <Content Include="Views\Approvers\EditApprover.cshtml" />
     <Content Include="Views\LeaveTypes\Create.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
+    <Content Include="Views\LeaveTypes\Edit.cshtml" />
+    <Content Include="Views\LeaveTypes\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
