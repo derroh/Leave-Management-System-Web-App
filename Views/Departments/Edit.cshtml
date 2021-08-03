@@ -41,7 +41,7 @@
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.TextBoxFor(m => m.Name, new { @class = "col-xs-12 col-sm-5" })
+                                                @Html.TextBoxFor(m => m.Name, new { @class = "col-xs-12 col-sm-5", @value = Model.Name })
                                             </div>
                                             @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
                                         </div>
