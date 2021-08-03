@@ -2,7 +2,11 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -29,7 +33,7 @@ namespace HumanResources.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateEmployee(ViewModels.CreateEmployeeViewModel ep)
+        public async Task<ActionResult> CreateEmployee(ViewModels.CreateEmployeeViewModel ep)
         {
             string message = "", DocumentNo = "", status = "";
 
@@ -80,10 +84,33 @@ namespace HumanResources.Controllers
                         dbEntities.SaveChanges();
                         status = "000";
                         message = "Employee saved successfully";
+
+                        AppFunctions.UpdateNumberSeries(EmployeeCode, DocumentNo);                                             
                     }
 
-                    //update last used number
-                    AppFunctions.UpdateNumberSeries(EmployeeCode, DocumentNo);
+                    var user = new User
+                    {
+                        Email = ep.Email,
+                        Password = GetMD5(ep.Password),
+                        FirstName = ep.FirstName,
+                        LastName = ep.LastName,
+                        // Phone = _user.Phone,
+                        Role = "Staff",
+                        EmployeeNo = employee.EmployeeNo
+
+                    };
+
+                    using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
+                    {
+                        dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                        dbEntities.Users.Add(user);
+                        dbEntities.SaveChanges();
+
+
+                        string statsus = await Task.Run(() => SendNotification(DocumentNo));
+                    }
+
+
                 }
                 else
                 {
@@ -105,6 +132,44 @@ namespace HumanResources.Controllers
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
+
+        private async Task<string> SendNotification(string documentNo)
+        {
+            using(var dbEntities= new LeaveManagementEntities())
+            {
+                var user = dbEntities.Users.Where(x => x.EmployeeNo == documentNo).FirstOrDefault();
+
+                if (user != null)
+                {
+                    string resetCode = Guid.NewGuid().ToString();
+                    var verifyUrl = "/Account/ResetPassword/" + resetCode;
+                    var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
+
+                    user.ResetPasswordCode = resetCode;
+
+                    //This line I have added here to avoid confirm password not match issue , as we had added a confirm password property 
+
+                    dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                    dbEntities.SaveChanges();
+
+                    string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                    string body = string.Empty;
+
+                    string pathToTemplate = Server.MapPath("~/MailTemplates/SignUp.html");
+
+                    using (StreamReader reader = new StreamReader(pathToTemplate))
+                    {
+                        body = reader.ReadToEnd();
+                    }
+                    body = body.Replace("{ResetLink}", domainName + verifyUrl);
+                    body = body.Replace("{UserName}", user.FirstName);
+
+                    bool IsSendEmail = await Task.Run(() => EmailFunctions.SendMailAsync(user.Email, user.FirstName, "Account creation Success", body));
+                }
+            }
+            return "success";
         }
 
         public ActionResult Edit(string Id)
@@ -185,6 +250,71 @@ namespace HumanResources.Controllers
             };
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(string EmployeeNo)
+        {
+            string username = HttpContext.Session["EmployeeNo"].ToString();
+
+            string status = "", message = "";
+
+            try
+            {
+                if(username != EmployeeNo)
+                {
+                    using (var db = new LeaveManagementEntities())
+                    {
+                        var employee = db.Employees.Where(x => x.EmployeeNo == EmployeeNo).SingleOrDefault();
+
+                        if (employee != null)
+                        {
+                            db.Employees.Remove(employee);
+                            db.SaveChanges();
+                            status = "000";
+                            message = "Employee " + EmployeeNo + " has been successfully deleted";
+                        }
+                        else
+                        {
+                            status = "900";
+                            message = "Couldn't find Employee " + EmployeeNo;
+                        }
+                    }
+                }
+                else
+                {
+                    status = "900";
+                    message = "Cannot proceed with action. You cannot delete your own account " + EmployeeNo;
+                }
+                
+            }
+            catch (Exception es)
+            {
+                message = es.Message;
+            }
+
+            var _RequestResponse = new RequestResponse
+            {
+                Status = status,
+                Message = message
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
+
+        public static string GetMD5(string str)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] fromData = Encoding.UTF8.GetBytes(str);
+            byte[] targetData = md5.ComputeHash(fromData);
+            string byte2String = null;
+
+            for (int i = 0; i < targetData.Length; i++)
+            {
+                byte2String += targetData[i].ToString("x2");
+
+            }
+            return byte2String;
         }
     }
 }

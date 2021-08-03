@@ -11,5 +11,6 @@ namespace HumanResources.ViewModels
         public string DaysEntitled { get; set; }
         public string DaysTaken { get; set; }
         public string Balance { get; set; }
+        public string Code { get; set; }
     }
 }

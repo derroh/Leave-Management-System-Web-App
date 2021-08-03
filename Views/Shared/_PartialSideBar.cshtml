@@ -8,7 +8,7 @@
         <b class="arrow"></b>
     </li>
 
-    @if (this.Session["role_id"].ToString() == "Admin")
+    @if (this.Session["role_id"].ToString() == "Approver")
     {
         <li class="">
             <a href="#" class="dropdown-toggle">
@@ -42,36 +42,6 @@
                     <a href="@Url.Action("Index", "ApprovalEntries", new { status = "rejected" })">
                         <i class="menu-icon fa fa-times red"></i>
                         Rejected
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-            </ul>
-        </li>
-        <li class="">
-            <a href="#" class="dropdown-toggle">
-                <i class="menu-icon fa fa-building"></i>
-                <span class="menu-text"> Departments </span>
-
-                <b class="arrow fa fa-angle-down"></b>
-            </a>
-
-            <b class="arrow"></b>
-
-            <ul class="submenu">
-                <li class="">
-                    <a href="@Url.Action("Create", "Departments")">
-                        <i class="menu-icon fa fa-building orange"></i>
-                        Create
-                    </a>
-
-                    <b class="arrow"></b>
-                </li>
-
-                <li class="">
-                    <a href="@Url.Action("Index", "Departments")">
-                        <i class="menu-icon fa fa-list green"></i>
-                        View Departments
                     </a>
 
                     <b class="arrow"></b>
@@ -155,14 +125,37 @@
     @if (this.Session["role_id"].ToString() == "Admin")
     {
 
-        @*<li class="@Html.IsActive("Reports", "Index")">
-                <a href="@Url.Action("Index", "Reports")">
-                    <i class="menu-icon fa fa-file-pdf-o"></i>
-                    <span class="menu-text"> Reports </span>
-                </a>
 
-                <b class="arrow"></b>
-            </li>*@
+        <li class="">
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-building"></i>
+                <span class="menu-text"> Departments </span>
+
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+
+            <b class="arrow"></b>
+
+            <ul class="submenu">
+                <li class="">
+                    <a href="@Url.Action("Create", "Departments")">
+                        <i class="menu-icon fa fa-building orange"></i>
+                        Create
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+
+                <li class="">
+                    <a href="@Url.Action("Index", "Departments")">
+                        <i class="menu-icon fa fa-list green"></i>
+                        View Departments
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
 
         <li class="">
             <a href="#" class="dropdown-toggle">
@@ -236,7 +229,7 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-                
+
                 <li class="">
                     <a href="@Url.Action("Holidays", "Settings")">
                         <i class="menu-icon fa fa-cogs green"></i>

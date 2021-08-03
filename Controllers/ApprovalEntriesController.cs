@@ -13,7 +13,7 @@ namespace HumanResources.Controllers
     using System.IO;
     using System.Threading.Tasks;
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "LeaveApprover")]
     public class ApprovalEntriesController : Controller
     {
         private static LeaveManagementEntities _db = new LeaveManagementEntities();

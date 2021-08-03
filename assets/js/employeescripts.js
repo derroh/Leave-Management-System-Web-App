@@ -1889,7 +1889,7 @@
                 bAutoWidth: false,
                 "aoColumns": [
                     { "bSortable": false },
-                    null, null,
+                    null, null, null,
                     { "bSortable": false }
                 ],
                 "aaSorting": [],
@@ -1949,6 +1949,107 @@
         e.preventDefault();
     });
 
+
+    $("#holidays-table").on("click", ".isObserved", function (e) {
+        e.preventDefault();
+
+        var pid = $(this).attr('data-id');
+
+        $("#HolidayId").val(pid);
+
+        $('#modal-form').modal('show');
+    });
+
+    $('#holidaysetting').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            IsObserved: {
+                required: true
+            }
+        },
+
+        messages: {
+            IsObserved: "Please specify is the holiday is observed or not"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
+    });
+
+    $("#UpdateHoliday").click(function (event) {
+
+        if (!$('#holidaysetting').valid()) e.preventDefault();
+
+
+        if ($('#holidaysetting').valid()) {
+            //Serialize the form datas.  
+            var valdata = $("#holidaysetting").serialize();
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/LeaveTypes/UpdateLeaveType',
+                type: "POST",
+                data: valdata,
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+
+                        if (data.Status == "000") {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-success gritter-center'
+                            });
+
+                            window.setTimeout(function () {
+                                window.location.href = '/LeaveTypes/Index';
+                            }, 2000);
+
+                        } else {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-error gritter-center'
+                            });
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
+    });
 
     //employee
 
@@ -2031,6 +2132,68 @@
         }
 
         event.preventDefault();
+    });
+    $("#employees-table").on("click", ".deleteemployee", function (e) {
+        e.preventDefault();
+
+        var docno = $(this).attr('data-docno');
+
+        bootbox.confirm({
+            title: "<i class='fa fa-trash'></i> Delete?",
+            message: "Do you wish to delete employee?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true) {
+
+                    jQuery.ajax({
+                        url: '/Employees/Delete',
+                        type: "POST",
+                        data: '{EmployeeNo:"' + docno + '" }',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
+
+
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+
+                                    window.setTimeout(function () {
+                                        location.reload(true);
+                                    }, 2000);
+
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
     });
 
     $.mask.definitions['~'] = '[+-]';
@@ -2135,7 +2298,7 @@
                 bAutoWidth: false,
                 "aoColumns": [
                     { "bSortable": false },
-                    null, null, null, null, null, null, 
+                    null, null, null, null, null, null,  null,
                     { "bSortable": false }
                 ],
                 "aaSorting": [],
@@ -2603,6 +2766,59 @@
 
         event.preventDefault();
     });
+
+    $("#UpdateLeaveType").click(function (event) {
+
+        if (!$('#leavetypeform').valid()) e.preventDefault();
+
+
+        if ($('#leavetypeform').valid()) {
+            //Serialize the form datas.  
+            var valdata = $("#leavetypeform").serialize();
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/LeaveTypes/UpdateLeaveType',
+                type: "POST",
+                data: valdata,
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+
+                        if (data.Status == "000") {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-success gritter-center'
+                            });
+
+                            window.setTimeout(function () {
+                                window.location.href = '/LeaveTypes/Index';
+                            }, 2000);
+
+                        } else {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-error gritter-center'
+                            });
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
+    });
     
     var leaveslisttable =
         $('#leaveslist-table')
@@ -2742,5 +2958,6 @@
         });
     });
 
+    //holidays sripts
     
 })

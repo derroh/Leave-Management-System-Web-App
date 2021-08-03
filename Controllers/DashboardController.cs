@@ -27,6 +27,7 @@ namespace HumanResources.Controllers
 
             using (var dbEntities = new LeaveManagementEntities())
             {
+                var employee = dbEntities.Employees.Where(x => x.EmployeeNo == username).FirstOrDefault();
                 int ApprovalStatus = (int)DocumentApprovalStatus.Approved;
                 var ApprovedLeaves = dbEntities.ApprovalEntries.Where(s => s.SenderId == username && s.Status == ApprovalStatus).ToList().Count();
 
@@ -37,10 +38,10 @@ namespace HumanResources.Controllers
                 var ApprovalPendingLeaves = dbEntities.ApprovalEntries.Where(s => s.SenderId == username && s.Status == ApprovalStatus).ToList().Count();
 
                 var LeaveTypes = dbEntities.LeaveTypes.ToList();
-                mymodel.LeaveTypesCount = LeaveTypes.Count;
-                mymodel.ApprovedLeaves = ApprovedLeaves;
-                mymodel.RejectedLeaves = RejectedLeaves;
-                mymodel.ApprovalPendingLeaves = ApprovalPendingLeaves;
+                ViewBag.LeaveTypesCount = LeaveTypes.Count;
+                ViewBag.ApprovedLeaves = ApprovedLeaves;
+                ViewBag.RejectedLeaves = RejectedLeaves;
+                ViewBag.ApprovalPendingLeaves = ApprovalPendingLeaves;
 
 
 
@@ -61,12 +62,24 @@ namespace HumanResources.Controllers
 
                         int LeaveBalance = (DaysEntitled - TotalDaysTaken);
 
-                        _LeaveBalancesList.Add(new LeaveBalancesView { LeaveType = leavetype.Description, DaysEntitled = DaysEntitled.ToString(), DaysTaken = TotalDaysTaken.ToString(), Balance = LeaveBalance.ToString() });
+                        _LeaveBalancesList.Add(new LeaveBalancesView { LeaveType = leavetype.Description, DaysEntitled = DaysEntitled.ToString(), DaysTaken = TotalDaysTaken.ToString(), Balance = LeaveBalance.ToString(), Code = leavetype.Code });
 
                     }
                 }
+
+                if (employee.Gender.Trim() == "Male")
+                {
+                    var itemToRemove = _LeaveBalancesList.Single(r => r.Code == "MATERNITY");
+                    _LeaveBalancesList.Remove(itemToRemove);
+                }
+                else if (employee.Gender.Trim() == "Female")
+                {
+                    var itemToRemove = _LeaveBalancesList.Single(r => r.Code == "PATERNITY");
+                    _LeaveBalancesList.Remove(itemToRemove);
+                }
             }
-           
+            
+
             mymodel.LeaveBalancesList = _LeaveBalancesList;
            
             return View(mymodel);

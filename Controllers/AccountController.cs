@@ -83,6 +83,7 @@ namespace HumanResources.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
+            var claims = new List<Claim>();
             try
             {
                 string password = GetMD5(model.Password);
@@ -101,7 +102,24 @@ namespace HumanResources.Controllers
                         string Username = logindetails.Email.Trim();
 
                         // Login In.
-                        this.SignInUser(Username, Role, false);
+                        claims.Add(new Claim(ClaimTypes.Name, Username));
+                        claims.Add(new Claim(ClaimTypes.Role, Role));
+
+                        var IsApprover = this.databaseManager.ApprovalUsers.Where(x => x.Approver == Username).FirstOrDefault();
+                        var IsApproverSubstitute = this.databaseManager.ApprovalUsers.Where(x => x.SubstituteApprover == Username).FirstOrDefault();
+
+                        if (IsApprover != null)
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, "LeaveApprover"));
+                        }
+                        if (IsApproverSubstitute != null)
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, "LeaveApprover"));
+                        }
+
+                        this.SignInUser(false, claims);
+
+                        //   Approver
 
                         // setting.
                         this.Session["role_id"] = Role;
@@ -200,16 +218,12 @@ namespace HumanResources.Controllers
         /// <param name="username">Username parameter.</param>
         /// <param name="role_id">Role ID parameter</param>
         /// <param name="isPersistent">Is persistent parameter.</param>
-        private void SignInUser(string username, string role_id, bool isPersistent)
+        private void SignInUser( bool isPersistent, List<Claim> claims)
         {
             // Initialization.
-            var claims = new List<Claim>();
 
             try
             {
-                // Setting
-                claims.Add(new Claim(ClaimTypes.Name, username));
-                claims.Add(new Claim(ClaimTypes.Role, role_id.ToString()));
                 var claimIdenties = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
                 var ctx = Request.GetOwinContext();
                 var authenticationManager = ctx.Authentication;

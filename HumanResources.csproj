@@ -577,6 +577,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="MailTemplates\ApprovalCompletedNotification.html" />
     <Content Include="MailTemplates\ApprovalNotification.html" />
+    <Content Include="MailTemplates\SignUp.html" />
     <Content Include="MailTemplates\ForgotPassword.html" />
     <Content Include="Models\LeaveManagementSystemModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

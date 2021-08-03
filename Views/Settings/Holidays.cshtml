@@ -45,7 +45,11 @@
                                     </th>
                                     <th class="hidden-480">
                                         <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
-                                        Date 
+                                        Date
+                                    </th>
+                                    <th class="hidden-480">
+                                        <i class="ace-icon fa fa-calendar bigger-110 hidden-480"></i>
+                                        Is Observed
                                     </th>
 
 
@@ -57,47 +61,49 @@
 
                                 @foreach (var holiday in Model)
                                 {
-                                    <tr>
-                                        <td class="center">
-                                            <label class="pos-rel">
-                                                <input type="checkbox" class="ace" />
-                                                <span class="lbl"></span>
-                                            </label>
-                                        </td>
+                                <tr>
+                                    <td class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
 
-                                        <td>
-                                            @holiday.HolidayName
-                                        </td>
-                                        <td>@holiday.HolidayDate</td>
+                                    <td>
+                                        @holiday.HolidayName
+                                    </td>
+                                    <td>@AppFunctions.GetReadableDate(@holiday.HolidayDate.ToString())</td>
 
-                                        <td>
-                                            <div class="hidden-sm hidden-xs action-buttons">                                                
+                                    <td>@holiday.IsObserved</td>
 
-                                                <a class="red rejectapprovalentry" href="#" data-id="@holiday.Id" data-docno="@holiday.Id">
-                                                    <i class="ace-icon fa fa-pencil bigger-130"></i>
-                                                </a>
+                                    <td>
+                                        <div class="hidden-sm hidden-xs action-buttons">
+
+                                            <a class="red isObserved" href="#" data-id="@holiday.Id" data-docno="@holiday.Id">
+                                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                            </a>
+                                        </div>
+
+                                        <div class="hidden-md hidden-lg">
+                                            <div class="inline pos-rel">
+                                                <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                                    <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
+                                                </button>
+
+                                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+
+                                                    <li>
+                                                        <a href="#" class="tooltip-error isObserved" data-id="@holiday.Id" data-docno="@holiday.Id" data-rel="tooltip" title="Mark as observed">
+                                                            <span class="red">
+                                                                <i class="ace-icon fa fa-times-circle-o bigger-120"></i>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
                                             </div>
-
-                                            <div class="hidden-md hidden-lg">
-                                                <div class="inline pos-rel">
-                                                    <button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                                        <i class="ace-icon fa fa-caret-down icon-only bigger-120"></i>
-                                                    </button>
-
-                                                    <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                                       
-                                                        <li>
-                                                            <a href="#" class="tooltip-error rejectapprovalentry" data-id="@holiday.Id" data-docno="@holiday.Id" data-rel="tooltip" title="Mark as observed">
-                                                                <span class="red">
-                                                                    <i class="ace-icon fa fa-times-circle-o bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                </tr>
                                 }
 
                             </tbody>
@@ -110,5 +116,50 @@
     </div><!-- /.row -->
 </div>
 
+@*Modal*@
 
+<div id="modal-form" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="blue bigger">Please fill the following form fields</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="holidaysetting" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="form-group">
+                                <label for="form-field-select-3">Is holiday Observed</label>
+
+                                <div>
+                                    <select class="select2" data-placeholder="Choose an option" id="IsObserved">
+                                        <option value="">&nbsp;</option>
+                                        <option value="1">No</option>
+                                        <option value="0">Yes</option>
+                                    </select>
+                                </div>
+
+                                <input type="text" id="HolidayId"  value="" hidden="hidden" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Cancel
+                </button>
+
+                <button class="btn btn-sm btn-primary" id="UpdateHoliday">
+                    <i class="ace-icon fa fa-check"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 

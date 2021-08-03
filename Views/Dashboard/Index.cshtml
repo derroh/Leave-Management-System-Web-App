@@ -37,7 +37,7 @@
                             <div class="col-md-3">
                                 <div class="card-counter primary">
                                     <i class="fa fa-code-fork"></i>
-                                    <span class="count-numbers">@Model.LeaveTypesCount</span>
+                                    <span class="count-numbers">@ViewBag.LeaveTypesCount</span>
                                     <span class="count-name">Leave Types</span>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                             <div class="col-md-3">
                                 <div class="card-counter danger">
                                     <i class="fa fa-ticket"></i>
-                                    <span class="count-numbers">@Model.RejectedLeaves</span>
+                                    <span class="count-numbers">@ViewBag.RejectedLeaves</span>
                                     <span class="count-name">Rejected Leaves</span>
                                 </div>
                             </div>
@@ -53,7 +53,7 @@
                             <div class="col-md-3">
                                 <div class="card-counter success">
                                     <i class="fa fa-database"></i>
-                                    <span class="count-numbers">@Model.ApprovedLeaves</span>
+                                    <span class="count-numbers">@ViewBag.ApprovedLeaves</span>
                                     <span class="count-name">Approved Leaves</span>
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                             <div class="col-md-3">
                                 <div class="card-counter info">
                                     <i class="fa fa-users"></i>
-                                    <span class="count-numbers">@Model.ApprovalPendingLeaves</span>
+                                    <span class="count-numbers">@ViewBag.ApprovalPendingLeaves</span>
                                     <span class="count-name">Leaves Pending</span>
                                 </div>
                             </div>
@@ -109,7 +109,7 @@
                                 </thead>
 
                                 <tbody>
-                                    @foreach (HumanResources.ViewModels.LeaveBalancesView leavebalance in Model.LeaveBalancesList)
+                                    @foreach (var leavebalance in Model.LeaveBalancesList)
                                     {
                                     <tr>
                                         <td>@leavebalance.LeaveType</td>
