@@ -1,4 +1,4 @@
-﻿@model HumanResources.ViewModels.ForgotPasswordViewModel
+﻿
 @{
     Layout = null;
 }
@@ -46,11 +46,11 @@
                     <div class="login-container">
                         <div class="center">
                             <h1>
-                                <i class="ace-icon fa fa-briefcase green"></i>
-                                <span class="red">Halima's</span>
-                                <span class="white" id="id-text2"> Leave Management System</span>
+                                <i class="ace-icon fa fa-leaf green"></i>
+                                <span class="red">Bettie's</span>
+                                <span class="white" id="id-text2"> Voting System</span>
                             </h1>
-                            <h4 class="blue" id="id-company-text">&copy; 2021</h4>
+                            <h4 class="blue" id="id-company-text">&copy; Bettie's</h4>
                         </div>
 
                         <div class="space-6"></div>
@@ -62,34 +62,21 @@
                                     <div class="widget-main">
                                         <h4 class="header red lighter bigger">
                                             <i class="ace-icon fa fa-key"></i>
-                                            Retrieve Password
+                                            Reset Password
                                         </h4>
 
                                         <div class="space-6"></div>
-                                        <p>
-                                            Enter your email and to receive instructions
-                                        </p>
-
-                                        @using (Html.BeginForm("ForgotPassword", "Account", FormMethod.Post))
+                                        @if (@ViewBag.Message != null)
                                         {
-                                            @Html.AntiForgeryToken()
+                                            <div class="alert alert-block alert-danger">
+                                                <button type="button" class="close" data-dismiss="alert">
+                                                    <i class="ace-icon fa fa-times"></i>
+                                                </button>
 
-                                            <fieldset>
-                                                <label class="block clearfix">
-                                                    <span class="block input-icon input-icon-right">
-                                                        @Html.TextBoxFor(m => m.Email, "", new { @class = "form-control", @placeholder = "Email", autocomplete = "off" })
-                                                        <i class="ace-icon fa fa-envelope"></i>
-                                                    </span>
-                                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                                                </label>
+                                                <i class="ace-icon fa fa-check green"></i>
 
-                                                <div class="clearfix">
-                                                    <button type="submit" class="width-35 pull-right btn btn-sm btn-danger">
-                                                        <i class="ace-icon fa fa-lightbulb-o"></i>
-                                                        <span class="bigger-110">Send Me!</span>
-                                                    </button>
-                                                </div>
-                                            </fieldset>
+                                                @ViewBag.Message
+                                            </div>
                                         }
                                     </div><!-- /.widget-main -->
 

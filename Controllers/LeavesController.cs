@@ -309,46 +309,49 @@ namespace HumanResources.Controllers
             {
                 var settings = _db.Settings.Where(s => s.Id == 1).SingleOrDefault();
 
-                if(settings != null)
+                if(LeaveDocumentNo == null)
                 {
-                    string LeaveCode = settings.LeaveNumbers;
-
-                    var NumberSeriesData = _db.NumberSeries.Where(s => s.Code == LeaveCode).SingleOrDefault();
-
-                    string LastUsedNumber = NumberSeriesData.LastUsedNumber;
-
-                    if (LastUsedNumber != "")
+                    if (settings != null)
                     {
-                        DocumentNo = AppFunctions.GetNewDocumentNumber(LeaveCode.Trim(), LastUsedNumber.Trim());
+                        string LeaveCode = settings.LeaveNumbers;
 
-                        LeaveDocumentNo = DocumentNo;
+                        var NumberSeriesData = _db.NumberSeries.Where(s => s.Code == LeaveCode).SingleOrDefault();
+
+                        string LastUsedNumber = NumberSeriesData.LastUsedNumber;
+
+                        if (LastUsedNumber != "")
+                        {
+                            DocumentNo = AppFunctions.GetNewDocumentNumber(LeaveCode.Trim(), LastUsedNumber.Trim());
+
+                            LeaveDocumentNo = DocumentNo;
+                        }
+
+                        var leave = new Leaf
+                        {
+                            DocumentNo = DocumentNo,
+                            LeaveType = ep.LeaveType,
+                            EmployeeNo = SenderId,
+                            ApprovalStatus = (int)DocumentApprovalStatus.Open
+                        };
+
+                        using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
+                        {
+                            dbEntities.Configuration.ValidateOnSaveEnabled = false;
+                            dbEntities.Leaves.Add(leave);
+                            dbEntities.SaveChanges();
+                            status = "000";
+                            message = "Leave type saved successfully";
+                        }
+
+                        //update last used number
+                        AppFunctions.UpdateNumberSeries(LeaveCode, DocumentNo);
                     }
-
-                    var leave = new Leaf
+                    else
                     {
-                        DocumentNo = DocumentNo,
-                        LeaveType = ep.LeaveType,
-                        EmployeeNo = SenderId,
-                        ApprovalStatus = (int)DocumentApprovalStatus.Open
-                    };
-
-                    using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
-                    {
-                        dbEntities.Configuration.ValidateOnSaveEnabled = false;
-                        dbEntities.Leaves.Add(leave);
-                        dbEntities.SaveChanges();
-                        status = "000";
-                        message = "Leave type saved successfully";
+                        message = "Looks like leave numbers have not been set up";
+                        status = "900";
                     }
-
-                    //update last used number
-                    AppFunctions.UpdateNumberSeries(LeaveCode, DocumentNo);
-                }
-                else
-                {
-                    message = "Looks like leave numbers have not been set up";
-                    status = "900";
-                }               
+                }                             
             }
             catch (Exception es)
             {

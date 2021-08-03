@@ -2000,7 +2000,7 @@
 
     $("#UpdateHoliday").click(function (event) {
 
-        if (!$('#holidaysetting').valid()) e.preventDefault();
+        if (!$('#holidaysetting').valid()) event.preventDefault();
 
 
         if ($('#holidaysetting').valid()) {
@@ -2009,7 +2009,7 @@
             //to get alert popup  	
 
             jQuery.ajax({
-                url: '/LeaveTypes/UpdateLeaveType',
+                url: '/Settings/UpdateHoliday',
                 type: "POST",
                 data: valdata,
                 dataType: "json",
@@ -2451,7 +2451,7 @@
                 if (result == true) {
 
                     jQuery.ajax({
-                        url: '/Settings/DeleteApprover',
+                        url: '/Approvers/DeleteApprover',
                         type: "POST",
                         data: '{id:"' + docno + '" }',
                         dataType: "json",
@@ -2571,7 +2571,7 @@
             //to get alert popup  	
 
             jQuery.ajax({
-                url: '/Settings/CreateApprovalUser',
+                url: '/Approvers/CreateApprovalUser',
                 type: "POST",
                 data: valdata,
                 dataType: "json",
@@ -2611,7 +2611,7 @@
             //to get alert popup  	
 
             jQuery.ajax({
-                url: '/Settings/UpdateApprovalUser',
+                url: '/Approvers/UpdateApprovalUser',
                 type: "POST",
                 data: valdata,
                 dataType: "json",

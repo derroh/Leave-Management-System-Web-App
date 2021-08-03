@@ -127,25 +127,29 @@
             </div>
 
             <div class="modal-body">
-                <form id="holidaysetting" class="form-horizontal">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12">
-                            <div class="form-group">
-                                <label for="form-field-select-3">Is holiday Observed</label>
+                @using (Html.BeginForm("CreateDepartment", "Settings", FormMethod.Post, new { @id = "holidaysetting", @class = "form-horizontal" }))
+                {
+                    @Html.AntiForgeryToken()
 
-                                <div>
-                                    <select class="select2" data-placeholder="Choose an option" id="IsObserved">
-                                        <option value="">&nbsp;</option>
-                                        <option value="1">No</option>
-                                        <option value="0">Yes</option>
-                                    </select>
-                                </div>
+                    HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
 
-                                <input type="text" id="HolidayId"  value="" hidden="hidden" />
+                    <input type="hidden" id="HolidayId" />
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">Department Name:</label>
+
+                        <div class="col-xs-12 col-sm-9">
+                            <div class="clearfix">
+                                <select class="select2" data-placeholder="Choose an option" id="IsObserved" name="IsObserved">
+                                    <option value="">&nbsp;</option>
+                                    <option value="1">No</option>
+                                    <option value="0">Yes</option>
+                                </select>
                             </div>
+
                         </div>
                     </div>
-                </form>
+                }
             </div>
 
             <div class="modal-footer">

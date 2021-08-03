@@ -68,6 +68,45 @@ namespace HumanResources.Controllers
             return View(from publicholidays in _db.PublicHolidays.Where(h =>h.HolidayDate <= SixmonthsFromToday).OrderBy(h=>h.HolidayDate)
                         select publicholidays);
         }
-     
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateHoliday(Models.PublicHoliday holiday)
+        {
+            string status = "", message = "";
+
+            try
+            {
+                using (var db = new LeaveManagementEntities())
+                {
+
+                    var dept = _db.PublicHolidays.Where(s => s.Id == holiday.Id).SingleOrDefault();
+
+                    if (dept != null)
+                    {
+                        dept.IsObserved = holiday.IsObserved;
+                        db.SaveChanges();
+                        status = "000";
+                        message = "Department updated successfully";
+                    }
+                    else
+                    {
+                        status = "900";
+                        message = "Department not found";
+                    }
+                }
+            }
+            catch (Exception es)
+            {
+                status = "900";
+                message = es.Message;
+            }
+            var _RequestResponse = new RequestResponse
+            {
+                Status = status,
+                Message = message
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
     }
 }

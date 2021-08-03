@@ -53,7 +53,6 @@ namespace HumanResources.CustomFunctions
                         ApproverEmail = ApprovalUser.ApproverEmail;
                         OpenApproverEmail = ApproverEmail;
                         ApproverName = ApprovalUser.Approver;
-
                        
                     }
                     else
@@ -66,7 +65,7 @@ namespace HumanResources.CustomFunctions
                 }
                 //Update Parent Table
 
-                UpdateParentTableStatus(_DocumentNumber, (int)DocumentApprovalStatus.Open);
+                UpdateParentTableStatus(_DocumentNumber, (int)DocumentApprovalStatus.ApprovalPending);
 
                 //if sender has an approval entry approve it
 

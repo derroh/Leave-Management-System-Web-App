@@ -718,6 +718,7 @@
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\LeaveTypes\Edit.cshtml" />
     <Content Include="Views\LeaveTypes\Details.cshtml" />
+    <Content Include="Views\Account\ResetSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

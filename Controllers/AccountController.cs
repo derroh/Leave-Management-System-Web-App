@@ -99,7 +99,7 @@ namespace HumanResources.Controllers
                         var logindetails = loginInfo.First();
 
                         string Role = logindetails.Role.Trim();
-                        string Username = logindetails.Email.Trim();
+                        string Username = logindetails.EmployeeNo.Trim();
 
                         // Login In.
                         claims.Add(new Claim(ClaimTypes.Name, Username));
@@ -108,13 +108,17 @@ namespace HumanResources.Controllers
                         var IsApprover = this.databaseManager.ApprovalUsers.Where(x => x.Approver == Username).FirstOrDefault();
                         var IsApproverSubstitute = this.databaseManager.ApprovalUsers.Where(x => x.SubstituteApprover == Username).FirstOrDefault();
 
+                        this.Session["Approver_id"] = "";
+
                         if (IsApprover != null)
                         {
                             claims.Add(new Claim(ClaimTypes.Role, "LeaveApprover"));
+                            this.Session["Approver_id"] = "LeaveApprover";
                         }
                         if (IsApproverSubstitute != null)
                         {
                             claims.Add(new Claim(ClaimTypes.Role, "LeaveApprover"));
+                            this.Session["Approver_id"] = "LeaveApprover";
                         }
 
                         this.SignInUser(false, claims);
@@ -122,7 +126,7 @@ namespace HumanResources.Controllers
                         //   Approver
 
                         // setting.
-                        this.Session["role_id"] = Role;
+                        this.Session["role_id"] = Role;                        
                         this.Session["EmployeeNo"] = logindetails.EmployeeNo;
                         this.Session["FirstName"] = logindetails.FirstName;
                         
@@ -402,7 +406,7 @@ namespace HumanResources.Controllers
             ViewBag.Message = message;
 
             // return this.RedirectToAction("Login", "Account");
-            return View();
+            return View("ResetSuccess");
         }
 
         [AllowAnonymous]
