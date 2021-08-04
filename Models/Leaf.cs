@@ -31,6 +31,7 @@ namespace HumanResources.Models
         public Nullable<System.DateTime> ReturnDate { get; set; }
         public string EmployeeNo { get; set; }
         public int ApprovalStatus { get; set; }
+        public string RejectComment { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Attachment> Attachments { get; set; }

@@ -69,8 +69,8 @@ namespace HumanResources.Controllers
                         select publicholidays);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateHoliday(Models.PublicHoliday holiday)
+       // [ValidateAntiForgeryToken]
+        public ActionResult UpdateHoliday(string HolidayId, string IsObserved)
         {
             string status = "", message = "";
 
@@ -79,19 +79,19 @@ namespace HumanResources.Controllers
                 using (var db = new LeaveManagementEntities())
                 {
 
-                    var dept = _db.PublicHolidays.Where(s => s.Id == holiday.Id).SingleOrDefault();
+                    var dept = _db.PublicHolidays.Where(s => s.Id == HolidayId).SingleOrDefault();
 
                     if (dept != null)
                     {
-                        dept.IsObserved = holiday.IsObserved;
+                        dept.IsObserved = Convert.ToByte(IsObserved);
                         db.SaveChanges();
                         status = "000";
-                        message = "Department updated successfully";
+                        message = "Holiday updated successfully";
                     }
                     else
                     {
                         status = "900";
-                        message = "Department not found";
+                        message = "Holiday not found";
                     }
                 }
             }

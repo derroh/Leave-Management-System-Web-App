@@ -65,7 +65,7 @@ namespace HumanResources.CustomFunctions
                 }
                 //Update Parent Table
 
-                UpdateParentTableStatus(_DocumentNumber, (int)DocumentApprovalStatus.ApprovalPending);
+                UpdateParentTableStatus(_DocumentNumber, (int)DocumentApprovalStatus.ApprovalPending, "");
 
                 //if sender has an approval entry approve it
 
@@ -90,7 +90,7 @@ namespace HumanResources.CustomFunctions
             return JsonConvert.SerializeObject(_ApprovalRequestResponse);
         }
 
-        private static bool UpdateParentTableStatus(string documentNumber, int ApprovalStatus)
+        private static bool UpdateParentTableStatus(string documentNumber, int ApprovalStatus, string RejectComment)
         {
             bool status = false;
             try
@@ -103,6 +103,7 @@ namespace HumanResources.CustomFunctions
                     if (leaves != null)
                     {
                         leaves.ApprovalStatus = ApprovalStatus;
+                        leaves.RejectComment = RejectComment;
                         dbEntities.SaveChanges();
                         status = true;
                     }
@@ -176,7 +177,7 @@ namespace HumanResources.CustomFunctions
 
                     ApprovalEntryCreated = true;
 
-                    UpdateParentTableStatus(_DocumentNumber, (int)DocumentApprovalStatus.Approved);
+                    UpdateParentTableStatus(_DocumentNumber, (int)DocumentApprovalStatus.Approved, "");
 
                     UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, (int)DocumentApprovalStatus.Approved, HttpContext.Current.Session["EmployeeNo"].ToString());
 
@@ -307,14 +308,34 @@ namespace HumanResources.CustomFunctions
 
         * @return bool | return true if approval entry is rejected / return false if not rejected
         */
-        public static bool RejectAppovalRequest(int EntryNumber, string _DocumentType, string _DocumentNumber, string Approver)
+        public static string RejectAppovalRequest(int EntryNumber, string _DocumentType, string _DocumentNumber, string Approver, string RejectComment)
         {
+            string status = null, message = null, senderemail = null, SenderName = null;
+
             //set all approval entries record to Rejected
             bool IsRejected = UpdateApprovalEntry(EntryNumber, _DocumentType, _DocumentNumber, (int)DocumentApprovalStatus.Rejected, Approver);
 
-            IsRejected = UpdateParentTableStatus(_DocumentNumber, (int)DocumentApprovalStatus.Rejected);
+            IsRejected = UpdateParentTableStatus(_DocumentNumber, (int)DocumentApprovalStatus.Rejected, RejectComment);
 
-            return IsRejected;
+            var SenderInfo = _db.ApprovalEntries.Where(a => a.DocumentNo == _DocumentNumber).FirstOrDefault();
+            var EmployeeRec = _db.Employees.Where(e => e.EmployeeNo == SenderInfo.SenderId).FirstOrDefault();
+
+            senderemail = EmployeeRec.EMail;
+            SenderName = EmployeeRec.FirstName;
+
+            message = "An approval entry has been successfully rejected";
+            status = "000";
+
+            var _ApprovalRequestResponse = new ApprovedRequestResponse
+            {
+                Status = status,
+                Message = message,
+                SenderEmail = senderemail,
+                SenderName = SenderName,
+                DocumentNo = _DocumentNumber
+            };
+
+            return JsonConvert.SerializeObject(_ApprovalRequestResponse);
         }
         /**
         * Function returns true if approval entry record sequence is delegated     

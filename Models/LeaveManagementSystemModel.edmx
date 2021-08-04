@@ -66,13 +66,13 @@
           <Property Name="DocumentDate" Type="date" />
           <Property Name="DocumentNo" Type="nvarchar" MaxLength="50" />
           <Property Name="ExternalDocumentNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="Description" Type="nchar" MaxLength="10" />
+          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="LeaveType" Type="nvarchar" MaxLength="50" />
-          <Property Name="UnitOfMeasure" Type="nchar" MaxLength="10" />
+          <Property Name="UnitOfMeasure" Type="nvarchar" MaxLength="50" />
           <Property Name="FromDate" Type="date" />
           <Property Name="ToDate" Type="date" />
           <Property Name="Quantity" Type="int" />
-          <Property Name="EntryType" Type="nchar" MaxLength="10" />
+          <Property Name="EntryType" Type="nvarchar" MaxLength="50" />
           <Property Name="Year" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Employees">
@@ -153,6 +153,7 @@
           <Property Name="ReturnDate" Type="date" />
           <Property Name="EmployeeNo" Type="nvarchar" MaxLength="50" />
           <Property Name="ApprovalStatus" Type="int" Nullable="false" />
+          <Property Name="RejectComment" Type="text" />
         </EntityType>
         <EntityType Name="LeaveTypes">
           <Key>
@@ -267,7 +268,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Leaves_Employees">
-          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Leaves" Type="Self.Leaves" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employees">
@@ -395,13 +398,13 @@
           <Property Name="DocumentDate" Type="DateTime" Precision="0" />
           <Property Name="DocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ExternalDocumentNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="LeaveType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UnitOfMeasure" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UnitOfMeasure" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FromDate" Type="DateTime" Precision="0" />
           <Property Name="ToDate" Type="DateTime" Precision="0" />
           <Property Name="Quantity" Type="Int32" />
-          <Property Name="EntryType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="EntryType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Year" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_EmployeeLedgerEntries_Employees" FromRole="EmployeeLedgerEntries" ToRole="Employees" />
         </EntityType>
@@ -490,6 +493,7 @@
           <NavigationProperty Name="Attachments" Relationship="Self.FK_Attachments_Leaves" FromRole="Leaves" ToRole="Attachments" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Leaves_Employees" FromRole="Leaves" ToRole="Employees" />
           <NavigationProperty Name="LeaveRecalls" Relationship="Self.FK_LeaveRecalls_Leaves" FromRole="Leaves" ToRole="LeaveRecalls" />
+          <Property Name="RejectComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="LeaveType">
           <Key>
@@ -818,6 +822,7 @@
           <EntitySetMapping Name="Leaves">
             <EntityTypeMapping TypeName="Model.Leaf">
               <MappingFragment StoreEntitySet="Leaves">
+                <ScalarProperty Name="RejectComment" ColumnName="RejectComment" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
                 <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
                 <ScalarProperty Name="SelectionType" ColumnName="SelectionType" />

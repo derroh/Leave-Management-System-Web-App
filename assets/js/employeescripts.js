@@ -1020,40 +1020,101 @@
 
                 if (result == true) {
 
-                    jQuery.ajax({
-                        url: '/ApprovalEntries/Approve',
-                        type: "POST",
-                        data: '{EntryNo:"' + pid + '" }',
-                        dataType: "json",
-                        contentType: "application/json; charset=utf-8",
-                        success: function (response) {
+                    $("#EntryNo").val(pid);
 
-                            if (response != null) {
-                                //console.log(JSON.stringify(response)); //it comes out to be string 
-
-                                //we need to parse it to JSON
-                                var data = $.parseJSON(response);
-
-
-                                if (data.Status == "000") {
-                                    $.gritter.add({
-                                        title: 'Approval Notification',
-                                        text: data.Message,
-                                        class_name: 'gritter-info gritter-center'
-                                    });
-                                } else {
-                                    $.gritter.add({
-                                        title: 'Approval Notification',
-                                        text: data.Message,
-                                        class_name: 'gritter-error gritter-center'
-                                    });
-                                }
-                            }
-                        }
-                    });
+                    $('#rejectmodal-form').modal('show');
                 }
             }
         });
+    });
+
+    $("#RejectApprovalEntryComment").click(function (event) {
+
+        if (!$('#rejectapproval').valid()) event.preventDefault();
+
+
+        if ($('#rejectapproval').valid()) {
+
+            //to get alert popup  	
+
+            jQuery.ajax({
+                url: '/ApprovalEntries/Reject',
+                type: "POST",
+                data: '{EntryNo:"' + $("#EntryNo").val() + '", Comment:"' + $("#Comment").val() + '" }',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    if (response != null) {
+                        //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                        //we need to parse it to JSON
+                        var data = $.parseJSON(response);
+
+
+                        if (data.Status == "000") {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-success gritter-center'
+                            });
+
+                            window.setTimeout(function () {
+                                window.location.href = '/LeaveTypes/Index';
+                            }, 2000);
+
+                        } else {
+                            $.gritter.add({
+                                title: 'Action Notification',
+                                text: data.Message,
+                                class_name: 'gritter-error gritter-center'
+                            });
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+
+        event.preventDefault();
+    });
+    $('#rejectapproval').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            Comment: {
+                required: true
+            }
+        },
+
+        Comment: {
+            IsObserved: "Please specify is the holiday is observed or not"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
     });
 
     //Leave Recalls scripts
@@ -2004,16 +2065,15 @@
 
 
         if ($('#holidaysetting').valid()) {
-            //Serialize the form datas.  
-            var valdata = $("#holidaysetting").serialize();
+          
             //to get alert popup  	
 
             jQuery.ajax({
                 url: '/Settings/UpdateHoliday',
                 type: "POST",
-                data: valdata,
+                data: '{HolidayId:"' + $("#HolidayId").val() + '", IsObserved:"' + $("#IsObserved").val() + '" }',
                 dataType: "json",
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     if (response != null) {
                         //console.log(JSON.stringify(response)); //it comes out to be string 
