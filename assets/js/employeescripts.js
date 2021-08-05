@@ -1090,8 +1090,8 @@
             }
         },
 
-        Comment: {
-            IsObserved: "Please specify is the holiday is observed or not"
+        messages: {
+            Comment: "Please specify a message for rejecting the application"
         },
 
 

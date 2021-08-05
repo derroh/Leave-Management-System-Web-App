@@ -152,7 +152,7 @@ namespace HumanResources.Controllers
                     body = body.Replace("{LeaveNo}", _ApprovedRequestResponse.DocumentNo);
                     body = body.Replace("{UserName}", _ApprovedRequestResponse.SenderEmail);
 
-                    bool IsSendEmail = await Task.Run(() => EmailFunctions.SendMailAsync(_ApprovedRequestResponse.SenderEmail, _ApprovedRequestResponse.SenderEmail, "Approval Complete!", body));
+                    bool IsSendEmail = await Task.Run(() => EmailFunctions.SendMailAsync(_ApprovedRequestResponse.SenderEmail, _ApprovedRequestResponse.SenderEmail, "Approval Rejected !", body));
 
 
                     status = "000";

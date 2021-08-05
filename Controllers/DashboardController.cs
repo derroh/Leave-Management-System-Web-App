@@ -16,6 +16,8 @@ namespace HumanResources.Controllers
         public ActionResult Index()
         {
             string username = HttpContext.Session["EmployeeNo"].ToString();
+            string CurrentYear = DateTime.Now.Year.ToString();
+            string PreviousYear = (DateTime.Now.Year - 1).ToString();
 
             List<LeaveBalancesView> _LeaveBalancesList = new List<LeaveBalancesView>();
 
@@ -49,7 +51,7 @@ namespace HumanResources.Controllers
                 {
                     foreach(var leavetype in LeaveTypes)
                     {
-                        var result = dbEntities.EmployeeLedgerEntries.Where(s => s.EmployeeNo == username && s.LeaveType == leavetype.Code).GroupBy(o => o.LeaveType)
+                        var result = dbEntities.EmployeeLedgerEntries.Where(s => s.EmployeeNo == username && s.LeaveType == leavetype.Code && s.Year == CurrentYear).GroupBy(o => o.LeaveType)
                                                                  .Select(g => new { leavetype = g.Key, total = g.Sum(i => i.Quantity) });
                         int TotalDaysTaken = 0;
 
@@ -62,7 +64,11 @@ namespace HumanResources.Controllers
 
                         int LeaveBalance = (DaysEntitled - TotalDaysTaken);
 
-                        _LeaveBalancesList.Add(new LeaveBalancesView { LeaveType = leavetype.Description, DaysEntitled = DaysEntitled.ToString(), DaysTaken = TotalDaysTaken.ToString(), Balance = LeaveBalance.ToString(), Code = leavetype.Code });
+                        int BalCarriedForward = LeavebalanceFromPreviousYear(username, leavetype.Code, DaysEntitled, PreviousYear);
+
+                        LeaveBalance = LeaveBalance + BalCarriedForward;
+
+                        _LeaveBalancesList.Add(new LeaveBalancesView { LeaveType = leavetype.Description, DaysEntitled = DaysEntitled.ToString(), DaysTaken = TotalDaysTaken.ToString(), Balance = LeaveBalance.ToString(), Code = leavetype.Code, BalanceBroughtFoward = BalCarriedForward.ToString() });
 
                     }
                 }
@@ -83,6 +89,24 @@ namespace HumanResources.Controllers
             mymodel.LeaveBalancesList = _LeaveBalancesList;
            
             return View(mymodel);
+        }
+        private int LeavebalanceFromPreviousYear(string username, string Code, int TotalAbsence, string Year)
+        {
+            int LeaveBalance = 0;
+            using (var dbEntities = new LeaveManagementEntities())
+            {
+                var result = dbEntities.EmployeeLedgerEntries.Where(s => s.EmployeeNo == username && s.LeaveType == Code && s.Year == Year).GroupBy(o => o.LeaveType)
+                                                                 .Select(g => new { leavetype = g.Key, total = g.Sum(i => i.Quantity) });
+                int TotalDaysTaken = 0;
+
+                foreach (var group in result)
+                {
+                    TotalDaysTaken = Convert.ToInt32(group.total);
+                }
+
+                LeaveBalance = (TotalAbsence - TotalDaysTaken);
+            }
+            return LeaveBalance;
         }
     }
 }
