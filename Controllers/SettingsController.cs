@@ -111,7 +111,78 @@ namespace HumanResources.Controllers
 
         public ActionResult AppSettings()
         {
-            return View();
+            var settings = _db.Settings.Where(x => x.Id == 1).FirstOrDefault();
+
+            var _AppSettings = new ViewModels.AppSettings
+            {
+                AfricasTalkingApiKey = settings.AfricasTalkingApiKey,
+                AfricasTalkingAppName = settings.AfricasTalkingAppName,
+                GoogleId = settings.GoogleId,
+                EmailSender = settings.EmailSender,
+                GmailPassword = settings.GmailPassword,
+                GmailAppPassword = settings.GmailAppPassword,
+                GmailSenderName = settings.GmailSenderName,
+                GmailUsername = settings.GmailUsername,
+                SMTPHost = settings.SMTPHost,
+                SMTPPort = settings.SMTPPort.ToString(),
+                DepartmentNumbers = settings.DepartmentNumbers,
+                LeaveNumbers = settings.LeaveNumbers,
+                EmployeeNumbers = settings.EmployeeNumbers,
+                LeaveRecallNumbers = settings.LeaveRecallNumbers
+
+            };
+            return View(_AppSettings);
+        }
+
+        public ActionResult SaveSettings(ViewModels.AppSettings ep)
+        {
+            string message = "", status = "";
+
+            try
+            {
+                
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
+                {
+                    var settings = dbEntities.Settings.Where(s => s.Id == 1).SingleOrDefault();
+
+                    if (settings != null)
+                    {
+
+                        settings.AfricasTalkingApiKey = ep.AfricasTalkingApiKey;
+                        settings.AfricasTalkingAppName = ep.AfricasTalkingAppName;
+                        settings.GoogleId = ep.GoogleId;
+                        settings.EmailSender = ep.EmailSender;
+                        settings.GmailPassword = ep.GmailPassword;
+                        settings.GmailAppPassword = ep.GmailAppPassword;
+                        settings.GmailSenderName = ep.GmailSenderName;
+                        settings.GmailUsername = ep.GmailUsername;
+                        settings.SMTPHost = ep.SMTPHost;
+                        settings.SMTPPort = Convert.ToInt32(ep.SMTPPort);
+                        settings.DepartmentNumbers = ep.DepartmentNumbers;
+                        settings.LeaveNumbers = ep.LeaveNumbers;
+                        settings.EmployeeNumbers = ep.EmployeeNumbers;
+                        settings.LeaveRecallNumbers = ep.LeaveRecallNumbers;
+                        dbEntities.SaveChanges();
+
+                        message = "Leave Created successfully";
+                        status = "000";
+                    }
+                }
+            }
+            catch (Exception es)
+            {
+                message = es.Message;
+                status = "900";
+            }
+
+            var _RequestResponse = new RequestResponse
+            {
+                Message = message,
+
+                Status = status
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
     }
 }

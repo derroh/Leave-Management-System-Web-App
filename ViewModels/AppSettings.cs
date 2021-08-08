@@ -21,5 +21,6 @@ namespace HumanResources.ViewModels
         public string LeaveRecallNumbers { get; set; }
         public string DepartmentNumbers { get; set; }
         public string EmployeeNumbers { get; set; }
+        public string Id { get; set; }
     }
 }

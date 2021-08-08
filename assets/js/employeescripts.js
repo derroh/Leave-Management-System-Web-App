@@ -3018,6 +3018,43 @@
         });
     });
 
-    //holidays sripts
+    //settings
+    $("#SaveSettings").click(function (event) {
+
+        var valdata = $("#settingsform").serialize();
+        //to get alert popup  	
+
+        jQuery.ajax({
+            url: '/Settings/SaveSettings',
+            type: "POST",
+            data: valdata,
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (response) {
+                if (response != null) {
+                    //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                    //we need to parse it to JSON
+                    var data = $.parseJSON(response);
+
+                    //console.log(data.Message);
+                    bootbox.dialog({
+                        message: data.Message,
+                        buttons: {
+                            "success": {
+                                "label": "OK",
+                                "className": "btn-sm btn-primary"
+                            }
+                        }
+                    });
+                }
+            },
+            error: function (e) {
+                console.log(e.responseText);
+            }
+        });
+
+        event.preventDefault();
+    });
     
 })

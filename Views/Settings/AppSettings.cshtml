@@ -29,7 +29,7 @@
 
                             <div class="step-content pos-rel">
                                 <h3 class="lighter block green">Enter the following information</h3>
-                                @using (Html.BeginForm("CreateApprovalUser", "Settings", FormMethod.Post, new { @id = "settingsform", @class = "form-horizontal" }))
+                                @using (Html.BeginForm("UpdateSettings", "Settings", FormMethod.Post, new { @id = "settingsform", @class = "form-horizontal" }))
                                 {
                                     @Html.AntiForgeryToken()
 
@@ -63,25 +63,25 @@
                                     <div class="hr hr-dotted"></div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Approver">Approver</label>
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Approver">GoogleId</label>
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.TextBoxFor(m => m.ApprovalSequence, new { @class = "col-xs-12 col-sm-8" })
+                                                @Html.TextBoxFor(m => m.GoogleId, new { @class = "col-xs-12 col-sm-8" })
                                             </div>
-                                            @Html.ValidationMessageFor(m => m.ApprovalSequence, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessageFor(m => m.GoogleId, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                     <div class="space-2"></div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="ApproverEmail">Approver Email:</label>
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="ApproverEmail">Gmail AppPassword:</label>
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.TextBoxFor(m => m.ApproverEmail, new { @class = "col-xs-12 col-sm-8" })
+                                                @Html.TextBoxFor(m => m.GmailAppPassword, new { @class = "col-xs-12 col-sm-8" })
                                             </div>
-                                            @Html.ValidationMessageFor(m => m.ApproverEmail, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessageFor(m => m.GmailAppPassword, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
 
@@ -90,29 +90,134 @@
                                     <div class="hr hr-dotted"></div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="SubstituteApprover">Substitute</label>
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="SubstituteApprover">Gmail SenderName</label>
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.TextBoxFor(m => m.ApprovalSequence, new { @class = "col-xs-12 col-sm-8" })
+                                                @Html.TextBoxFor(m => m.GmailSenderName, new { @class = "col-xs-12 col-sm-8" })
                                             </div>
-                                            @Html.ValidationMessageFor(m => m.ApprovalSequence, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessageFor(m => m.GmailSenderName, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                     <div class="space-2"></div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Name">Substitute Approver Email</label>
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Name">Gmail Username</label>
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.TextBoxFor(m => m.SubstituteApproverEmail, new { @class = "col-xs-12 col-sm-8" })
+                                                @Html.TextBoxFor(m => m.GmailUsername, new { @class = "col-xs-12 col-sm-8" })
                                             </div>
-                                            @Html.ValidationMessageFor(m => m.SubstituteApproverEmail, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessageFor(m => m.GmailUsername, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
 
                                     <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Name">Gmail Password</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.GmailPassword, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.GmailPassword, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Name">Email Sender</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.EmailSender, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.EmailSender, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="SMTPPort">SMTP Port</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.SMTPPort, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.SMTPPort, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="SMTPHost">SMTPHost</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.SMTPHost, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.SMTPHost, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="LeaveNumbers">LeaveNumbers</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.LeaveNumbers, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.LeaveNumbers, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Name">Leave Recall Numbers</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.LeaveRecallNumbers, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.LeaveRecallNumbers, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Name">Department Numbers</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.DepartmentNumbers, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.DepartmentNumbers, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="Name">Employee Numbers</label>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="clearfix">
+                                                @Html.TextBoxFor(m => m.EmployeeNumbers, new { @class = "col-xs-12 col-sm-8" })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.EmployeeNumbers, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="space-2"></div>
+
+                                    @Html.HiddenFor(m => m.Id)
 
                                 }
                             </div>
@@ -120,7 +225,7 @@
 
                         <hr />
                         <div class="wizard-actions center">
-                            <button class="btn btn-success btn-next" id="SaveApprovalUser">
+                            <button class="btn btn-success btn-next" id="SaveSettings">
                                 Save
                                 <i class="ace-icon fa fa-floppy-o  icon-on-right"></i>
                             </button>

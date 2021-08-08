@@ -273,6 +273,15 @@
                 </li>
             </ul>
         </li>
+
+        <li class="@Html.IsActive("Settings", "AppSettings")">
+            <a href="@Url.Action("AppSettings", "Settings")">
+                <i class="menu-icon fa fa-cog"></i>
+                <span class="menu-text"> Settings </span>
+            </a>
+
+            <b class="arrow"></b>
+        </li>
     }
 
     <li class="@Html.IsActive("Profile", "Index")">
