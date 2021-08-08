@@ -269,6 +269,7 @@
       <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ApprovalEntriesListViewModel.cs" />
+    <Compile Include="ViewModels\AppSettings.cs" />
     <Compile Include="ViewModels\CreateApproverViewModel.cs" />
     <Compile Include="ViewModels\DepartmentsViewModel.cs" />
     <Compile Include="ViewModels\EmployeeProfileViewModel.cs" />
@@ -720,6 +721,7 @@
     <Content Include="Views\LeaveTypes\Edit.cshtml" />
     <Content Include="Views\LeaveTypes\Details.cshtml" />
     <Content Include="Views\Account\ResetSuccess.cshtml" />
+    <Content Include="Views\Settings\AppSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -108,5 +108,10 @@ namespace HumanResources.Controllers
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult AppSettings()
+        {
+            return View();
+        }
     }
 }
