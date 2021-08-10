@@ -2,30 +2,26 @@
 using HumanResources.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using OfficeOpenXml;
+using System.IO;
+//using RotativaPDF.Models;
+using OfficeOpenXml.Table;
 
 namespace HumanResources.Controllers
 {
     [Authorize]
     public class DashboardController : Controller
     {
+        
         // GET: Dashboard
         public ActionResult Index()
         {
             string username = HttpContext.Session["EmployeeNo"].ToString();
-            string CurrentYear = DateTime.Now.Year.ToString();
-            string PreviousYear = (DateTime.Now.Year - 1).ToString();
-
-            List<LeaveBalancesView> _LeaveBalancesList = new List<LeaveBalancesView>();
-
-            dynamic mymodel = new ExpandoObject();
-
-            //get leave balances for each of the leave types
-
-            //get number of days entilted
 
             using (var dbEntities = new LeaveManagementEntities())
             {
@@ -44,12 +40,36 @@ namespace HumanResources.Controllers
                 ViewBag.ApprovedLeaves = ApprovedLeaves;
                 ViewBag.RejectedLeaves = RejectedLeaves;
                 ViewBag.ApprovalPendingLeaves = ApprovalPendingLeaves;
+            }
 
 
+            //for creating Excel to export
+
+
+            dynamic mymodel = new ExpandoObject();   
+
+            mymodel.LeaveBalancesList = GetLeaveBalancesList();
+            return View(mymodel);
+        }
+
+        private dynamic GetLeaveBalancesList()
+        {
+            string username = HttpContext.Session["EmployeeNo"].ToString();
+            string CurrentYear = DateTime.Now.Year.ToString();
+            string PreviousYear = (DateTime.Now.Year - 1).ToString();
+
+
+            List<LeaveBalancesView> _LeaveBalancesList = new List<LeaveBalancesView>();
+
+            using (var dbEntities = new LeaveManagementEntities())
+            {
+                var employee = dbEntities.Employees.Where(x => x.EmployeeNo == username).FirstOrDefault();
+
+                var LeaveTypes = dbEntities.LeaveTypes.ToList();
 
                 if (LeaveTypes != null)
                 {
-                    foreach(var leavetype in LeaveTypes)
+                    foreach (var leavetype in LeaveTypes)
                     {
                         var result = dbEntities.EmployeeLedgerEntries.Where(s => s.EmployeeNo == username && s.LeaveType == leavetype.Code && s.Year == CurrentYear).GroupBy(o => o.LeaveType)
                                                                  .Select(g => new { leavetype = g.Key, total = g.Sum(i => i.Quantity) });
@@ -70,6 +90,7 @@ namespace HumanResources.Controllers
 
                         _LeaveBalancesList.Add(new LeaveBalancesView { LeaveType = leavetype.Description, DaysEntitled = DaysEntitled.ToString(), DaysTaken = TotalDaysTaken.ToString(), Balance = LeaveBalance.ToString(), Code = leavetype.Code, BalanceBroughtFoward = BalCarriedForward.ToString() });
 
+                        
                     }
                 }
 
@@ -84,12 +105,10 @@ namespace HumanResources.Controllers
                     _LeaveBalancesList.Remove(itemToRemove);
                 }
             }
-            
 
-            mymodel.LeaveBalancesList = _LeaveBalancesList;
-           
-            return View(mymodel);
+            return _LeaveBalancesList;
         }
+      
         private int LeavebalanceFromPreviousYear(string username, string Code, int TotalAbsence, string Year)
         {
             int LeaveBalance = 0;
@@ -107,6 +126,59 @@ namespace HumanResources.Controllers
                 LeaveBalance = (TotalAbsence - TotalDaysTaken);
             }
             return LeaveBalance;
+        }
+                
+
+        public ActionResult Download()
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            //create Datatable
+
+            DataTable Dt = new DataTable();
+            Dt.Columns.Add("LeaveCode", typeof(string));
+            Dt.Columns.Add("LeaveType", typeof(string));
+            Dt.Columns.Add("DaysEntitled", typeof(string));
+            Dt.Columns.Add("BalanceBroughtFoward", typeof(string));
+            Dt.Columns.Add("DaysTaken", typeof(string));
+            Dt.Columns.Add("Balance", typeof(string));
+
+            foreach (var leave in GetLeaveBalancesList())
+            {
+                DataRow row = Dt.NewRow();
+                row[0] = leave.Code;
+                row[1] = leave.LeaveType;
+                row[2] = leave.DaysEntitled.ToString();
+                row[3] = leave.BalanceBroughtFoward.ToString();
+                row[4] = leave.DaysTaken.ToString();
+                row[5] = leave.Balance.ToString();
+                Dt.Rows.Add(row);
+            }
+
+            var memoryStream = new MemoryStream();
+
+            using (var excelPackage = new ExcelPackage(memoryStream))
+            {
+                if (Dt.Rows.Count > 0)
+                {
+                    var worksheet = excelPackage.Workbook.Worksheets.Add("Sheet1");
+                    worksheet.Cells["A1"].LoadFromDataTable(Dt, true, TableStyles.None);
+                    worksheet.Cells["A1:AN1"].Style.Font.Bold = true;
+                    worksheet.DefaultRowHeight = 18;
+
+
+                    worksheet.Column(2).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                    worksheet.Column(6).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Column(7).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.DefaultColWidth = 20;
+                    worksheet.Column(2).AutoFit();
+
+                    byte[] data = excelPackage.GetAsByteArray();
+                    return File(data, "application/octet-stream", "FileManager.xlsx");
+                }
+
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

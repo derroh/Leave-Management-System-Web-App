@@ -164,7 +164,7 @@ namespace HumanResources.Controllers
                         settings.LeaveRecallNumbers = ep.LeaveRecallNumbers;
                         dbEntities.SaveChanges();
 
-                        message = "Leave Created successfully";
+                        message = "Settings updated successfully";
                         status = "000";
                     }
                 }

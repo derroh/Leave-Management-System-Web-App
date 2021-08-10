@@ -78,9 +78,17 @@
                             Leave Balances
                         </h4>
 
+
                         <div class="widget-toolbar">
+
                             <a href="#" data-action="collapse">
                                 <i class="ace-icon fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+
+                        <div class="widget-toolbar">
+                            <a href="@Url.Action("Download", "Dashboard")" >
+                                <i class="ace-icon fa fa-file-excel-o"></i>
                             </a>
                         </div>
                     </div>
@@ -114,23 +122,23 @@
                                 <tbody>
                                     @foreach (var leavebalance in Model.LeaveBalancesList)
                                     {
-                                    <tr>
-                                        <td>@leavebalance.LeaveType</td>
+                                        <tr>
+                                            <td>@leavebalance.LeaveType</td>
 
-                                        <td>
-                                            @leavebalance.DaysEntitled
-                                        </td>
-                                        <td>
-                                            @leavebalance.BalanceBroughtFoward
-                                        </td>
+                                            <td>
+                                                @leavebalance.DaysEntitled
+                                            </td>
+                                            <td>
+                                                @leavebalance.BalanceBroughtFoward
+                                            </td>
 
-                                        <td class="hidden-480">
-                                            @leavebalance.DaysTaken
-                                        </td>
-                                        <td class="hidden-480">
-                                            @leavebalance.Balance
-                                        </td>
-                                    </tr>
+                                            <td class="hidden-480">
+                                                @leavebalance.DaysTaken
+                                            </td>
+                                            <td class="hidden-480">
+                                                @leavebalance.Balance
+                                            </td>
+                                        </tr>
                                     }
 
                                 </tbody>
@@ -145,4 +153,27 @@
         <!-- PAGE CONTENT ENDS -->
     </div><!-- /.col -->
 </div><!-- /.row -->
+
+@*scripts*@
+
+<script>
+    function DownloadExcel() {
+        window.location = '/Dashboard/Download';
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Dashboard/ExcelExport",
+        //    cache: false,
+        //    success: function (data) {
+        //        window.location = '/Dashboard/Download';
+        //    },
+        //    error: function (data) {
+        //        $.gritter.add({
+        //            title: 'Error',
+        //            text: 'Something went wrong',
+        //            class_name: 'gritter-error gritter-center'
+        //        });
+        //    }
+        //});
+    }
+</script>
 
