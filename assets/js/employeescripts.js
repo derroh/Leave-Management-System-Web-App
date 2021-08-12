@@ -810,6 +810,75 @@
         });
     });
 
+    
+    $("#leaves-table").on("click", ".delegateleave", function (e) {
+        e.preventDefault();
+
+        var docno = $(this).attr('data-docno');
+
+        bootbox.confirm({
+            title: "<i class='fa fa-trash'></i> Delete?",
+            message: "Do you wish to delegate this leave application number " + docno + "?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+
+                if (result == true) {
+
+                    jQuery.ajax({
+                        url: '/Leaves/Delegate',
+                        type: "POST",
+                        data: '{DocumentNo:"' + docno + '" }',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        headers: {
+                            'RequestVerificationToken': '@TokenHeaderValue()'
+                        },
+                        success: function (response) {
+
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                                //we need to parse it to JSON
+                                var data = $.parseJSON(response);
+
+
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info gritter-center'
+                                    });
+
+                                    window.setTimeout(function () {
+                                        location.reload(true);
+                                    }, 2000);
+                                } else {
+                                    $.gritter.add({
+                                        title: 'Delete Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error gritter-center'
+                                    });
+                                }
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(errorThrown);
+                        }
+                    });
+                }
+            }
+        });
+    });
+
     //attachments
     $("#attachments-table").on("click", ".deleteattachment", function (e) {
         e.preventDefault();
@@ -2090,7 +2159,7 @@
                             });
 
                             window.setTimeout(function () {
-                                window.location.href = '/LeaveTypes/Index';
+                                window.location.href = '/Settings/Holidays';
                             }, 2000);
 
                         } else {

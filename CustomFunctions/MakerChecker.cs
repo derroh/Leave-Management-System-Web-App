@@ -344,8 +344,9 @@ namespace HumanResources.CustomFunctions
 
         * @return bool | return true if approval entry is delegated / return false if not delegated
         */
-        public static bool DelegateAppovalRequest(int EntryNumber, int ApprovalSequence)
+        public static string DelegateAppovalRequest(int EntryNumber, int ApprovalSequence)
         {
+            string status = null, message = null;
             //Get Document approver substitute
             var approvalSubstitute = _db.ApprovalUsers.Where(x => x.DocumentType == "Leave" && x.ApprovalSequence == ApprovalSequence).FirstOrDefault();
             string substituteApprover = approvalSubstitute.SubstituteApprover;
@@ -353,7 +354,14 @@ namespace HumanResources.CustomFunctions
             //Update Approval User 
             bool IsRecordDelegated = UpdateApprovalEntryApproverId(EntryNumber, substituteApprover);
 
-            return IsRecordDelegated;
+            var _ApprovalRequestResponse = new ApprovalRequestResponse
+            {
+                Status = status,
+                Message = message,
+                ApproverEmail = approvalSubstitute.SubstituteApproverEmail
+            };
+
+            return JsonConvert.SerializeObject(_ApprovalRequestResponse);
         }
         private static bool UpdateApprovalEntryApproverId(int entryNumber, string approverId)
         {

@@ -42,7 +42,21 @@ namespace HumanResources.Controllers
                 // = MembershipNumber;
 
                 List<PublicHolidays> sortedList = _PublicHolidays.Where(f => f.HolidayDate > DateTime.Now).OrderBy(o => o.HolidayDate).ToList();
-                //  Console.WriteLine((int)ElectionStatus.Created);
+
+                var observeddays = _PublicHolidays.Where(au => au.Name.Contains("observed"));
+
+                foreach (var day in observeddays)
+                {
+                    sortedList.Remove(day);
+                }
+                //
+                var offdays = _PublicHolidays.Where(au => au.Name.Contains("off"));
+
+                foreach (var day in offdays)
+                {
+                    sortedList.Remove(day);
+                }
+
 
                 using (var db = new LeaveManagementEntities())
                 {
@@ -50,7 +64,7 @@ namespace HumanResources.Controllers
                     {
                         if (!db.PublicHolidays.Any(o => o.Id == holday.Id))
                         {
-                            var publicholiday = new PublicHoliday { Id = holday.Id, HolidayDate = holday.HolidayDate, HolidayName = holday.Name, IsObserved = 1 };
+                            var publicholiday = new PublicHoliday { Id = holday.Id, HolidayDate = holday.HolidayDate, HolidayName = holday.Name, IsObserved = "Yes" };
                             db.Configuration.ValidateOnSaveEnabled = false;
                             db.PublicHolidays.Add(publicholiday);
                             db.SaveChanges();
@@ -79,11 +93,11 @@ namespace HumanResources.Controllers
                 using (var db = new LeaveManagementEntities())
                 {
 
-                    var dept = _db.PublicHolidays.Where(s => s.Id == HolidayId).SingleOrDefault();
+                    var holidays = _db.PublicHolidays.Where(s => s.Id == HolidayId).SingleOrDefault();
 
-                    if (dept != null)
+                    if (holidays != null)
                     {
-                        dept.IsObserved = Convert.ToByte(IsObserved);
+                        holidays.IsObserved = IsObserved;
                         db.SaveChanges();
                         status = "000";
                         message = "Holiday updated successfully";

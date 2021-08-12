@@ -148,6 +148,11 @@
                                                     <a class="red cancelleave" href="#" data-docno="@leave.DocumentNo">
                                                         <i class="ace-icon fa fa-times bigger-130"></i>
                                                     </a>
+
+
+                                                    <a class="blue delegateleave" href="#" data-docno="@leave.DocumentNo">
+                                                        <i class="ace-icon fa fa-arrow-right bigger-130"></i>
+                                                    </a>
                                                 }
                                                 else if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Approved).ToString())
                                                 {
@@ -175,48 +180,95 @@
                                                     </button>
 
                                                     <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                                        <li>
-                                                            <a href="@Url.Action("ViewLeave", "Leaves", new { id = leave.DocumentNo })" class="tooltip-info" data-rel="tooltip" title="View">
-                                                                <span class="blue">
-                                                                    <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-
-                                                        @if (leave.ApprovalStatus == "open")
+                                                        @if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Open).ToString())
                                                         {
                                                             <li>
-                                                                <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                                <a href="@Url.Action("Details", "Leaves", new { id = leave.DocumentNo })" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                    <span class="blue">
+                                                                        <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="@Url.Action("Edit", "Leaves", new { id = leave.DocumentNo })" class="tooltip-success" data-rel="tooltip" title="Edit">
                                                                     <span class="green">
                                                                         <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
                                                                     </span>
                                                                 </a>
                                                             </li>
+
+                                                            <li>
+                                                                <a href="#" class="tooltip-success submitleave" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Submit">
+                                                                    <span class="green">
+                                                                        <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="#" class="tooltip-error cancelleave" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Cancel">
+                                                                    <span class="red">
+                                                                        <i class="ace-icon fa fa-times bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="#" class="tooltip-error deleteleaves" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Delete">
+                                                                    <span class="red">
+                                                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
                                                         }
 
-                                                        <li>
-                                                            <a href="#" class="tooltip-success submitleave" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Submit">
-                                                                <span class="green">
-                                                                    <i class="ace-icon fa fa-paper-plane-o bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
+                                                        @if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.ApprovalPending).ToString())
+                                                        {
+                                                            <li>
+                                                                <a href="@Url.Action("Details", "Leaves", new { id = leave.DocumentNo })" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                    <span class="blue">
+                                                                        <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
 
-                                                        <li>
-                                                            <a href="#" class="tooltip-error cancelleave" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Cancel">
-                                                                <span class="red">
-                                                                    <i class="ace-icon fa fa-times bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
+                                                            <li>
+                                                                <a href="#" class="tooltip-error cancelleave" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Cancel">
+                                                                    <span class="red">
+                                                                        <i class="ace-icon fa fa-times bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
 
-                                                        <li>
-                                                            <a href="#" class="tooltip-error deleteleaves" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Delete">
-                                                                <span class="red">
-                                                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                                </span>
-                                                            </a>
-                                                        </li>
+                                                            <li>
+                                                                <a href="#" class="tooltip-info delegateleave" data-docno="@leave.DocumentNo" data-rel="tooltip" title="Cancel">
+                                                                    <span class="red">
+                                                                        <i class="ace-icon fa fa-arrow-right bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                        @if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Approved).ToString())
+                                                        {
+                                                            <li>
+                                                                <a href="@Url.Action("Details", "Leaves", new { id = leave.DocumentNo })" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                    <span class="blue">
+                                                                        <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                        @if (leave.ApprovalStatus == ((int)DocumentApprovalStatus.Rejected).ToString())
+                                                        {
+                                                            <li>
+                                                                <a href="@Url.Action("Details", "Leaves", new { id = leave.DocumentNo })" class="tooltip-info" data-rel="tooltip" title="View">
+                                                                    <span class="blue">
+                                                                        <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        }
                                                     </ul>
                                                 </div>
                                             </div>

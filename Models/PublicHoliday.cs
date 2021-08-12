@@ -17,6 +17,6 @@ namespace HumanResources.Models
         public string Id { get; set; }
         public string HolidayName { get; set; }
         public System.DateTime HolidayDate { get; set; }
-        public Nullable<byte> IsObserved { get; set; }
+        public string IsObserved { get; set; }
     }
 }

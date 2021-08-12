@@ -768,6 +768,77 @@ namespace HumanResources.Controllers
 
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
+
+        public async Task<ActionResult> Delegate(string DocumentNo)
+        {
+            string status = "", message = "";
+
+            int ApprovalStatus = (int)DocumentApprovalStatus.Open;
+
+            try
+            {
+                using (var db = new LeaveManagementEntities())
+                {
+                    var approvalentry = db.ApprovalEntries.Where(x => x.DocumentNo == DocumentNo && x.Status == ApprovalStatus).SingleOrDefault();
+
+                    if (approvalentry != null)
+                    {
+                        string delegaterequestresponse = MakerChecker.DelegateAppovalRequest(approvalentry.EntryNumber, Convert.ToInt32(approvalentry.SequenceNo));
+
+                        ApprovalRequestResponse _ApprovalRequestResponse = JsonConvert.DeserializeObject<ApprovalRequestResponse>(delegaterequestresponse);
+
+                        status = _ApprovalRequestResponse.Status;
+
+
+                        if (status == "000")
+                        {
+                            string body = string.Empty;
+
+                            string domainName = Request.Url.GetLeftPart(UriPartial.Authority);
+
+                            string url = Url.Action("Login", "Account");
+
+                            string pathToTemplate = Server.MapPath("~/MailTemplates/ApprovalNotification.html");
+
+                            using (StreamReader reader = new StreamReader(pathToTemplate))
+                            {
+                                body = reader.ReadToEnd();
+                            }
+                            body = body.Replace("{Link}", domainName + url);
+                            body = body.Replace("{UserName}", _ApprovalRequestResponse.ApproverEmail);
+
+                            bool IsSendEmail = await Task.Run(() => EmailFunctions.SendMailAsync(_ApprovalRequestResponse.ApproverEmail, _ApprovalRequestResponse.ApproverEmail, "Approval Notification", body));
+
+                            status = "000";
+                            message = "Submit Success! for leave " + LeaveDocumentNo;
+                        }
+                        else
+                        {
+                            status = "999";
+                            message = "Submit Failed for leave " + LeaveDocumentNo;
+                        }
+                    }
+                    else
+                    {
+                        status = "900";
+                        message = "Couldn't find approval entry for leave number " + DocumentNo;
+                    }
+                }
+                
+            }
+            catch (Exception es)
+            {
+                message = es.Message;
+            }
+
+            var _RequestResponse = new RequestResponse
+            {
+                Status = status,
+                Message = message
+            };
+
+            return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
+        }
         //get approve
         public string GetListOfDates(DateTime startdate, DateTime enddate)
         {

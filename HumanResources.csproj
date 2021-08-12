@@ -216,65 +216,65 @@
     </Compile>
     <Compile Include="Models\AppFunctions.cs" />
     <Compile Include="Models\ApprovalDocumentType.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ApprovalEntry.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ApprovalUser.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Attachment.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Department.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Employee.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmployeeLedgerEntry.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GoogleCalendarAPI.cs" />
     <Compile Include="Models\Leaf.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\LeaveManagementSystemModel.Context.cs">
+    <Compile Include="Models\LeaveManagementSystem.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>LeaveManagementSystemModel.Context.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\LeaveManagementSystemModel.cs">
+    <Compile Include="Models\LeaveManagementSystem.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\LeaveManagementSystemModel.Designer.cs">
+    <Compile Include="Models\LeaveManagementSystem.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\LeaveRecall.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LeaveType.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NumberSery.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PublicHoliday.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Setting.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>LeaveManagementSystemModel.tt</DependentUpon>
+      <DependentUpon>LeaveManagementSystem.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ApprovalEntriesListViewModel.cs" />
     <Compile Include="ViewModels\AppSettings.cs" />
@@ -589,15 +589,15 @@
     <Content Include="MailTemplates\ApprovalNotification.html" />
     <Content Include="MailTemplates\SignUp.html" />
     <Content Include="MailTemplates\ForgotPassword.html" />
-    <Content Include="Models\LeaveManagementSystemModel.Context.tt">
+    <Content Include="Models\LeaveManagementSystem.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
-      <LastGenOutput>LeaveManagementSystemModel.Context.cs</LastGenOutput>
+      <DependentUpon>LeaveManagementSystem.edmx</DependentUpon>
+      <LastGenOutput>LeaveManagementSystem.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\LeaveManagementSystemModel.tt">
+    <Content Include="Models\LeaveManagementSystem.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
-      <LastGenOutput>LeaveManagementSystemModel.cs</LastGenOutput>
+      <DependentUpon>LeaveManagementSystem.edmx</DependentUpon>
+      <LastGenOutput>LeaveManagementSystem.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -661,12 +661,12 @@
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
     </None>
-    <EntityDeploy Include="Models\LeaveManagementSystemModel.edmx">
+    <EntityDeploy Include="Models\LeaveManagementSystem.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>LeaveManagementSystemModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>LeaveManagementSystem.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\LeaveManagementSystemModel.edmx.diagram">
-      <DependentUpon>LeaveManagementSystemModel.edmx</DependentUpon>
+    <Content Include="Models\LeaveManagementSystem.edmx.diagram">
+      <DependentUpon>LeaveManagementSystem.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

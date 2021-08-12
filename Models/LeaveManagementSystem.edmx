@@ -182,7 +182,7 @@
           <Property Name="Id" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="HolidayName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="HolidayDate" Type="datetime" Nullable="false" />
-          <Property Name="IsObserved" Type="tinyint" />
+          <Property Name="IsObserved" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -490,10 +490,10 @@
           <Property Name="ReturnDate" Type="DateTime" Precision="0" />
           <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ApprovalStatus" Type="Int32" Nullable="false" />
+          <Property Name="RejectComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Attachments" Relationship="Self.FK_Attachments_Leaves" FromRole="Leaves" ToRole="Attachments" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Leaves_Employees" FromRole="Leaves" ToRole="Employees" />
           <NavigationProperty Name="LeaveRecalls" Relationship="Self.FK_LeaveRecalls_Leaves" FromRole="Leaves" ToRole="LeaveRecalls" />
-          <Property Name="RejectComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="LeaveType">
           <Key>
@@ -522,7 +522,7 @@
           <Property Name="Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="HolidayName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="HolidayDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IsObserved" Type="Byte" />
+          <Property Name="IsObserved" Type="String" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -563,8 +563,8 @@
           <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EmployeeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Role" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="Self.FK_Users_Employees" FromRole="Users" ToRole="Employees" />
           <Property Name="ResetPasswordCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Users_Employees" FromRole="Users" ToRole="Employees" />
         </EntityType>
         <Association Name="FK_Attachments_Leaves">
           <End Role="Leaves" Type="Self.Leaf" Multiplicity="0..1">
@@ -595,7 +595,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Leaves_Employees">
-          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Leaves" Type="Self.Leaf" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employees">
@@ -822,7 +824,6 @@
           <EntitySetMapping Name="Leaves">
             <EntityTypeMapping TypeName="Model.Leaf">
               <MappingFragment StoreEntitySet="Leaves">
-                <ScalarProperty Name="RejectComment" ColumnName="RejectComment" />
                 <ScalarProperty Name="DocumentNo" ColumnName="DocumentNo" />
                 <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
                 <ScalarProperty Name="SelectionType" ColumnName="SelectionType" />
@@ -833,6 +834,7 @@
                 <ScalarProperty Name="ReturnDate" ColumnName="ReturnDate" />
                 <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
                 <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="RejectComment" ColumnName="RejectComment" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -900,7 +902,6 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="Model.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
                 <ScalarProperty Name="idUser" ColumnName="idUser" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -909,6 +910,7 @@
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="EmployeeNo" ColumnName="EmployeeNo" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
