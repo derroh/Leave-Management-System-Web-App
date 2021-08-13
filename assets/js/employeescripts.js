@@ -244,7 +244,7 @@
                                 class_name: 'gritter-success gritter-center'
                             });
                             var delay = 5000;
-                            var url = '/Leaves/Index'
+                            var url = '/Leaves?status=pending'
                             setTimeout(function () { window.location = url; }, delay);
 
                         } else {
@@ -817,7 +817,7 @@
         var docno = $(this).attr('data-docno');
 
         bootbox.confirm({
-            title: "<i class='fa fa-trash'></i> Delete?",
+            title: "<i class='fa fa-arrow-right'></i> Delegate?",
             message: "Do you wish to delegate this leave application number " + docno + "?",
             buttons: {
                 confirm: {

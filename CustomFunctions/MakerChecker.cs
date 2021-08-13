@@ -354,6 +354,12 @@ namespace HumanResources.CustomFunctions
             //Update Approval User 
             bool IsRecordDelegated = UpdateApprovalEntryApproverId(EntryNumber, substituteApprover);
 
+            if (IsRecordDelegated)
+            {
+                status = "000";
+                message = "Leave has been delegated successfully";
+            }
+
             var _ApprovalRequestResponse = new ApprovalRequestResponse
             {
                 Status = status,
