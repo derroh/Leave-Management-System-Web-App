@@ -2325,12 +2325,12 @@
         });
     });
 
-    $.mask.definitions['~'] = '[+-]';
-    $('#Phone').mask('+254 999-999999');
+    //$.mask.definitions['~'] = '[+-]';
+    //$('#Phone').mask('+254 999-999999');
 
-    jQuery.validator.addMethod("Phone", function (value, element) {
-        return this.optional(element) || /^\+\d{3}\ \d{3}\-\d{6}( x\d{1,6})?$/.test(value);
-    }, "Enter a valid phone number.");
+    //jQuery.validator.addMethod("Phone", function (value, element) {
+    //    return this.optional(element) || /^\+\d{3}\ \d{3}\-\d{6}( x\d{1,6})?$/.test(value);
+    //}, "Enter a valid phone number.");
 
     $('#employeeform').validate({
         errorElement: 'div',
@@ -2352,8 +2352,7 @@
                 equalTo: "#Password"
             },
             Phone: {
-                required: true,
-                Phone: 'required'
+                required: true
             },
             FirstName: {
                 required: true
