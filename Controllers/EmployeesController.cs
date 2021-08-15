@@ -302,6 +302,32 @@ namespace HumanResources.Controllers
             return Json(JsonConvert.SerializeObject(_RequestResponse), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ViewEmployee(string Id)
+        {
+            var departments = _db.Departments.ToList();
+
+            ViewBag.Departments = departments;
+
+            ViewModels.CreateEmployeeViewModel ep = new ViewModels.CreateEmployeeViewModel();
+
+            var employee = _db.Employees.Where(e => e.EmployeeNo == Id).FirstOrDefault();
+
+            if (employee != null)
+            {
+                ep.DepartmentName = employee.Department_Name;
+                ep.Email = employee.EMail;
+                ep.EmployeeNo = employee.EmployeeNo;
+                ep.FirstName = employee.FirstName;
+                ep.LastName = employee.LastName;
+                ep.Name = employee.FullName;
+                ep.Gender = employee.Gender;
+                ep.JobTitle = employee.JobTitle;
+                ep.Phone = employee.CellularPhoneNumber;
+            }
+
+            return View(ep);
+        }
+
         public static string GetMD5(string str)
         {
             MD5 md5 = new MD5CryptoServiceProvider();

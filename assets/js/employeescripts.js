@@ -2760,7 +2760,7 @@
                             });
 
                             window.setTimeout(function () {
-                                window.location.href = '/Settings/ApprovalUsers';
+                                window.location.href = '/Approvers/Index';
                             }, 2000);
 
                         } else {

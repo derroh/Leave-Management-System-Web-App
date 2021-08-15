@@ -25,6 +25,7 @@ namespace HumanResources.Controllers
                 using(var db = new LeaveManagementEntities())
                 {
                     var employee = db.Employees.Where(x => x.EmployeeNo == username).FirstOrDefault();
+                    var user = db.Users.Where(x => x.EmployeeNo == username).FirstOrDefault();
 
                     EmployeeProfile.FullName = employee.FullName;
                     EmployeeProfile.Status = "Active";
@@ -38,7 +39,7 @@ namespace HumanResources.Controllers
                     EmployeeProfile.DateOfLeaving = AppFunctions.GetReadableDate(employee.DateOfLeaving.ToString());
                     EmployeeProfile.Date_Of_Joining_the_Company = AppFunctions.GetReadableDate(employee.Date_Of_Joining_the_Company.ToString());
                     EmployeeProfile.Date_Of_Leaving_the_Company = AppFunctions.GetReadableDate(employee.Date_Of_Leaving_the_Company.ToString());
-                    EmployeeProfile.EMail = employee.EMail;
+                    ViewBag.EMail = user.Email;
                     EmployeeProfile.Gender = employee.Gender;
                     EmployeeProfile.EmployeeNo = employee.EmployeeNo;
                     EmployeeProfile.JobTitle = employee.JobTitle;
@@ -52,6 +53,10 @@ namespace HumanResources.Controllers
             }
 
             return View(EmployeeProfile);
+        }
+        public ActionResult ChangePassword()
+        {
+            return View();
         }
         
     }
