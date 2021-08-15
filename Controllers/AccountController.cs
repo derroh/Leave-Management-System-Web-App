@@ -199,6 +199,12 @@ namespace HumanResources.Controllers
 
                 // Sign Out.
                 authenticationManager.SignOut();
+
+                //clear session variables as well
+
+                Session.Abandon();
+                Session.Clear();
+
             }
             catch (Exception ex)
             {
