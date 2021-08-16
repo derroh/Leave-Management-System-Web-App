@@ -3124,5 +3124,112 @@
 
         event.preventDefault();
     });
+
+    //change password
+    $("#UpdatePassword").click(function (event) {
+
+        var valdata = $("#changepasswordform").serialize();
+        //to get alert popup  	
+
+        jQuery.ajax({
+            url: '/Profile/UpdatePassword',
+            type: "POST",
+            data: valdata,
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (response) {
+                if (response != null) {
+                    //console.log(JSON.stringify(response)); //it comes out to be string 
+
+                    //we need to parse it to JSON
+                    var data = $.parseJSON(response);
+
+                    //console.log(data.Message);
+                    bootbox.dialog({
+                        message: data.Message,
+                        buttons: {
+                            "success": {
+                                "label": "OK",
+                                "className": "btn-sm btn-primary"
+                            }
+                        }
+                    });
+                }
+            },
+            error: function (e) {
+                console.log(e.responseText);
+            }
+        });
+
+        event.preventDefault();
+    });
+
+    $.validator.addMethod("passwordstrengthcheck", function (value) {
+        return /^[A-Za-z0-9\d=!\-@._*]*$/.test(value) // consists of only these
+            && /[a-z]/.test(value) // has a lowercase letter
+            && /\d/.test(value) // has a digit
+    });
+    $('#changepasswordform').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            OldPassword: {
+                required: true
+            },
+            NewPassword: {
+                required: true,
+                passwordstrengthcheck: true,
+                minlength: 5
+            },
+            ConfirmPassword: {
+                required: true,
+                passwordstrengthcheck: true,
+                minlength: 5,
+                equalTo: "#NewPassword"
+            }
+        },
+
+        messages: {            
+            NewPassword: {
+                required: "Please specify a password.",
+                minlength: "Please specify a secure password.",
+                passwordstrengthcheck: "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+            },
+            OldPassword: "Please provide your current password",
+            passwordstrengthcheck: "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+                var controls = element.closest('div[class*="col-"]');
+                if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
+                else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+            }
+            else if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else if (element.is('.chosen-select')) {
+                error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
+    });
     
 })

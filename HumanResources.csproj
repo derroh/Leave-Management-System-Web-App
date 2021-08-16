@@ -278,6 +278,7 @@
     </Compile>
     <Compile Include="ViewModels\ApprovalEntriesListViewModel.cs" />
     <Compile Include="ViewModels\AppSettings.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\CreateApproverViewModel.cs" />
     <Compile Include="ViewModels\DepartmentsViewModel.cs" />
     <Compile Include="ViewModels\EmployeeProfileViewModel.cs" />
