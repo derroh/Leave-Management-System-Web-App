@@ -28,14 +28,32 @@
                         //we need to parse it to JSON
                         var data = $.parseJSON(response);
 
-                        //set fields values
-                        $('#EndDate').val(data.LeaveEndDate);
-                        $('#LeaveEndDate').val(data.LeaveEndDate);
-                        $('#ReturnDate').val(data.ReturnDate);
+                        if (data.Code == "999") {
+                            $.gritter.add({
+                                title: 'Leave Notification',
+                                text: 'The leave start date cannot be earlier than today',
+                                class_name: 'gritter-error gritter-center'
+                            });
+
+
+                            $("#LeaveDaysApplied").val('');
+                            $("#StartDate").val('');
+
+                        } else {
+
+                            //set fields values
+                            $('#EndDate').val(data.LeaveEndDate);
+                            $('#LeaveEndDate').val(data.LeaveEndDate);
+                            $('#ReturnDate').val(data.ReturnDate);
+                        }                        
                     }
                 }
             });
         }
+    });
+    $("#LeaveStartDate").change(function () {
+
+        $("#LeaveDaysApplied").val('');
     });
 
 
@@ -145,47 +163,52 @@
             if (info.step == 2 && $validation) {
                 if (!$('#leavedaysselection-form').valid()) e.preventDefault();
 
-                //save step 2
-                var valdata2 = $("#leavedaysselection-form").serialize();
+                if ($('#leavedaysselection-form').valid())
+                {
+                    //save step 2
+                    var valdata2 = $("#leavedaysselection-form").serialize();
 
-                jQuery.ajax({
-                    url: '/Leaves/SaveLeaveSelection',
-                    type: "POST",
-                    data: valdata2,
-                    dataType: "json",
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                    success: function (response) {
-                        if (response != null) {
-                            //console.log(JSON.stringify(response)); //it comes out to be string 
+                    jQuery.ajax({
+                        url: '/Leaves/SaveLeaveSelection',
+                        type: "POST",
+                        data: valdata2,
+                        dataType: "json",
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        success: function (response) {
+                            if (response != null) {
+                                //console.log(JSON.stringify(response)); //it comes out to be string 
 
-                            //we need to parse it to JSON
+                                //we need to parse it to JSON
 
-                            var data = jQuery.parseJSON(response);                          
+                                var data = jQuery.parseJSON(response);
 
-                            if (data.Status == "000") {
-                                $.gritter.add({
-                                    title: 'Leave Notification',
-                                    text: data.Message,
-                                    class_name: 'gritter-info'
-                                });
-                            } else {
-                                $.gritter.add({
-                                    title: 'Leave Notification',
-                                    text: data.Message,
-                                    class_name: 'gritter-error'
-                                });
+                                if (data.Status == "000") {
+                                    $.gritter.add({
+                                        title: 'Leave Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-info'
+                                    });
+                                } else {
+
+                                    $.gritter.add({
+                                        title: 'Leave Notification',
+                                        text: data.Message,
+                                        class_name: 'gritter-error'
+                                    });
+                                }
                             }
+                        },
+                        error: function (e) {
+                            console.log(e.responseText);
                         }
-                    },
-                    error: function (e) {
-                        console.log(e.responseText);
-                    }
-                });
+                    });
+                }               
             }
             if (info.step == 3 && $validation) {
                 if (!$('#leaveattachments-form').valid()) e.preventDefault();
 
-                if ($('#leaveattachments-form').valid()) {
+                if ($('#leaveattachments-form').valid())
+                {
                     //Attachments
                     var files = jQuery("#LeaveAttachments").get(0).files;
                     var fileData = new FormData();
@@ -460,7 +483,7 @@
     $('.date-picker').datepicker({
         autoclose: true,
         todayHighlight: true,
-        multidate: true
+        minYear: 2020
     })
         //show datepicker when clicking on the icon
         .next().on(ace.click_event, function () {
@@ -468,7 +491,7 @@
         });
 
     //or change it into a date range picker
-    $('.input-daterange').datepicker({ autoclose: true });
+    $('.input-daterange').datepicker({ autoclose: true, minYear: 2020 });
 
 
     //to translate the daterange picker, please copy the "examples/daterange-fr.js" contents here before initialization
@@ -3191,7 +3214,7 @@
             }
         },
 
-        messages: {            
+        messages: {
             NewPassword: {
                 required: "Please specify a password.",
                 minlength: "Please specify a secure password.",
@@ -3231,5 +3254,5 @@
         invalidHandler: function (form) {
         }
     });
-    
+
 })

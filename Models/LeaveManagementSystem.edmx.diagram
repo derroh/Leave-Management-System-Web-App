@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9f112fc1c6c34cbeb34f7cf7cea79f2a" Name="Diagram1" ZoomLevel="71">
+      <Diagram DiagramId="9f112fc1c6c34cbeb34f7cf7cea79f2a" Name="Diagram1" ZoomLevel="52">
         <EntityTypeShape EntityType="Model.ApprovalDocumentType" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.ApprovalEntry" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.ApprovalUser" Width="1.5" PointX="7.75" PointY="4.75" IsExpanded="true" />

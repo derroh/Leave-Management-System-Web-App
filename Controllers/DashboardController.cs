@@ -174,7 +174,7 @@ namespace HumanResources.Controllers
                     worksheet.Column(2).AutoFit();
 
                     byte[] data = excelPackage.GetAsByteArray();
-                    return File(data, "application/octet-stream", "FileManager.xlsx");
+                    return File(data, "application/octet-stream", "Leavebalances.xlsx");
                 }
 
                 return Json("", JsonRequestBehavior.AllowGet);

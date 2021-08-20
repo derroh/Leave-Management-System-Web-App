@@ -170,6 +170,22 @@ namespace HumanResources
             }
             return status;
         }
+        public static string ConvertToDate(string timeString)
+        {
+            string date = null;
+
+            try
+            {
+                DateTime oDate = DateTime.ParseExact(timeString, "ddMMyyyy", System.Globalization.CultureInfo.InvariantCulture);
+                date = oDate.ToString("dd/MM/yyyy");
+            }
+            catch (Exception es)
+            {
+                Console.Write(es);
+            }
+
+            return date;
+        }
     }
     static class RegexFunctions
     {

@@ -14,4 +14,10 @@ namespace HumanResources.ViewModels
         public string BalanceBroughtFoward { get; set; }
         public string Code { get; set; }
     }
+    public class EmployeeLeaveBalancesView
+    {
+        public string EmployeeNo { get; set; }
+        public string EmployeeName { get; set; }
+        public List<LeaveBalancesView> LeaveBalances { get; set; }
+    }
 }

@@ -42,7 +42,7 @@
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.TextBoxFor(m => m.FirstName, new { @class = "col-xs-12 col-sm-5", @Value = Model.FirstName })
+                                                @Html.TextBoxFor(m => m.FirstName, new { @class = "col-xs-12 col-sm-5", @Value = Model.FirstName, @disabled = "disabled" })
                                             </div>
                                             @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
                                         </div>
@@ -52,7 +52,7 @@
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.TextBoxFor(m => m.LastName, new { @class = "col-xs-12 col-sm-5", @Value = Model.LastName })
+                                                @Html.TextBoxFor(m => m.LastName, new { @class = "col-xs-12 col-sm-5", @Value = Model.LastName, @disabled = "disabled" })
                                             </div>
                                             @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
                                         </div>
@@ -65,7 +65,7 @@
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.TextBoxFor(m => m.Name, new { @class = "col-xs-12 col-sm-8", @Value = Model.Name })
+                                                @Html.TextBoxFor(m => m.Name, new { @class = "col-xs-12 col-sm-8", @Value = Model.Name, @disabled = "disabled" })
                                             </div>
                                             @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
                                         </div>
@@ -80,7 +80,7 @@
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.TextBoxFor(m => m.Email, new { @class = "col-xs-12 col-sm-6", @Value = Model.Email })
+                                                @Html.TextBoxFor(m => m.Email, new { @class = "col-xs-12 col-sm-6", @Value = Model.Email, @disabled = "disabled" })
                                             </div>
                                             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                         </div>
@@ -98,7 +98,7 @@
 
                                                 </span>
 
-                                                @Html.TextBoxFor(m => m.Phone, new { @class = "col-xs-12 col-sm-5", @Value = Model.Phone })
+                                                @Html.TextBoxFor(m => m.Phone, new { @class = "col-xs-12 col-sm-5", @Value = Model.Phone, @disabled = "disabled" })
                                             </div>
                                             @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
                                         </div>
@@ -145,7 +145,7 @@
                                                 @Html.DropDownListFor(m => m.DepartmentName,
                                                                     new SelectList(ViewBag.Departments, "Code", "Description", Model.DepartmentName),
                                                                     "Select Faculty",
-                                                                    new { @class = "select2", @data_placeholder = "Click to Choose..." })
+                                                                    new { @class = "select2", @data_placeholder = "Click to Choose...", @disabled = "disabled" })
                                             </div>
                                             @Html.ValidationMessageFor(m => m.DepartmentName, "", new { @class = "text-danger  " })
                                         </div>
@@ -163,7 +163,7 @@
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.PasswordFor(m => m.Password, new { @class = "col-xs-12 col-sm-4" })
+                                                @Html.PasswordFor(m => m.Password, new { @class = "col-xs-12 col-sm-4", @disabled = "disabled" })
                                             </div>
                                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                                         </div>
@@ -176,7 +176,7 @@
 
                                         <div class="col-xs-12 col-sm-9">
                                             <div class="clearfix">
-                                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "col-xs-12 col-sm-4" })
+                                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "col-xs-12 col-sm-4", @disabled = "disabled" })
                                             </div>
                                             @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
                                         </div>
@@ -194,10 +194,10 @@
 
                         <hr />
                         <div class="wizard-actions center">
-                            <button class="btn btn-success btn-next" id="UpdateEmployee">
+                            @*<button class="btn btn-success btn-next" id="UpdateEmployee">
                                 Save
                                 <i class="ace-icon fa fa-floppy-o  icon-on-right"></i>
-                            </button>
+                            </button>*@
                         </div>
                     </div><!-- /.widget-main -->
                 </div><!-- /.widget-body -->

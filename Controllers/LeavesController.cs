@@ -252,37 +252,51 @@ namespace HumanResources.Controllers
         {
             string EndDate = null;
 
-            Code = Code.Trim();
+            if (string.IsNullOrEmpty(LeaveDaysApplied))
+            {
+                LeaveDaysApplied = "0";
+            }
 
             DateTime LeaveStartDate = Convert.ToDateTime(StartDate);
 
-            IEnumerable<DateTime> holidays;
-
-            holidays = _db.PublicHolidays.Where(h => h.HolidayDate >= LeaveStartDate).Select(h => h.HolidayDate).ToList();
-
-            //only holidays on business days
-
-            using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
+            if (LeaveStartDate > DateTime.Now)
             {
-                var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
+                Code = Code.Trim();
 
-                if(leaveType != null)
+              //  DateTime LeaveStartDate = Convert.ToDateTime(StartDate);
+
+                IEnumerable<DateTime> holidays;
+
+                holidays = _db.PublicHolidays.Where(h => h.HolidayDate >= LeaveStartDate).Select(h => h.HolidayDate).ToList();
+
+                //only holidays on business days
+
+                using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                 {
-                    string AnnualLeaveDaysType = leaveType.AnnualLeaveDaysType;
+                    var leaveType = dbEntities.LeaveTypes.Where(s => s.Code == Code).SingleOrDefault();
 
-                    if (AnnualLeaveDaysType.Trim() == "Consecutive Days")
+                    if (leaveType != null)
                     {
-                        var dtResult = LeaveStartDate.AddDays(Convert.ToInt32(LeaveDaysApplied));
+                        string AnnualLeaveDaysType = leaveType.AnnualLeaveDaysType;
 
-                        EndDate = dtResult.ToString("MM/dd/yyyy");//
-                    }
-                    else if (AnnualLeaveDaysType.Trim() == "Working Days")
-                    {
-                        var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), Convert.ToInt32(LeaveDaysApplied), holidays);
-                        EndDate = dtResult.ToString("MM/dd/yyyy");
-                    }
-                }               
+                        if (AnnualLeaveDaysType.Trim() == "Consecutive Days")
+                        {
+                            var dtResult = LeaveStartDate.AddDays(Convert.ToInt32(LeaveDaysApplied));
 
+                            EndDate = dtResult.ToString("MM/dd/yyyy");//
+                        }
+                        else if (AnnualLeaveDaysType.Trim() == "Working Days")
+                        {
+                            var dtResult = DateTimeExtensions.AddBusinessDays(Convert.ToDateTime(StartDate), Convert.ToInt32(LeaveDaysApplied), holidays);
+                            EndDate = dtResult.ToString("MM/dd/yyyy");
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                Code = "999";
             }
 
             var _ResponseLeaveQuantityAndReturnDate = new ResponseLeaveQuantityAndReturnDate
@@ -367,10 +381,10 @@ namespace HumanResources.Controllers
         }
         public ActionResult SaveLeaveSelection(LeaveApplicationViewModel ep)
         {
-            string message = "", status = "";
+            string message = "", status = "";           
 
             try
-            {             
+            {
                 using (LeaveManagementEntities dbEntities = new LeaveManagementEntities())
                 {
                     var leave = dbEntities.Leaves.Where(s => s.DocumentNo == LeaveDocumentNo).SingleOrDefault();
@@ -384,15 +398,16 @@ namespace HumanResources.Controllers
                         leave.SelectionType = "RangeSelection";
                         leave.StartDate = ep.StartDate;
                         leave.ReturnDate = Convert.ToDateTime(leavedates.ReturnDate);
-                        leave.EndDate =Convert.ToDateTime(leavedates.LeaveEndDate);
+                        leave.EndDate = Convert.ToDateTime(leavedates.LeaveEndDate);
                         leave.LeaveDaysApplied = Convert.ToInt32(ep.LeaveDaysApplied);
-                       // leave.LeaveDates = GetListOfDates(Convert.ToDateTime(ep.StartDate), Convert.ToDateTime(ep.EndDate));
+                        // leave.LeaveDates = GetListOfDates(Convert.ToDateTime(ep.StartDate), Convert.ToDateTime(ep.EndDate));
                         dbEntities.SaveChanges();
 
                         message = "Leave Created successfully";
                         status = "000";
-                    }                   
+                    }
                 }
+
             }
             catch (Exception es)
             {
